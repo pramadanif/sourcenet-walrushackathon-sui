@@ -1,54 +1,93 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion, useAnimation, useInView } from 'framer-motion';
 import { Zap, Upload, Shield, ShoppingCart } from 'lucide-react';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+const headerVariants = {
+  hidden: { opacity: 0, y: 30 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: "easeOut" },
+  },
+};
+
+const pillarsListVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const pillarCardVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.95 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.7, ease: "easeOut" },
+  },
+  hover: {
+    y: -6,
+    scale: 1.02,
+    transition: { duration: 0.3, ease: "easeInOut" },
+  },
+};
+
+const accentMap: Record<string, { text: string; halo: string; ring: string; icon: string }> = {
+  "#919191": {
+    text: "linear-gradient(135deg, #ffffff 0%, #cfcfcf 100%)",
+    halo: "radial-gradient(circle at 20% 20%, rgba(255,255,255,0.18), rgba(255,255,255,0))",
+    ring: "rgba(255,255,255,0.28)",
+    icon: "linear-gradient(135deg, rgba(255,255,255,0.55), rgba(180,180,180,0.28))",
+  },
+  "#474747": {
+    text: "linear-gradient(135deg, #f3f3f3 0%, #a7a7a7 100%)",
+    halo: "radial-gradient(circle at 80% 20%, rgba(220,220,220,0.2), rgba(220,220,220,0))",
+    ring: "rgba(200,200,200,0.24)",
+    icon: "linear-gradient(135deg, rgba(230,230,230,0.45), rgba(120,120,120,0.25))",
+  },
+  "#CECECE": {
+    text: "linear-gradient(135deg, #ffffff 0%, #d9d9d9 100%)",
+    halo: "radial-gradient(circle at 25% 25%, rgba(255,255,255,0.22), rgba(255,255,255,0))",
+    ring: "rgba(255,255,255,0.35)",
+    icon: "linear-gradient(135deg, rgba(255,255,255,0.6), rgba(200,200,200,0.3))",
+  },
+  "#353535": {
+    text: "linear-gradient(135deg, #f8f8f8 0%, #b4b4b4 100%)",
+    halo: "radial-gradient(circle at 80% 20%, rgba(255,255,255,0.18), rgba(255,255,255,0))",
+    ring: "rgba(180,180,180,0.26)",
+    icon: "linear-gradient(135deg, rgba(255,255,255,0.5), rgba(140,140,140,0.28))",
+  },
+};
 
 export default function FourPillars() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const headingControls = useAnimation();
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const headingInView = useInView(headingRef, { once: true, amount: 0.55 });
 
   useEffect(() => {
-    if (!sectionRef.current) return;
-
-    const ctx = gsap.context(() => {
-      // Animate pillars sliding in from alternating directions
-      gsap.utils.toArray('.pillar-card').forEach((card: any, index) => {
-        const direction = index % 2 === 0 ? -100 : 100;
-        gsap.from(card, {
-          scrollTrigger: {
-            trigger: card,
-            start: 'top 80%',
-          },
-          x: direction,
-          opacity: 0,
-          duration: 1,
-          ease: 'power3.out',
-        });
-      });
-
-      // Animate 3D icon rotation on scroll
-      gsap.from('.pillar-icon', {
-        scrollTrigger: {
-          trigger: '.pillars-grid',
-          start: 'top 70%',
+    if (headingInView) {
+      headingControls.start({
+        opacity: 1,
+        y: 0,
+        textShadow: [
+          '0 0 0px rgba(255,255,255,0)',
+          '0 0 24px rgba(255,255,255,0.85)',
+          '0 0 0px rgba(255,255,255,0)'
+        ],
+        transition: {
+          duration: 0.7,
+          delay: 0.2,
+          textShadow: { duration: 1.6, ease: 'easeInOut' },
         },
-        rotation: 360,
-        scale: 0,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: 'back.out(1.7)',
       });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+    }
+  }, [headingControls, headingInView]);
 
   const pillars = [
     {
@@ -60,7 +99,7 @@ export default function FourPillars() {
         'No wallet or seed phrase needed',
         'Ephemeral wallet auto-created',
       ],
-      color: 'from-[#34656D] to-[#334443]',
+      color: '#919191',
       direction: 'left',
     },
     {
@@ -72,7 +111,7 @@ export default function FourPillars() {
         'Sponsored Transactions - we pay gas fees',
         'One-click to monetize',
       ],
-      color: 'from-[#FAEAB1] to-[#FAF8F1]',
+      color: '#474747',
       direction: 'right',
     },
     {
@@ -84,7 +123,7 @@ export default function FourPillars() {
         'Metadata + IPFS hash on-chain',
         'Privacy preserved with encryption',
       ],
-      color: 'from-[#34656D] to-[#334443]',
+      color: '#CECECE',
       direction: 'left',
     },
     {
@@ -96,120 +135,120 @@ export default function FourPillars() {
         'Automated payments',
         'Global buyer access 24/7',
       ],
-      color: 'from-[#FAEAB1] to-[#FAF8F1]',
+      color: '#353535',
       direction: 'right',
     },
   ];
 
   return (
-    <section ref={sectionRef} id="features" className="section-padding bg-gradient-to-b from-white to-[#FAF8F1] relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#FAEAB1] opacity-40 blur-[150px] rounded-full" />
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#34656D] opacity-20 blur-[150px] rounded-full" />
+    <section
+      id="features"
+      className="relative w-full overflow-hidden bg-gradient-to-b from-[#171717] to-[#252525] py-16 sm:py-20 md:py-24 lg:py-32 flex flex-col items-center"
+    >
+      {/* Background Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1C1C1C] via-[#222222] to-[#2A2A2A]" />
+
+      {/* Subtle Glow Orbs */}
+      <div className="absolute inset-0 opacity-15 pointer-events-none">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#A8A8A8] opacity-25 blur-[150px] rounded-full" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#5A5A5A] opacity-2 blur-[150px] rounded-full" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
+      <div className="section-inner relative z-10 flex flex-col items-center max-w-7xl px-4 sm:px-6 lg:px-8">
+        <motion.div
+          variants={headerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.4 }}
+          className="mx-auto mb-16 sm:mb-20 flex w-full max-w-4xl flex-col items-center gap-5 text-center sm:gap-6"
+        >
+          <motion.span
+            className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-6 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.38em] text-white/90 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-sm"
+            initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-block mb-6"
+            transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <span className="px-4 py-2 bg-[#FAEAB1]/30 border border-[#34656D]/30 rounded-full text-[#34656D] text-sm font-medium">
-              ✨ Our Solution
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-white/90 shadow-inner shadow-white/30">
+              <Zap size={16} />
             </span>
-          </motion.div>
+            DATA JOURNEY REIMAGINED
+          </motion.span>
+          <motion.h2
+            ref={headingRef}
+            className="w-full text-balance text-3xl font-black leading-tight text-white sm:text-4xl md:text-5xl lg:text-6xl"
+            initial={{ opacity: 0, y: 14, textShadow: '0 0 0px rgba(255,255,255,0)' }}
+            animate={headingControls}
+          >
+            <span className="bg-gradient-to-r from-white via-white/85 to-[#d8d8d8] bg-clip-text text-transparent drop-shadow-[0_18px_40px_rgba(0,0,0,0.45)]">
+              SourceNet:
+            </span>{" "}
+            <span className="bg-gradient-to-r from-[#f5f5f5] via-[#dcdcdc] to-[#bfbfbf] bg-clip-text text-transparent">
+              Simple, Gasless, Anonymous
+            </span>
+          </motion.h2>
+          <motion.p
+            className="max-w-3xl text-pretty text-center text-base text-white/75 sm:text-lg md:text-xl lg:text-[1.35rem]"
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+          >
+            Empowering every data creator with effortless onboarding, automated monetization, and privacy-first control.
+          </motion.p>
+        </motion.div>
 
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#34656D] mb-6">
-            SourceNet: Simple, Gasless, <span className="text-[#334443]">Anonymous</span>
-          </h2>
-          <p className="text-xl text-[#334443]/80 max-w-3xl mx-auto">
-            Four feature blocks that make data monetization effortless.
-          </p>
-        </div>
-
-        {/* Pillars Grid */}
-        <div className="pillars-grid grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <motion.div
+          variants={pillarsListVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          className="pillars-grid mx-auto grid w-full grid-cols-1 gap-6 md:grid-cols-2"
+        >
           {pillars.map((pillar, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.02, y: -5 }}
+              variants={pillarCardVariants}
+              whileHover="hover"
               className="pillar-card group relative"
             >
-              <div className="relative bg-white border border-[#34656D]/20 rounded-3xl p-8 h-full hover:border-[#34656D]/50 transition-all overflow-hidden shadow-lg">
-                {/* Background gradient */}
-                <motion.div
-                  className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${pillar.color} opacity-20 blur-3xl`}
-                  whileHover={{ scale: 1.5, opacity: 0.4 }}
-                  transition={{ duration: 0.3 }}
-                />
-                
-                {/* Ripple effect on hover */}
-                <motion.div
-                  className={`absolute inset-0 bg-gradient-to-br ${pillar.color} opacity-0 group-hover:opacity-10`}
-                  initial={false}
-                  whileHover={{
-                    scale: [1, 1.05, 1],
-                    opacity: [0, 0.1, 0],
-                  }}
-                  transition={{ duration: 0.6 }}
-                />
+              <div className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#474747] bg-[#0A0A0A] p-7 sm:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-[#919191] hover:shadow-[0_15px_40px_rgba(0,0,0,0.7)]">
+                {/* Hover Accent */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500" style={{
+                  background: `radial-gradient(circle at ${pillar.direction === 'left' ? '25%' : '75%'} 20%, rgba(255,255,255,0.1), transparent 60%)`,
+                }} />
 
-                <div className="relative z-10">
-                  {/* Number */}
-                  <div className="flex items-start justify-between mb-6">
-                    <motion.div
-                      className={`text-8xl font-black bg-gradient-to-br ${pillar.color} bg-clip-text text-transparent`}
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ type: 'spring', stiffness: 300 }}
-                    >
-                      {pillar.number}
-                    </motion.div>
-                    <motion.div
-                      whileHover={{ rotate: 360, scale: 1.2 }}
-                      transition={{ duration: 0.5 }}
-                      className={`pillar-icon w-16 h-16 rounded-2xl bg-gradient-to-br ${pillar.color} flex items-center justify-center shadow-lg`}
-                    >
-                      <pillar.icon size={32} className={index % 2 === 0 ? "text-white" : "text-[#34656D]"} />
-                    </motion.div>
+                {/* Number & Icon Row */}
+                <div className="relative z-10 mb-6 flex items-start justify-between">
+                  <div className="text-7xl font-black text-[#E0E0E0] sm:text-8xl">
+                    {pillar.number}
                   </div>
+                  <div className="pillar-icon flex h-14 w-14 items-center justify-center rounded-2xl bg-[#353535] shadow-inner shadow-[#919191]/20 sm:h-16 sm:w-16 transition-transform duration-300 group-hover:scale-110 group-hover:bg-[#474747]">
+                    <pillar.icon size={28} className="text-white" />
+                  </div>
+                </div>
 
-                  {/* Content */}
-                  <div className="space-y-4">
-                    <h3 className="text-2xl font-black text-[#34656D] group-hover:text-[#334443] transition-all">
-                      {pillar.title}
-                    </h3>
-                    <ul className="space-y-3">
-                      {pillar.features.map((feature, i) => (
-                        <motion.li
-                          key={i}
-                          className="flex items-start gap-3"
-                          initial={{ opacity: 0, x: -20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: index * 0.1 + i * 0.05 }}
-                          whileHover={{ x: 5 }}
-                        >
-                          <motion.div
-                            className={`w-1.5 h-1.5 rounded-full bg-gradient-to-br ${pillar.color} mt-2 flex-shrink-0`}
-                            whileHover={{ scale: 2 }}
-                          />
-                          <span className="text-[#334443]/70 group-hover:text-[#334443] transition-colors">{feature}</span>
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </div>
+                {/* Title & Features */}
+                <div className="relative z-10 flex-1 space-y-4">
+                  <h3 className="text-xl font-semibold text-[#F0F0F0] transition-colors duration-300 sm:text-2xl">
+                    {pillar.title}
+                  </h3>
+                  <ul className="space-y-3">
+                    {pillar.features.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <div className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#919191]" />
+                        <span className="text-sm text-[#E0E0E0] sm:text-base">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
+
+        {/* Padding Bottom for Smooth Transition */}
+        <div className="h-12 sm:h-16 md:h-20 lg:h-24"></div>
       </div>
     </section>
   );

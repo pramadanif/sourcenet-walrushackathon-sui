@@ -20,7 +20,7 @@ export default function Home() {
       <HowItWorks />
       <Technology />
       <WhyWeWin />
-      <CTASection />
+      {/* <CTASection /> */}
       <Footer />
     </main>
   );

@@ -1,174 +1,244 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap } from "gsap";
+import { useState, useRef, useEffect } from 'react';
 import { Users, Briefcase, DollarSign, ShoppingBag, Smile } from 'lucide-react';
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Statistics() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [hasAnimated, setHasAnimated] = useState(false);
-
-  useEffect(() => {
-    if (!sectionRef.current) return;
-
-    const ctx = gsap.context(() => {
-      // Counter animation
-      const counters = document.querySelectorAll('.counter-value');
-      
-      ScrollTrigger.create({
-        trigger: '.stats-grid',
-        start: 'top 80%',
-        onEnter: () => {
-          if (!hasAnimated) {
-            counters.forEach((counter) => {
-              const target = counter.getAttribute('data-target');
-              const element = counter as HTMLElement;
-              
-              if (target) {
-                const isPercentage = target.includes('%');
-                const isDollar = target.includes('$');
-                const isK = target.includes('K');
-                const isM = target.includes('M');
-                
-                let numericValue = parseFloat(target.replace(/[^0-9.]/g, ''));
-                
-                gsap.to({ val: 0 }, {
-                  val: numericValue,
-                  duration: 2,
-                  ease: 'power2.out',
-                  onUpdate: function() {
-                    let current = Math.floor(this.targets()[0].val);
-                    let display = current.toString();
-                    
-                    if (isDollar) display = '$' + display;
-                    if (isK) display += 'K+';
-                    if (isM) display += 'M+';
-                    if (isPercentage) display += '%';
-                    
-                    element.textContent = display;
-                  }
-                });
-              }
-            });
-            setHasAnimated(true);
-          }
-        },
-      });
-
-      gsap.from('.stat-card', {
-        scrollTrigger: {
-          trigger: '.stats-grid',
-          start: 'top 80%',
-        },
-        y: 60,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: 'power3.out',
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, [hasAnimated]);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const stickyHeaderRef = useRef<HTMLDivElement | null>(null);
+  const stickySectionRef = useRef<HTMLDivElement | null>(null);
+  const [counters, setCounters] = useState<Record<number, number>>({});
+  const [hasCounterStarted, setHasCounterStarted] = useState(false);
+  const [stickyHeight, setStickyHeight] = useState(5000);
 
   const stats = [
     {
       icon: Users,
       value: '100K+',
       label: 'Targeting Early Adopters',
-      color: 'from-[#CDFF00] to-yellow-300',
+      color: 'from-[#d0d0d0] to-[#a8a8a8]',
     },
     {
       icon: Briefcase,
       value: '$500M+',
       label: 'Potential Market',
-      color: 'from-blue-500 to-cyan-400',
+      color: 'from-[#b8b8b8] to-[#8a8a8a]',
     },
     {
       icon: DollarSign,
       value: '$2B+',
       label: 'Untapped Data Value',
-      color: 'from-green-500 to-emerald-400',
+      color: 'from-[#c5c5c5] to-[#9f9f9f]',
     },
     {
       icon: ShoppingBag,
       value: '30+',
       label: 'Data Categories',
-      color: 'from-purple-500 to-pink-500',
+      color: 'from-[#bebebe] to-[#969696]',
     },
     {
       icon: Smile,
       value: '97%',
       label: 'User Satisfaction (Projected)',
-      color: 'from-orange-500 to-red-500',
+      color: 'from-[#d8d8d8] to-[#adadad]',
     },
   ];
 
+  const transforms = [
+    [
+      [10, 50, -10, 10],
+      [20, -10, -45, 10],
+    ],
+    [
+      [0, 47.5, -10, 15],
+      [-25, 15, -45, 30],
+    ],
+    [
+      [0, 52.5, -10, 5],
+      [15, -5, -40, 60],
+    ],
+    [
+      [10, 50, -10, 10],
+      [20, -10, -45, 90],
+    ],
+    [
+      [0, 0, 0, 0],
+      [25, -15, 60, 120],
+    ],
+  ];
+
+  useEffect(() => {
+    setStickyHeight(window.innerHeight * 5);
+
+    // Initialize Lenis
+    const initLenis = async () => {
+      const { default: Lenis } = await import('lenis');
+      const lenis = new Lenis();
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    };
+
+    initLenis();
+
+    const stickySectionEl = stickySectionRef.current;
+    if (!stickySectionEl) {
+      return;
+    }
+
+    ScrollTrigger.create({
+      trigger: stickySectionEl,
+      start: "top top",
+      end: `+=${stickyHeight}px`,
+      pin: true,
+      pinSpacing: true,
+      onUpdate: (self) => {
+        const progress = self.progress;
+
+        if (stickyHeaderRef.current) {
+          const maxTranslate =
+            stickyHeaderRef.current.offsetWidth - window.innerWidth;
+          const translateX = -progress * maxTranslate;
+          gsap.set(stickyHeaderRef.current, { x: translateX });
+        }
+
+        // Start counter animation at 30% progress
+        if (progress > 0.3 && !hasCounterStarted) {
+          setHasCounterStarted(true);
+          stats.forEach((stat, index) => {
+            const target = stat.value;
+            const numericValue = parseFloat(target.replace(/[^0-9.]/g, ''));
+            let current = 0;
+            const increment = numericValue / 60;
+            const timer = setInterval(() => {
+              current += increment;
+              if (current >= numericValue) {
+                current = numericValue;
+                clearInterval(timer);
+              }
+              setCounters(prev => ({ ...prev, [index]: Math.floor(current) }));
+            }, 30);
+          });
+        }
+
+        cardsRef.current.forEach((card, index) => {
+          const delay = index * 0.1125;
+          const cardProgress = Math.max(0, Math.min((progress - delay) * 2, 1));
+
+          if (cardProgress > 0) {
+            const cardStartX = 25;
+            const cardEndX = -650;
+            const yPos = transforms[index]?.[0] || [0];
+            const rotations = transforms[index]?.[1] || [0];
+
+            const cardX = gsap.utils.interpolate(
+              cardStartX,
+              cardEndX,
+              cardProgress,
+            );
+            const yProgress = cardProgress * 3;
+            const yIndex = Math.min(Math.floor(yProgress), yPos.length - 2);
+            const yInterpolation = yProgress - yIndex;
+            const cardY = gsap.utils.interpolate(
+              yPos[yIndex],
+              yPos[yIndex + 1],
+              yInterpolation,
+            );
+            const cardRotation = gsap.utils.interpolate(
+              rotations[yIndex],
+              rotations[yIndex + 1],
+              yInterpolation,
+            );
+
+            gsap.set(card, {
+              xPercent: cardX,
+              yPercent: cardY,
+              rotation: cardRotation,
+              opacity: 1,
+            });
+          } else {
+            gsap.set(card, { opacity: 0 });
+          }
+        });
+      },
+    });
+
+    return () => {
+      ScrollTrigger.killAll();
+    };
+  }, [hasCounterStarted]);
+
   return (
-    <section ref={sectionRef} className="section-padding bg-[#1A1A1A] relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#CDFF00] opacity-20 blur-[200px] rounded-full" />
+    <div
+      className="relative bg-[#d6d5d5] w-full h-screen overflow-hidden transition-colors duration-300"
+      id="statistics"
+      ref={stickySectionRef}
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-[#e8e8e8] via-[#f0f0f0] to-[#d5d5d5]" />
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#919191] opacity-25 blur-[200px] rounded-full" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-block mb-6"
+      <div
+        className="absolute top-0 left-0 w-[250vw] h-full flex items-center justify-center will-change-transform"
+        ref={stickyHeaderRef}
+      >
+        <h1 className="text-black text-[30vw] tracking-tight leading-tight font-semibold m-0 transition-colors duration-300">
+          ACHIEVEMENTS & <span className="text-[#2f2f2f]">PROJECTIONS</span>
+        </h1>
+      </div>
+
+      {stats.map((stat, index) => {
+        const target = stat.value;
+        const isPercentage = target.includes('%');
+        const isDollar = target.includes('$');
+        const isK = target.includes('K');
+        const isM = target.includes('M');
+        const isPlus = target.includes('+');
+        const counterValue = counters[index] ?? 0;
+        let display = counterValue.toString();
+        if (isDollar) display = '$' + display;
+        if (isM) display += 'M';
+        if (isK) display += 'K';
+        if (isPlus) display += '+';
+        if (isPercentage) display += '%';
+
+        return (
+          <div
+            key={index}
+            className="absolute left-full w-[325px] bg-white rounded-[10px] p-3 will-change-transform z-20 transition-colors duration-300"
+            ref={(el) => {
+              cardsRef.current[index] = el;
+            }}
           >
-            <span className="px-4 py-2 bg-[#CDFF00]/10 border border-[#CDFF00]/30 rounded-full text-[#CDFF00] text-sm font-medium">
-              📈 By The Numbers
-            </span>
-          </motion.div>
-
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6">
-            ACHIEVEMENTS & <span className="text-[#CDFF00]">PROJECTIONS</span>
-          </h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            Join the revolution. Be part of the data ownership movement.
-          </p>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="stats-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
-          {stats.map((stat, index) => (
-            <motion.div
-              key={index}
-              whileHover={{ y: -10, scale: 1.05 }}
-              className="stat-card group"
-            >
-              <div className="bg-[#0A0A0A] border border-gray-800 rounded-2xl p-6 text-center hover:border-gray-700 transition-all h-full">
-                <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                  <stat.icon size={28} className="text-white" />
+            <div className="w-full h-[300px] flex flex-col justify-between text-black p-2 transition-colors duration-300">
+              <div className="flex flex-col items-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#f0f0f0] shadow-lg mb-6 mt-4">
+                  <stat.icon size={32} className="text-[#1e1e1e]" />
                 </div>
-                <div 
-                  className={`counter-value text-3xl md:text-4xl font-black bg-gradient-to-br ${stat.color} bg-clip-text text-transparent mb-2`}
-                  data-target={stat.value}
-                >
-                  0
-                </div>
-                <p className="text-sm text-gray-400 leading-tight">{stat.label}</p>
+                <h2 className={`text-[48px] tracking-tighter leading-tight font-medium bg-gradient-to-br ${stat.color} bg-clip-text text-transparent text-center`}>
+                  {display}
+                </h2>
               </div>
-            </motion.div>
-          ))}
-        </div>
+              <div>
+                <p className="text-[20px] leading-tight text-black text-center transition-colors duration-300">
+                  {stat.label}
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+      })}
 
-        {/* Additional Info */}
-        <div className="mt-16 text-center">
-          <p className="text-gray-500 text-sm max-w-2xl mx-auto">
-            * Projections based on market research and early user feedback. Actual results may vary.
-          </p>
-        </div>
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 w-full px-4">
+        <p className="text-[#4f4f4f] text-sm text-center max-w-2xl mx-auto">
+          * Projections based on market research and early user feedback. Actual results may vary.
+        </p>
       </div>
-    </section>
+    </div>
   );
 }

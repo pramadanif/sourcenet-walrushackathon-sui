@@ -65,10 +65,10 @@ export default function WhyWeWin() {
   ];
 
   return (
-    <section ref={sectionRef} id="about" className="section-padding bg-[#FAF8F1] relative overflow-hidden">
+    <section ref={sectionRef} id="about" className="section-padding bg-[#FAF8F1] relative overflow-hidden flex flex-col items-center w-full">
       {/* Background effects */}
       <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#FAEAB1] opacity-30 blur-[200px] rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#919191] opacity-30 blur-[200px] rounded-full" />
       </div>
 
       {/* Flowing data animation */}
@@ -76,7 +76,7 @@ export default function WhyWeWin() {
         {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
-            className="data-flow absolute w-16 h-16 rounded-lg bg-[#34656D]/10 border border-[#34656D]/20"
+            className="data-flow absolute w-16 h-16 rounded-lg bg-[#474747]/10 border border-[#474747]/20"
             style={{
               left: `${-10 + i * 15}%`,
               top: `${20 + (i % 3) * 25}%`,
@@ -94,8 +94,8 @@ export default function WhyWeWin() {
         ))}
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
+      <div className="section-inner relative z-10 flex flex-col items-center">
+        <div className="grid lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto w-full">
           {/* Left Content */}
           <div>
             <motion.div
@@ -104,25 +104,25 @@ export default function WhyWeWin() {
               viewport={{ once: true }}
               className="inline-block mb-6"
             >
-              <span className="px-4 py-2 bg-[#FAEAB1]/30 border border-[#34656D]/30 rounded-full text-[#34656D] text-sm font-medium">
+              <span className="px-4 py-2 bg-[#919191]/20 border border-[#4b4b4b]/30 rounded-full text-[#353535] text-sm font-medium">
                 🏆 Why SourceNet Wins
               </span>
             </motion.div>
 
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#34656D] mb-6">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#1a1a1a] mb-6">
               10x Better UX
               <br />
-              <span className="text-[#334443]">for Data Producers</span>
+              <span className="text-[#2f2f2f]">for Data Producers</span>
             </h2>
 
-            <p className="text-xl text-[#334443]/80 mb-8 leading-relaxed">
+            <p className="text-xl text-[#4f4f4f] mb-8 leading-relaxed">
               Combining ZKLogin, Sponsored Tx, Kiosk, and PTB, SourceNet makes onboarding millions of new data producers to Sui effortless.
             </p>
 
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-[#34656D] text-[#FAF8F1] px-8 py-4 rounded-full font-bold text-lg hover:bg-[#334443] transition-all shadow-lg"
+              className="bg-[#2f2f2f] text-[#FAF8F1] px-8 py-4 rounded-full font-bold text-lg hover:bg-[#1a1a1a] transition-all shadow-lg"
             >
               Start Earning Today
             </motion.button>
@@ -134,12 +134,12 @@ export default function WhyWeWin() {
               <motion.div
                 key={index}
                 whileHover={{ x: 10 }}
-                className="feature-item flex items-center gap-4 bg-white border border-[#474747]/20 rounded-xl p-4 hover:border-[#3b82f6]/50 transition-all group shadow-sm"
+                className="feature-item flex items-center gap-4 bg-white border border-[#2e2e2e]/20 rounded-xl p-4 hover:border-[#2e2e2e]/50 transition-all group shadow-sm"
               >
-                <div className="w-8 h-8 rounded-lg bg-[#34656D] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <div className="w-8 h-8 rounded-lg bg-[#2f2f2f] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
                   <Check size={20} className="text-[#FAF8F1] font-bold" />
                 </div>
-                <span className="text-[#353535] font-semibold">{feature}</span>
+                <span className="text-[#1a1a1a] font-semibold">{feature}</span>
               </motion.div>
             ))}
           </div>
@@ -161,8 +161,8 @@ export default function WhyWeWin() {
               transition={{ delay: i * 0.1 }}
               className="text-center"
             >
-              <div className="text-3xl md:text-4xl font-black text-[#3b82f6] mb-2">{stat.value}</div>
-              <div className="text-sm text-[#474747]">{stat.label}</div>
+              <div className="text-3xl md:text-4xl font-black text-[#2f2f2f] mb-2">{stat.value}</div>
+              <div className="text-sm text-[#4f4f4f]">{stat.label}</div>
             </motion.div>
           ))}
         </div>

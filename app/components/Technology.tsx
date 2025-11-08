@@ -1,145 +1,155 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Zap, Shield, Database, Blocks, Cloud, Lock } from 'lucide-react';
+import { Shield, Database, Blocks, FileLock, Key } from 'lucide-react';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+// Walrus and Sui icons as SVG paths
+const WalrusIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13.5v5.25l4.5 2.67-.75 1.23L9 13V6.5h2z" fill="currentColor"/>
+  </svg>
+);
+
+const SuiIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
+    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const technologies = [
+  {
+    icon: Key,
+    name: 'ZKLogin',
+    description: 'Google OAuth integration with zero-knowledge proofs',
+    color: 'from-gray-700 to-gray-900',
+  },
+  {
+    icon: Shield,
+    name: 'Sponsored Transactions',
+    description: 'We pay gas fees so you don\'t have to',
+    color: 'from-gray-700 to-gray-900',
+  },
+  {
+    icon: Database,
+    name: 'Sui Objects',
+    description: 'Your data as programmable blockchain objects',
+    color: 'from-gray-700 to-gray-900',
+  },
+  {
+    icon: Blocks,
+    name: 'Kiosk & PTB',
+    description: 'Instant marketplace listing with programmable transactions',
+    color: 'from-gray-700 to-gray-900',
+  },
+  {
+    icon: WalrusIcon,
+    name: 'Walrus Protocol',
+    description: 'Decentralized storage for your data',
+    color: 'from-gray-700 to-gray-900',
+  },
+  {
+    icon: FileLock,
+    name: 'IPFS Storage',
+    description: 'Immutable and distributed file storage',
+    color: 'from-gray-700 to-gray-900',
+  },
+];
+
+const gridVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.15,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.96 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.6, ease: 'easeOut' },
+  },
+};
 
 export default function Technology() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (!sectionRef.current) return;
-
-    const ctx = gsap.context(() => {
-      gsap.from('.tech-card', {
-        scrollTrigger: {
-          trigger: '.tech-grid',
-          start: 'top 80%',
-        },
-        scale: 0.8,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: 'back.out(1.7)',
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const technologies = [
-    {
-      icon: Zap,
-      name: 'ZKLogin',
-      description: 'Google OAuth integration with zero-knowledge proofs',
-      color: 'from-yellow-500 to-orange-500',
-    },
-    {
-      icon: Shield,
-      name: 'Sponsored Transactions',
-      description: 'We pay gas fees so you don\'t have to',
-      color: 'from-green-500 to-emerald-500',
-    },
-    {
-      icon: Database,
-      name: 'Sui Objects',
-      description: 'Your data as programmable blockchain objects',
-      color: 'from-blue-500 to-cyan-500',
-    },
-    {
-      icon: Blocks,
-      name: 'Kiosk & PTB',
-      description: 'Instant marketplace listing with programmable transactions',
-      color: 'from-purple-500 to-pink-500',
-    },
-    {
-      icon: Cloud,
-      name: 'Walrus Protocol',
-      description: 'Decentralized storage for your data',
-      color: 'from-indigo-500 to-blue-500',
-    },
-    {
-      icon: Lock,
-      name: 'IPFS Storage',
-      description: 'Immutable and distributed file storage',
-      color: 'from-red-500 to-orange-500',
-    },
-  ];
-
   return (
-    <section ref={sectionRef} id="technology" className="section-padding bg-gradient-to-b from-[#1A1A1A] to-[#0A0A0A] relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-1/4 right-1/3 w-96 h-96 bg-blue-500 opacity-30 blur-[150px] rounded-full" />
-        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-purple-500 opacity-30 blur-[150px] rounded-full" />
+    <section
+      id="technology"
+      className="relative w-full overflow-hidden bg-gradient-to-b from-[#f4f4f4] to-[#dedede] pt-24 sm:pt-28 md:pt-32 lg:pt-36 pb-24 sm:pb-28 md:pb-32 lg:pb-36 flex flex-col items-center"
+    >
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-1/3 left-1/4 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-[#c3c3c3] blur-[180px]" />
+        <div className="absolute bottom-1/3 right-1/4 h-[360px] w-[360px] translate-x-1/3 rounded-full bg-[#9f9f9f] blur-[160px]" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
+      <div className="section-inner relative z-10 flex w-full max-w-6xl flex-col items-center gap-16">
+        <div className="text-center flex flex-col items-center gap-5">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#2f2f2f]/20 bg-white/60 px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#2b2b2b] sm:text-sm">
+            ⚡ Technology Stack
+          </span>
+          <motion.h2
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-block mb-6"
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+            className="text-balance text-3xl font-black leading-tight text-[#121212] sm:text-4xl md:text-5xl lg:text-6xl"
           >
-            <span className="px-4 py-2 bg-blue-500/10 border border-blue-500/30 rounded-full text-blue-400 text-sm font-medium">
-              ⚡ Technology Stack
-            </span>
-          </motion.div>
-
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6">
-            POWERED BY <span className="text-[#CDFF00]">SUI BLOCKCHAIN</span>
-          </h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            Best-in-class Web3 tech stack for seamless user experience
+            POWERED BY <span className="text-[#2f2f2f]">SUI BLOCKCHAIN</span>
+          </motion.h2>
+          <p className="max-w-3xl text-pretty text-sm text-[#3f3f3f] sm:text-base md:text-lg">
+            Best-in-class Web3 tooling to make data ownership seamless, secure, and lightning fast.
           </p>
         </div>
 
-        {/* Tech Grid */}
-        <div className="tech-grid grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-20">
-          {technologies.map((tech, index) => (
+        <motion.div
+          variants={gridVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.25 }}
+          className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {technologies.map((tech) => (
             <motion.div
-              key={index}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="tech-card group"
+              key={tech.name}
+              variants={cardVariants}
+              className="group flex h-full flex-col rounded-3xl border border-[#1f1f1f]/15 bg-gradient-to-br from-[#f8f8f8] via-[#e4e4e4] to-[#d1d1d1] p-6 text-left shadow-[0_14px_32px_rgba(23,23,23,0.12)] transition-all duration-300 hover:-translate-y-2 hover:border-[#1f1f1f]/30 hover:shadow-[0_18px_42px_rgba(23,23,23,0.16)]"
             >
-              <div className="bg-[#0A0A0A] border border-gray-800 rounded-2xl p-6 h-full hover:border-gray-700 transition-all relative overflow-hidden">
-                {/* Background gradient */}
-                <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${tech.color} opacity-10 blur-2xl group-hover:opacity-20 transition-opacity`} />
-
-                <div className="relative z-10">
-                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${tech.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                    <tech.icon size={24} className="text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-2">{tech.name}</h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">{tech.description}</p>
-                </div>
+              <div className={`mb-5 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br ${tech.color} flex items-center justify-center text-white shadow-inner shadow-white/40 transition-transform duration-300 group-hover:scale-110`}>
+                {tech.icon === WalrusIcon || tech.icon === SuiIcon ? (
+                  <tech.icon />
+                ) : (
+                  <tech.icon size={22} className="text-white" />
+                )}
+              </div>
+              <h3 className="text-xl font-semibold text-[#1a1a1a] mb-2">{tech.name}</h3>
+              <p className="text-sm leading-relaxed text-[#2f2f2f] flex-1">
+                {tech.description}
+              </p>
+              <div className="mt-6 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.28em] text-[#4e4e4e]">
+                <span className="h-[2px] w-8 bg-[#4e4e4e]/60" />
+                SUI ECOSYSTEM
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        {/* Sui Logo Section */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
           className="text-center"
         >
-          <div className="inline-block bg-[#1A1A1A] border border-gray-800 rounded-3xl px-12 py-8">
-            <p className="text-gray-400 text-sm mb-4">Built on</p>
-            <div className="text-6xl font-black">
-              <span className="bg-gradient-to-r from-[#CDFF00] via-blue-500 to-purple-500 bg-clip-text text-transparent">
-                SUI
-              </span>
+          <div className="inline-flex items-center gap-3 rounded-3xl border border-[#1f1f1f]/15 bg-white/80 px-8 py-5 shadow-[0_12px_30px_rgba(23,23,23,0.08)]">
+            <SuiIcon />
+            <div className="text-left">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#4a4a4a]">Built on</p>
+              <p className="text-2xl font-black text-[#121212] leading-tight">Sui — developer-first blockchain</p>
             </div>
-            <p className="text-gray-500 text-xs mt-4">The most developer-friendly blockchain</p>
           </div>
         </motion.div>
       </div>

@@ -1,105 +1,81 @@
-"use client";
+'use client';
 
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Lock, Coins, Settings2, XCircle } from "lucide-react";
 
-gsap.registerPlugin(ScrollTrigger);
+const ProblemIcons = {
+  lock: Lock,
+  money: Coins,
+  gear: Settings2,
+  cross: XCircle,
+};
 
 const problems = [
   {
     id: 1,
     title: "Data Locked Away",
-    desc: "Your browsing history, game stats, and personal data are trapped in Web2 silos.",
-    icon: "🔐",
+    desc: "Your data is trapped in Web2 silos.",
+    icon: ProblemIcons.lock,
   },
   {
     id: 2,
     title: "Companies Profit, You Don't",
     desc: "Big tech monetizes your data for billions while you see zero compensation.",
-    icon: "💰",
+    icon: ProblemIcons.money,
   },
   {
     id: 3,
     title: "Web3 Too Complex",
     desc: "Existing Web3 marketplaces require wallets, gas fees, and technical knowledge.",
-    icon: "⚙️",
+    icon: ProblemIcons.gear,
   },
   {
     id: 4,
     title: "No Easy Access",
     desc: "Selling your data should be simple, but current solutions make it impossible.",
-    icon: "🚫",
+    icon: ProblemIcons.cross,
   },
 ];
 
-const LOCK_PARTICLES = Array.from({ length: 15 }, (_, i) => ({
-  left: `${(5 + i * 13) % 100}%`,
-  top: `${(18 + i * 19) % 100}%`,
-  amplitude: 25 + (i % 3) * 10,
-  delay: (i % 7) * 0.4,
-  rotation: (i % 4 === 0 ? 12 : i % 4 === 1 ? -15 : 8),
-}));
+const headerVariants = {
+  hidden: { opacity: 0, y: 40 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.9,
+      ease: "easeOut",
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 35, scale: 0.96 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.7,
+      ease: "easeOut",
+    },
+  },
+};
+
+const listVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.25,
+    },
+  },
+};
 
 export default function ProblemSection() {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const ctx = gsap.context(() => {
-      const header = el.querySelector<HTMLElement>(".header-content");
-      if (header) {
-        gsap.fromTo(
-          header,
-          { y: 80, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1.2,
-            ease: "power4.out",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 75%",
-            },
-          }
-        );
-      }
-
-      const cards = cardsRef.current.filter(
-        (card): card is HTMLDivElement => Boolean(card)
-      );
-
-      if (cards.length) {
-        gsap.fromTo(
-          cards,
-          { y: 100, opacity: 0, scale: 0.9 },
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            stagger: 0.15,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: el.querySelector(".cards-grid") ?? el,
-              start: "top 80%",
-            },
-          }
-        );
-      }
-    }, el);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
-      className="relative z-10 min-h-screen py-32 px-6 md:px-12 lg:px-20 bg-[#CECECE] text-[#474747] overflow-hidden"
+      className="relative z-10 w-full pt-24 sm:pt-28 md:pt-32 lg:pt-36 pb-28 sm:pb-32 md:pb-36 lg:pb-40 bg-[#CECECE] text-[#474747] overflow-hidden flex flex-col items-center"
     >
       {/* Animated gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#CECECE] via-white to-[#CECECE]" />
@@ -123,150 +99,80 @@ export default function ProblemSection() {
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="header-content text-center mb-20">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-            className="inline-block mb-4 px-6 py-2 rounded-full border border-[#474747]/30 bg-[#919191]/30 backdrop-blur-sm"
-          >
-            <span className="text-[#353535] text-sm font-semibold tracking-wider uppercase">
-              The Problem
-            </span>
-          </motion.div>
+      <div className="section-inner relative z-10 flex flex-col items-center gap-20">
+        <motion.div
+          variants={headerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.5 }}
+          className="header-content mx-auto flex w-full max-w-4xl flex-col items-center text-center gap-5 sm:gap-6 lg:gap-8"
+        >
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#4b4b4b]/30 bg-[#919191]/20 px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#353535] sm:text-sm">
+            The Problem
+          </span>
+          <h2 className="w-full text-balance text-3xl font-black leading-tight text-[#161616] sm:text-4xl md:text-5xl lg:text-6xl">
+            Your Data is <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2f2f2f] via-[#111111] to-[#3d3d3d]">Locked</span>
+            <br className="hidden sm:block" />
+            and Monetized by <span className="text-[#202020]">Big Web2</span>
+          </h2>
+          <p className="text-pretty text-center text-sm text-[#4f4f4f] sm:text-base md:text-lg lg:text-xl">
+            Your browsing history, game history, and personal data are <span className="font-semibold text-[#282828]">locked by companies.</span>
+            <span className="mt-1 block">Existing Web3 marketplaces are too complex: wallets, gas fees, and setup.</span>
+          </p>
+        </motion.div>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] mb-8"
-          >
-            Your Data is{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#353535] to-[#000000]">
-              Locked
-            </span>
-            <br />
-            and Monetized by{" "}
-            <span className="text-[#353535]">
-              Big Web2
-            </span>
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4 }}
-            className="text-[#474747]/80 max-w-3xl mx-auto text-lg md:text-xl leading-relaxed"
-          >
-            Your browsing history, game history, and personal data are{" "}
-            <span className="text-[#353535] font-semibold">locked by companies</span>. Existing Web3 marketplaces are too complex: wallets, gas fees, and setup.
-          </motion.p>
-        </div>
-
-        {/* Problem Cards Grid */}
-        <div className="cards-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {problems.map((problem, index) => (
-            <div
-              key={problem.id}
-              ref={(el) => {
-                cardsRef.current[index] = el;
-              }}
-              className="group relative"
-            >
-              {/* Card glow effect on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#919191]/0 via-[#919191]/0 to-[#919191]/0 
-                            group-hover:from-[#919191]/20 group-hover:via-[#919191]/30 group-hover:to-[#919191]/20 
-                            rounded-3xl blur-xl transition-all duration-700" />
-              
-              {/* Card */}
-              <div
-                className="relative h-full border border-[#474747]/20 rounded-3xl p-8 
-                          bg-gradient-to-br from-white via-[#CECECE] to-white
-                          group-hover:border-[#474747]/50 group-hover:shadow-[0_0_60px_rgba(71,71,71,0.2)]
-                          transition-all duration-700 backdrop-blur-sm overflow-hidden"
+        <motion.div
+          variants={listVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.25 }}
+          className="cards-grid mx-auto mt-12 grid w-full max-w-6xl grid-cols-1 gap-10 sm:grid-cols-2 xl:grid-cols-4"
+        >
+          {problems.map((problem) => {
+            const Icon = problem.icon;
+            return (
+              <motion.div
+                key={problem.id}
+                variants={cardVariants}
+                className="group relative flex h-full min-h-[240px] flex-col gap-6 overflow-hidden rounded-3xl border border-[#2e2e2e]/15 bg-gradient-to-br from-[#f3f3f3] via-[#dcdcdc] to-[#c6c6c6] p-7 shadow-[0_20px_50px_rgba(38,38,38,0.12)] backdrop-blur-sm transition-all duration-300 hover:border-[#2e2e2e]/35 hover:shadow-[0_26px_60px_rgba(38,38,38,0.18)]"
+                whileHover={{ y: -6 }}
               >
-                {/* Corner accent */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#919191]/30 to-transparent 
-                              opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-2xl" />
-                
-                {/* Header with Number Badge */}
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center gap-4">
-                    <div className="text-5xl opacity-25 group-hover:opacity-40 transition-opacity duration-500">
-                      {problem.icon}
-                    </div>
-                  </div>
-                  <div className="text-[#3b82f6] text-base font-bold px-4 py-2 rounded-full 
-                                border-2 border-[#3b82f6]/30 bg-[#3b82f6]/10
-                                group-hover:bg-[#3b82f6]/20 group-hover:scale-105 
-                                transition-all duration-500">
-                    0{index + 1}
-                  </div>
-                </div>
+                <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-40" style={{ background: "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.4), transparent 60%)" }} />
 
-                {/* Content */}
-                <div className="space-y-5">
-                  <h3 className="text-2xl md:text-3xl font-bold text-[#000000] leading-tight 
-                               group-hover:text-[#3b82f6] transition-colors duration-500">
+                <div className="relative z-10 flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/45 text-[#1e1e1e] shadow-inner shadow-white/60">
+                    <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={2.4} />
+                  </div>
+                  <h3 className="text-xl font-semibold text-[#111] sm:text-2xl">
                     {problem.title}
                   </h3>
-                  <p className="text-[#474747] text-base md:text-lg leading-relaxed 
-                              font-medium transition-colors duration-500">
-                    {problem.desc}
-                  </p>
                 </div>
 
-                {/* Bottom line indicator */}
-                <div className="absolute bottom-0 left-0 w-0 h-[3px] bg-gradient-to-r from-[#3b82f6] to-transparent 
-                              group-hover:w-full transition-all duration-700 rounded-full" />
-              </div>
-            </div>
-          ))}
-        </div>
+                <p className="relative z-10 text-base text-[#2f2f2f] leading-relaxed">
+                  {problem.desc}
+                </p>
 
-        {/* Bottom CTA */}
+                <div className="relative z-10 mt-auto h-[2px] w-0 bg-gradient-to-r from-[#1b1b1b] via-[#000000] to-transparent transition-all duration-500 group-hover:w-full" />
+              </motion.div>
+            );
+          })}
+        </motion.div>
+
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
+          transition={{ duration: 0.9, delay: 0.4 }}
           viewport={{ once: true }}
-          className="mt-24 text-center"
+          className="mt-24 sm:mt-28 text-center"
         >
-          <div className="inline-flex items-center gap-3 px-8 py-4 rounded-full 
-                        border border-[#474747]/30 bg-gradient-to-r from-[#919191]/30 to-transparent 
-                        backdrop-blur-md">
+          <div className="inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 rounded-full
+                        border border-[#353535]/25 bg-white/80 backdrop-blur-md shadow-sm">
             <div className="w-2 h-2 rounded-full bg-[#353535] animate-pulse" />
             <span className="text-[#474747] text-sm md:text-base">
               <span className="text-[#353535] font-bold">SourceNet</span> makes data ownership simple and profitable
             </span>
           </div>
         </motion.div>
-      </div>
-
-      {/* Floating locked chain particles effect */}
-      <div className="absolute inset-0 pointer-events-none">
-        {LOCK_PARTICLES.map((particle, i) => (
-          <motion.div
-            key={i}
-            className="absolute text-2xl opacity-20"
-            style={{ left: particle.left, top: particle.top }}
-            animate={{
-              y: [0, -particle.amplitude, 0],
-              opacity: [0.1, 0.3, 0.1],
-              rotate: [0, particle.rotation, -particle.rotation, 0],
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              delay: particle.delay,
-              ease: "easeInOut",
-            }}
-          >
-            🔒
-          </motion.div>
-        ))}
       </div>
     </section>
   );

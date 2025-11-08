@@ -137,7 +137,7 @@ export default function Navbar() {
       <motion.nav
         className={`fixed left-1/2 z-50 w-full max-w-[1400px] -translate-x-1/2 px-4 md:px-6 transition-all duration-500 ${
           isScrolled 
-            ? 'top-3 md:top-4 backdrop-blur-xl bg-[#CECECE]/60 shadow-lg' 
+            ? 'top-3 md:top-4'
             : 'top-6 md:top-8'
         }`}
         aria-label="Main navigation"
@@ -145,7 +145,12 @@ export default function Navbar() {
         <motion.div
           ref={navRef}
           onMouseMove={handleMouseMove}
-          className="relative mx-auto flex items-center justify-between rounded-[28px] px-5 md:px-7 py-4 overflow-hidden group/nav"
+          className="relative mx-auto flex items-center justify-between rounded-[28px] px-5 md:px-7 py-4 overflow-hidden group/nav transition-shadow duration-500"
+          style={{
+            boxShadow: isScrolled
+              ? '0 30px 70px -32px rgba(34,34,34,0.55)'
+              : '0 22px 60px -36px rgba(34,34,34,0.45)',
+          }}
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ 
@@ -157,12 +162,16 @@ export default function Navbar() {
           role="navigation"
         >
           {/* ✅ Lapisan Background Glassmorphism */}
-          <div className="absolute inset-0 bg-[#CECECE]/75 backdrop-blur-3xl" />
-          <div className="absolute inset-0 bg-gradient-to-br from-[#474747]/10 via-transparent to-[#919191]/15" />
+          <div
+            className={`absolute inset-0 rounded-[28px] ${
+              isScrolled ? 'bg-[#CECECE]/70 backdrop-blur-3xl' : 'bg-[#CECECE]/55 backdrop-blur-2xl'
+            }`}
+          />
+          <div className="absolute inset-0 rounded-[28px] bg-gradient-to-br from-[#474747]/10 via-transparent to-[#919191]/15" />
           
           {/* Animated Grain Texture */}
           <motion.div 
-            className="absolute inset-0 opacity-15"
+            className="absolute inset-0 rounded-[28px] opacity-15 pointer-events-none"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
             }}
@@ -178,7 +187,7 @@ export default function Navbar() {
 
           {/* Interactive Glow Effect */}
           <motion.div
-            className="absolute inset-0 opacity-0 group-hover/nav:opacity-100 transition-opacity duration-700"
+            className="absolute inset-0 rounded-[28px] opacity-0 group-hover/nav:opacity-100 transition-opacity duration-700"
             style={{
               background: `radial-gradient(800px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(145,145,145,0.2), transparent 50%)`,
             }}
@@ -357,8 +366,8 @@ export default function Navbar() {
                 transition={{ duration: 0.35 }}
               />
 
-              <span className="relative z-10 text-[#CECECE] flex items-center gap-2">
-                Get Started
+              <span className="relative z-10 text-white flex items-center gap-2">
+                Launch App
                 <motion.span
                   animate={{ x: [0, 4, 0] }}
                   transition={{ 
@@ -529,8 +538,8 @@ export default function Navbar() {
                       className="absolute -inset-1.5 bg-gradient-to-r from-[#919191] to-[#474747] rounded-2xl opacity-0 group-hover/mobile-cta:opacity-70 blur-xl"
                       transition={{ duration: 0.35 }}
                     />
-                    <span className="relative z-10 text-[#CECECE] flex items-center justify-center gap-2.5">
-                      Get Started
+                    <span className="relative z-10 text-white flex items-center justify-center gap-2.5">
+                      Launch App
                       <motion.span
                         animate={{ x: [0, 6, 0] }}
                         transition={{ 

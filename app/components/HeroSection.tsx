@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useMotionValue, useSpring, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, Shield } from 'lucide-react';
+import { ArrowRight, Shield, Users, DollarSign, Lock } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
 const Spline = dynamic(() => import('@splinetool/react-spline'), { ssr: false });
@@ -33,8 +33,9 @@ export default function SplineHeroSection() {
     offset: ["start start", "end start"]
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  // Removed fade animation - keeping section static when scrolling
+  const opacity = 1;
+  const scale = 1;
 
   // Track mouse for subtle parallax
   useEffect(() => {
@@ -99,7 +100,7 @@ export default function SplineHeroSection() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSubtitleIndex((prev) => (prev + 1) % subtitles.length);
-    }, 4000); // Ganti setiap 4 detik
+    }, 4000);
 
     return () => clearInterval(interval);
   }, []);
@@ -108,7 +109,7 @@ export default function SplineHeroSection() {
     <motion.section 
       ref={containerRef}
       style={{ opacity, scale }}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#CECECE]"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#f5f5f5]"
     >
       {/* Subtle Animated Grid */}
       <div className="absolute inset-0 opacity-[0.015]">
@@ -126,10 +127,10 @@ export default function SplineHeroSection() {
 
       {/* Elegant Gradient Orbs with Mouse Tracking */}
       <motion.div 
-        className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-[#919191] opacity-10 blur-[140px] rounded-full"
+        className="absolute top-1/4 -left-1/4 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-[#919191] opacity-5 blur-[100px] sm:blur-[140px] rounded-full"
         animate={{
           scale: [1, 1.05, 1],
-          opacity: [0.1, 0.15, 0.1],
+          opacity: [0.05, 0.1, 0.05],
         }}
         transition={{
           duration: 8,
@@ -142,10 +143,10 @@ export default function SplineHeroSection() {
         }}
       />
       <motion.div 
-        className="absolute bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-[#474747] opacity-10 blur-[140px] rounded-full"
+        className="absolute bottom-1/4 -right-1/4 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-[#474747] opacity-5 blur-[100px] sm:blur-[140px] rounded-full"
         animate={{
           scale: [1.05, 1, 1.05],
-          opacity: [0.1, 0.12, 0.1],
+          opacity: [0.05, 0.08, 0.05],
         }}
         transition={{
           duration: 10,
@@ -159,8 +160,8 @@ export default function SplineHeroSection() {
         }}
       />
 
-      {/* ✅ Spline 3D Background — now properly layered & full viewport */}
-      <div className="absolute inset-0 z-20 pointer-events-none">
+      {/* ✅ Spline 3D Background */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -169,7 +170,7 @@ export default function SplineHeroSection() {
         >
           <div className="relative w-full h-full">
             <Spline 
-              scene="https://prod.spline.design/hw1emnNezRQpqBrW/scene.splinecode" 
+              scene="https://prod.spline.design/hw1emnNezRQpqBrW/scene.splinecode  " 
               className="pointer-events-auto"
             />
           </div>
@@ -195,13 +196,13 @@ export default function SplineHeroSection() {
         />
       ))}
 
-      {/* ✅ Konten utama: z-30 agar selalu di atas Spline */}
-      <div className="max-w-7xl mx-auto px-6 py-16 sm:py-24 relative z-30 w-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      {/* ✅ Konten Utama */}
+      <div className="section-inner py-16 sm:py-24 relative z-30">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-20 items-center">
           
           {/* Left Content */}
           <motion.div 
-            className="space-y-8"
+            className="space-y-6 sm:space-y-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
@@ -217,22 +218,22 @@ export default function SplineHeroSection() {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                <span className="px-5 py-2.5 bg-white/60 border border-[#474747]/20 rounded-full text-[#353535] text-sm font-semibold backdrop-blur-md flex items-center gap-2 inline-flex">
-                  <Shield className="w-4 h-4" />
-                  Web2 Frictionless Data Marketplace
+                <span className="px-4 py-2 bg-white/60 border border-[#474747]/20 rounded-full text-[#353535] text-xs sm:text-sm font-semibold backdrop-blur-md flex items-center gap-1.5 sm:gap-2 inline-flex">
+                  <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  Web3 Frictionless Data Marketplace
                 </span>
               </motion.div>
             </motion.div>
 
-            {/* Main Title — ✅ Font size disesuaikan agar elegan & tidak dominan */}
-            <div className="space-y-3">
+            {/* Main Title — Cohesive unit */}
+            <div className="space-y-2">
               <motion.h1 
-                className="font-black tracking-tight text-[#353535] leading-[1.05]"
+                className="font-bold tracking-tight text-[#353535] leading-[1.1]"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
                 style={{
-                  fontSize: 'clamp(2.5rem, 6vw, 5.5rem)',
+                  fontSize: 'clamp(2rem, 8vw, 4rem)',
                 }}
               >
                 <motion.span 
@@ -240,40 +241,24 @@ export default function SplineHeroSection() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-                  whileHover={{ x: 5, transition: { duration: 0.3 } }}
                 >
-                  SourceNet —
+                  <span className="font-black">SourceNet</span>
                 </motion.span>
                 <motion.span 
-                  className="block mt-1"
+                  className="block mt-2 text-[#474747] font-medium"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
-                  whileHover={{ x: 5, transition: { duration: 0.3 } }}
+                  style={{ fontSize: 'clamp(1.1rem, 4vw, 1.5rem)' }}
                 >
-                  eBay for Your
-                </motion.span>
-                <motion.span 
-                  className="block text-[#000000] relative mt-1"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: 0.9, ease: "easeOut" }}
-                  whileHover={{ x: 5, transition: { duration: 0.3 } }}
-                >
-                  Personal Data
-                  <motion.span
-                    className="absolute -bottom-1.5 left-0 w-full h-2 bg-[#919191] -z-10 rounded-full"
-                    initial={{ scaleX: 0, originX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ duration: 1.2, delay: 1.3, ease: "easeOut" }}
-                  />
+                  Own & Monetize Your Personal Data
                 </motion.span>
               </motion.h1>
             </div>
 
-            {/* ✅ Dynamic Subtitle — tampil bergantian */}
+            {/* Dynamic Subtitle */}
             <motion.div 
-              className="space-y-4 max-w-xl"
+              className="space-y-4 max-w-xl pt-2"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.1, duration: 0.8 }}
@@ -289,14 +274,14 @@ export default function SplineHeroSection() {
                     ease: "easeOut"
                   }}
                   className="font-medium text-[#474747] leading-relaxed"
-                  style={{ fontSize: 'clamp(1.25rem, 3.5vw, 1.75rem)' }}
+                  style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)' }}
                 >
                   {subtitles[currentSubtitleIndex]}
                 </motion.p>
               </AnimatePresence>
             </motion.div>
 
-            {/* CTA Buttons */}
+            {/* ✅ CTA Button - Launch App */}
             <motion.div 
               className="flex flex-col sm:flex-row gap-4 pt-4"
               initial={{ opacity: 0, y: 20 }}
@@ -312,9 +297,9 @@ export default function SplineHeroSection() {
                 whileTap={{ scale: 0.98 }}
                 onHoverStart={() => setIsHovered(true)}
                 onHoverEnd={() => setIsHovered(false)}
-                className="group relative bg-[#353535] text-[#CECECE] px-7 py-4 sm:px-8 sm:py-4 rounded-full font-bold text-base sm:text-lg flex items-center justify-center gap-3 transition-all overflow-hidden shadow-lg"
+                className="group relative bg-[#353535] text-white px-7 py-4 sm:px-8 sm:py-4 rounded-full font-bold text-base sm:text-lg flex items-center justify-center gap-3 transition-all overflow-hidden shadow-lg"
                 style={{
-                  boxShadow: '0 4px 20px rgba(53, 53, 53, 0.2)',
+                  boxShadow: '0 4px 20px rgba(53, 53, 53, 0.3)',
                 }}
               >
                 <motion.div
@@ -328,67 +313,65 @@ export default function SplineHeroSection() {
                     ease: 'linear',
                   }}
                 />
-                <span className="relative z-10 font-semibold">Get Started</span>
+                <span className="relative z-10 font-semibold text-white">Launch App</span>
                 <motion.div
                   animate={{ x: isHovered ? 4 : 0 }}
                   transition={{ duration: 0.3 }}
                   className="relative z-10"
                 >
-                  <ArrowRight size={20} />
+                  <ArrowRight className="text-white" size={20} />
                 </motion.div>
-              </motion.button>
-
-              <motion.button
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.75, type: "spring", stiffness: 300 }}
-                whileHover={{ 
-                  scale: 1.02,
-                  backgroundColor: '#353535',
-                  color: '#CECECE',
-                }}
-                whileTap={{ scale: 0.98 }}
-                className="relative bg-transparent border-2 border-[#353535] text-[#353535] px-7 py-4 sm:px-8 sm:py-4 rounded-full font-bold text-base sm:text-lg transition-all"
-              >
-                Learn More
               </motion.button>
             </motion.div>
 
-            {/* Social Proof */}
+            {/* Social Proof & Trust Indicators */}
             <motion.div 
-              className="flex items-center gap-5 pt-6"
+              className="pt-6 sm:pt-8 space-y-4 sm:space-y-5"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 1.9 }}
             >
-              <div className="flex -space-x-2.5">
-                {[1, 2, 3, 4].map((i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ 
-                      delay: 2.0 + i * 0.08,
-                      type: "spring",
-                      stiffness: 200
-                    }}
-                    whileHover={{ 
-                      scale: 1.15, 
-                      zIndex: 10,
-                      transition: { duration: 0.2 }
-                    }}
-                    className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-[#353535] to-[#919191] border-2 border-[#CECECE] cursor-pointer"
-                  />
-                ))}
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="flex -space-x-2">
+                  {[1, 2, 3, 4].map((i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ 
+                        delay: 2.0 + i * 0.08,
+                        type: "spring",
+                        stiffness: 200
+                      }}
+                      whileHover={{ 
+                        scale: 1.15, 
+                        zIndex: 10,
+                        transition: { duration: 0.2 }
+                      }}
+                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#353535] to-[#919191] border-2 border-[#CECECE] cursor-pointer"
+                    />
+                  ))}
+                </div>
+                <p className="text-xs sm:text-sm text-[#474747]/80">
+                  <span className="text-[#353535] font-semibold">10K+</span> data producers already joined
+                </p>
               </div>
-              <motion.p 
-                className="text-sm text-[#474747]/70"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2.2 }}
-              >
-                <span className="text-[#353535] font-semibold">10K+</span> data producers already joined
-              </motion.p>
+
+              {/* Trust Badges */}
+              <div className="flex flex-wrap gap-3 sm:gap-4 pt-2">
+                <div className="flex items-center gap-1.5 sm:gap-2 text-xs text-[#474747]/70">
+                  <Lock size={12} className="text-[#353535]" />
+                  End-to-end encrypted
+                </div>
+                <div className="flex items-center gap-1.5 sm:gap-2 text-xs text-[#474747]/70">
+                  <DollarSign size={12} className="text-[#353535]" />
+                  Instant payouts
+                </div>
+                <div className="flex items-center gap-1.5 sm:gap-2 text-xs text-[#474747]/70">
+                  <Users size={12} className="text-[#353535]" />
+                  Zero technical skills
+                </div>
+              </div>
             </motion.div>
           </motion.div>
 
@@ -399,7 +382,7 @@ export default function SplineHeroSection() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
           >
-            {/* Transparent placeholder — Spline is visible behind */}
+            {/* Placeholder untuk Spline */}
           </motion.div>
         </div>
       </div>
