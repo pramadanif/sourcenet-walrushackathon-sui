@@ -1,13 +1,28 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useMotionValue, useSpring, useScroll, useTransform } from 'framer-motion';
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion';
 import { ArrowRight, Shield, Users, DollarSign, Lock } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
-const Spline = dynamic(() => import('@splinetool/react-spline'), { ssr: false });
+const Spline = dynamic(() => import('@splinetool/react-spline'), { 
+  ssr: false,
+  loading: () => null 
+});
 
-const HERO_PARTICLES = Array.from({ length: 15 }, (_, i) => ({
+// Memoized Spline component to prevent unnecessary re-renders
+const MemoizedSpline = React.memo(({ scene }: { scene: string }) => (
+  <Spline scene={scene} className="pointer-events-auto" />
+));
+MemoizedSpline.displayName = 'MemoizedSpline';
+
+// Optimize particle count based on device
+const getParticleCount = () => {
+  if (typeof window === 'undefined') return 15;
+  return window.innerWidth < 768 ? 8 : 15;
+};
+
+const HERO_PARTICLES = Array.from({ length: getParticleCount() }, (_, i) => ({
   left: `${(12 + i * 17) % 100}%`,
   top: `${(8 + i * 23) % 100}%`,
   amplitude: 40 + (i % 4) * 15,
@@ -18,8 +33,9 @@ const HERO_PARTICLES = Array.from({ length: 15 }, (_, i) => ({
 export default function SplineHeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+  const [splineLoaded, setSplineLoaded] = useState(false);
+  const mouseEventTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Smooth mouse tracking
   const mouseX = useMotionValue(0);
@@ -27,62 +43,79 @@ export default function SplineHeroSection() {
   const smoothMouseX = useSpring(mouseX, { damping: 40, stiffness: 80 });
   const smoothMouseY = useSpring(mouseY, { damping: 40, stiffness: 80 });
 
-  // Scroll progress
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  });
-
-  // Removed fade animation - keeping section static when scrolling
-  const opacity = 1;
-  const scale = 1;
-
-  // Track mouse for subtle parallax
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        mouseX.set(x * 20);
-        mouseY.set(y * 20);
-        setMousePosition({ x: e.clientX, y: e.clientY });
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+  // Debounced mouse move handler
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      mouseX.set(x * 20);
+      mouseY.set(y * 20);
+    }
   }, [mouseX, mouseY]);
 
-  // Magnetic button effect
+  // Track mouse for subtle parallax with debouncing
+  useEffect(() => {
+    const debouncedMouseMove = (e: MouseEvent) => {
+      if (mouseEventTimeoutRef.current) {
+        clearTimeout(mouseEventTimeoutRef.current);
+      }
+      mouseEventTimeoutRef.current = setTimeout(() => {
+        handleMouseMove(e);
+      }, 16); // ~60fps
+    };
+
+    window.addEventListener('mousemove', debouncedMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', debouncedMouseMove);
+      if (mouseEventTimeoutRef.current) {
+        clearTimeout(mouseEventTimeoutRef.current);
+      }
+    };
+  }, [handleMouseMove]);
+
+  // Magnetic button effect with optimized event handling
   useEffect(() => {
     const button = buttonRef.current;
     if (!button) return;
 
+    let animationFrameId: number | null = null;
+
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = button.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      const distance = Math.sqrt(x * x + y * y);
-      const maxDistance = 150;
-      
-      if (distance < maxDistance) {
-        const strength = (maxDistance - distance) / maxDistance;
-        button.style.transform = `translate(${x * strength * 0.3}px, ${y * strength * 0.3}px)`;
-      } else {
-        button.style.transform = 'translate(0, 0)';
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
       }
+      animationFrameId = requestAnimationFrame(() => {
+        const rect = button.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        const distance = Math.sqrt(x * x + y * y);
+        const maxDistance = 150;
+        
+        if (distance < maxDistance) {
+          const strength = (maxDistance - distance) / maxDistance;
+          button.style.transform = `translate(${x * strength * 0.3}px, ${y * strength * 0.3}px)`;
+        } else {
+          button.style.transform = 'translate(0, 0)';
+        }
+      });
     };
 
     const handleMouseLeave = () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
       if (button) button.style.transform = 'translate(0, 0)';
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('mouseleave', handleMouseLeave);
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
     };
   }, []);
 
@@ -105,10 +138,25 @@ export default function SplineHeroSection() {
     return () => clearInterval(interval);
   }, []);
 
+  // Preload Spline scene for better performance
+  useEffect(() => {
+    const preloadSpline = async () => {
+      try {
+        await fetch('https://prod.spline.design/hw1emnNezRQpqBrW/scene.splinecode', {
+          method: 'HEAD',
+        });
+        setSplineLoaded(true);
+      } catch (err) {
+        // Fallback: mark as loaded anyway after delay
+        setTimeout(() => setSplineLoaded(true), 2000);
+      }
+    };
+    preloadSpline();
+  }, []);
+
   return (
     <motion.section 
       ref={containerRef}
-      style={{ opacity, scale }}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#f5f5f5]"
     >
       {/* Subtle Animated Grid */}
@@ -160,21 +208,23 @@ export default function SplineHeroSection() {
         }}
       />
 
-      {/* ✅ Spline 3D Background */}
+      {/* ✅ Spline 3D Background - Optimized */}
       <div className="absolute inset-0 z-10 pointer-events-none">
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 2 }}
+          animate={{ opacity: splineLoaded ? 1 : 0 }}
+          transition={{ duration: 1.5 }}
           className="w-full h-full"
         >
-          <div className="relative w-full h-full">
-            <Spline 
-              scene="https://prod.spline.design/hw1emnNezRQpqBrW/scene.splinecode  " 
-              className="pointer-events-auto"
+          <div className="relative w-full h-full pointer-events-auto">
+            <MemoizedSpline 
+              scene="https://prod.spline.design/hw1emnNezRQpqBrW/scene.splinecode"
             />
           </div>
         </motion.div>
+        {!splineLoaded && (
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/5" />
+        )}
       </div>
 
       {/* Subtle Floating Particles */}
@@ -225,52 +275,63 @@ export default function SplineHeroSection() {
               </motion.div>
             </motion.div>
 
-            {/* Main Title — Cohesive unit */}
-            <div className="space-y-2">
+            {/* Main Title — Cohesive unit with enhanced animations */}
+            <div className="space-y-2 overflow-hidden">
               <motion.h1 
                 className="font-bold tracking-tight text-[#353535] leading-[1.1]"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
                 style={{
                   fontSize: 'clamp(2rem, 8vw, 4rem)',
                 }}
               >
                 <motion.span 
-                  className="block"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+                  className="block overflow-hidden"
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.9, delay: 0.4, ease: "easeOut" }}
                 >
-                  <span className="font-black">SourceNet</span>
+                  <motion.span
+                    className="inline-block font-black"
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.9, delay: 0.5, ease: "easeOut" }}
+                  >
+                    SourceNet
+                  </motion.span>
                 </motion.span>
                 <motion.span 
-                  className="block mt-2 text-[#474747] font-medium"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
+                  className="block mt-2 text-[#474747] font-medium overflow-hidden"
                   style={{ fontSize: 'clamp(1.1rem, 4vw, 1.5rem)' }}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.9, delay: 0.7, ease: "easeOut" }}
                 >
-                  Own & Monetize Your Personal Data
+                  <motion.span
+                    className="inline-block"
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.9, delay: 0.8, ease: "easeOut" }}
+                  >
+                    Own & Monetize Your Personal Data
+                  </motion.span>
                 </motion.span>
               </motion.h1>
             </div>
 
-            {/* Dynamic Subtitle */}
+            {/* Dynamic Subtitle with enhanced animations */}
             <motion.div 
-              className="space-y-4 max-w-xl pt-2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.1, duration: 0.8 }}
+              className="space-y-4 max-w-xl pt-2 overflow-hidden"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.0, duration: 0.8, ease: "easeOut" }}
             >
               <AnimatePresence mode="wait">
                 <motion.p
                   key={currentSubtitleIndex}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
+                  initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: -30, filter: "blur(10px)" }}
                   transition={{ 
-                    duration: 0.6,
+                    duration: 0.7,
                     ease: "easeOut"
                   }}
                   className="font-medium text-[#474747] leading-relaxed"
@@ -284,9 +345,9 @@ export default function SplineHeroSection() {
             {/* ✅ CTA Button - Launch App */}
             <motion.div 
               className="flex flex-col sm:flex-row gap-4 pt-4"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.6 }}
+              transition={{ delay: 1.5, duration: 0.8, ease: "easeOut" }}
             >
               <motion.button
                 ref={buttonRef}
