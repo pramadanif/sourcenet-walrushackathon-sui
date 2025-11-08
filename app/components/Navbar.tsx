@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -231,26 +232,17 @@ export default function Navbar() {
                 <motion.div
                   whileHover={{ scale: 1.06 }}
                   whileTap={{ scale: 0.95 }}
-                  className="text-2xl md:text-3xl font-black tracking-tighter flex items-center gap-1.5"
+                  className="flex items-center gap-2"
                 >
-                  <span className="text-[#353535] drop-shadow-[0_2px_3px_rgba(53,53,53,0.25)]">SOURCE</span>
-                  <motion.span
-                    className="text-[#000000] drop-shadow-[0_3px_6px_rgba(0,0,0,0.35)]"
-                    animate={{
-                      textShadow: [
-                        '0 2px 4px rgba(0,0,0,0.3)',
-                        '0 4px 10px rgba(0,0,0,0.5)',
-                        '0 2px 4px rgba(0,0,0,0.3)',
-                      ],
-                    }}
-                    transition={{ 
-                      duration: 2.5, 
-                      repeat: Infinity,
-                      repeatType: 'reverse'
-                    }}
-                  >
-                    NET
-                  </motion.span>
+                  <Image
+                    src="/sourcenet.png"
+                    alt="SourceNet"
+                    width={180}
+                    height={50}
+                    priority
+                    className="h-12 w-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
+                  />
+                  <span className="hidden sm:inline text-lg font-black text-[#353535] drop-shadow-[0_2px_3px_rgba(53,53,53,0.25)]">SourceNet</span>
                 </motion.div>
               </Link>
               
@@ -490,10 +482,15 @@ export default function Navbar() {
                       stiffness: 250, 
                       delay: 0.15 
                     }}
-                    className="text-3xl md:text-4xl font-black mb-2"
+                    className="mb-2"
                   >
-                    <span className="text-[#353535]">SOURCE</span>
-                    <span className="text-[#000000]">NET</span>
+                    <Image
+                      src="/sourcenet.png"
+                      alt="SourceNet"
+                      width={220}
+                      height={60}
+                      className="h-16 w-auto drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
+                    />
                   </motion.div>
 
                   {/* Nav Links */}

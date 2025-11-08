@@ -1,77 +1,86 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Shield, Database, Blocks, FileLock, Key } from 'lucide-react';
+import { Shield, Database, Blocks, FileLock, Key, Cpu } from 'lucide-react';
+import Image from 'next/image';
 
-// Walrus and Sui icons as SVG paths
 const WalrusIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
-    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13.5v5.25l4.5 2.67-.75 1.23L9 13V6.5h2z" fill="currentColor"/>
-  </svg>
+  <Image
+    src="/walrus.logo.png"
+    alt="Walrus"
+    width={40}
+    height={40}
+    className="w-full h-full object-contain"
+  />
 );
 
 const SuiIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6">
-    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
+  <Image
+    src="/suilogo.png"
+    alt="Sui"
+    width={40}
+    height={40}
+    className="w-full h-full object-contain"
+  />
 );
 
 const technologies = [
   {
     icon: Key,
     name: 'ZKLogin',
-    description: 'Google OAuth integration with zero-knowledge proofs',
-    color: 'from-gray-700 to-gray-900',
+    description: 'Google OAuth integration with zero-knowledge proofs for seamless authentication',
+    color: 'bg-black',
   },
   {
     icon: Shield,
     name: 'Sponsored Transactions',
-    description: 'We pay gas fees so you don\'t have to',
-    color: 'from-gray-700 to-gray-900',
+    description: 'We pay gas fees so you don\'t have to worry about transaction costs',
+    color: 'bg-black',
   },
   {
     icon: Database,
     name: 'Sui Objects',
-    description: 'Your data as programmable blockchain objects',
-    color: 'from-gray-700 to-gray-900',
+    description: 'Your data as programmable blockchain objects for total control',
+    color: 'bg-black',
   },
   {
     icon: Blocks,
     name: 'Kiosk & PTB',
-    description: 'Instant marketplace listing with programmable transactions',
-    color: 'from-gray-700 to-gray-900',
+    description: 'Instant marketplace listing with programmable transaction blocks',
+    color: 'bg-black',
   },
   {
     icon: WalrusIcon,
     name: 'Walrus Protocol',
-    description: 'Decentralized storage for your data',
-    color: 'from-gray-700 to-gray-900',
+    description: 'Decentralized storage for your data with maximum reliability',
+    color: 'bg-transparent',
+    isLogo: true,
   },
   {
     icon: FileLock,
     name: 'IPFS Storage',
-    description: 'Immutable and distributed file storage',
-    color: 'from-gray-700 to-gray-900',
-  },
+    description: 'Immutable and distributed file storage across the network',
+    color: 'bg-black',
+  }
 ];
 
 const gridVariants = {
   hidden: {},
   show: {
     transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.15,
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
     },
   },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 20, scale: 0.96 },
+  hidden: { opacity: 0, y: 24, scale: 0.92 },
   show: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.6, ease: 'easeOut' },
+    transition: { duration: 0.7, ease: 'easeOut' },
   },
 };
 
@@ -79,78 +88,140 @@ export default function Technology() {
   return (
     <section
       id="technology"
-      className="relative w-full overflow-hidden bg-gradient-to-b from-[#f4f4f4] to-[#dedede] pt-24 sm:pt-28 md:pt-32 lg:pt-36 pb-24 sm:pb-28 md:pb-32 lg:pb-36 flex flex-col items-center"
+      className="relative w-full overflow-hidden bg-[#F0F0F0] pt-56 sm:pt-64 md:pt-72 pb-32 flex flex-col items-center"
     >
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-1/3 left-1/4 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-[#c3c3c3] blur-[180px]" />
-        <div className="absolute bottom-1/3 right-1/4 h-[360px] w-[360px] translate-x-1/3 rounded-full bg-[#9f9f9f] blur-[160px]" />
+      {/* Subtle background elements */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-1/4 left-1/4 h-96 w-96 -translate-x-1/2 rounded-full bg-black blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 h-80 w-80 translate-x-1/2 rounded-full bg-gray-800 blur-3xl" />
       </div>
 
-      <div className="section-inner relative z-10 flex w-full max-w-6xl flex-col items-center gap-16">
-        <div className="text-center flex flex-col items-center gap-5">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#2f2f2f]/20 bg-white/60 px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#2b2b2b] sm:text-sm">
-            ⚡ Technology Stack
-          </span>
-          <motion.h2
-            initial={{ opacity: 0, y: 18 }}
+      <div className="section-inner relative z-10 flex w-full max-w-6xl flex-col items-center gap-16 px-4">
+        {/* Header Section */}
+        <div className="text-center flex flex-col items-center gap-6 w-full">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.7, ease: 'easeOut' }}
-            className="text-balance text-3xl font-black leading-tight text-[#121212] sm:text-4xl md:text-5xl lg:text-6xl"
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 rounded-full border border-black/20 bg-white px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-black/70 backdrop-blur-sm hover:border-black/40 transition-all"
           >
-            POWERED BY <span className="text-[#2f2f2f]">SUI BLOCKCHAIN</span>
+            <Cpu size={16} strokeWidth={2.5} />
+            Technology Stack
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-black leading-tight tracking-tight"
+          >
+            POWERED BY
+            <br />
+            <span className="text-black">SUI BLOCKCHAIN</span>
           </motion.h2>
-          <p className="max-w-3xl text-pretty text-sm text-[#3f3f3f] sm:text-base md:text-lg">
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="max-w-3xl text-lg sm:text-xl text-gray-700 leading-relaxed font-light"
+          >
             Best-in-class Web3 tooling to make data ownership seamless, secure, and lightning fast.
-          </p>
+          </motion.p>
         </div>
 
+        {/* Technology Grid */}
         <motion.div
           variants={gridVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.25 }}
-          className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7"
         >
-          {technologies.map((tech) => (
+          {technologies.map((tech, index) => (
             <motion.div
               key={tech.name}
               variants={cardVariants}
-              className="group flex h-full flex-col rounded-3xl border border-[#1f1f1f]/15 bg-gradient-to-br from-[#f8f8f8] via-[#e4e4e4] to-[#d1d1d1] p-6 text-left shadow-[0_14px_32px_rgba(23,23,23,0.12)] transition-all duration-300 hover:-translate-y-2 hover:border-[#1f1f1f]/30 hover:shadow-[0_18px_42px_rgba(23,23,23,0.16)]"
+              className="group relative h-full"
             >
-              <div className={`mb-5 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br ${tech.color} flex items-center justify-center text-white shadow-inner shadow-white/40 transition-transform duration-300 group-hover:scale-110`}>
-                {tech.icon === WalrusIcon || tech.icon === SuiIcon ? (
-                  <tech.icon />
-                ) : (
-                  <tech.icon size={22} className="text-white" />
-                )}
-              </div>
-              <h3 className="text-xl font-semibold text-[#1a1a1a] mb-2">{tech.name}</h3>
-              <p className="text-sm leading-relaxed text-[#2f2f2f] flex-1">
-                {tech.description}
-              </p>
-              <div className="mt-6 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.28em] text-[#4e4e4e]">
-                <span className="h-[2px] w-8 bg-[#4e4e4e]/60" />
-                SUI ECOSYSTEM
+              {/* Card Background with Border */}
+              <div className="absolute inset-0 bg-white rounded-2xl border border-black/10 transition-all duration-500 group-hover:border-black/30 group-hover:shadow-xl" />
+              
+              {/* Gradient Overlay on Hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-black/0 via-black/0 to-black/3 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+              {/* Content */}
+              <div className="relative z-10 p-8 h-full flex flex-col">
+                {/* Icon Container */}
+                <motion.div
+                  whileHover={{ scale: 1.12, rotate: 5 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                  className={`${tech.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 ${tech.isLogo ? 'shadow-none' : 'shadow-lg'} transition-all duration-500 ${!tech.isLogo && 'group-hover:shadow-2xl'}`}
+                >
+                  {tech.isLogo ? (
+                    <div className="w-12 h-12 flex items-center justify-center">
+                      <tech.icon />
+                    </div>
+                  ) : (
+                    <tech.icon size={28} className="text-white" strokeWidth={2} />
+                  )}
+                </motion.div>
+
+                {/* Title */}
+                <h3 className="text-xl font-black text-black mb-3 tracking-tight group-hover:text-gray-800 transition-colors duration-300">
+                  {tech.name}
+                </h3>
+
+                {/* Description */}
+                <p className="text-sm text-gray-600 leading-relaxed flex-1 mb-6 font-light group-hover:text-gray-700 transition-colors duration-300">
+                  {tech.description}
+                </p>
+
+                {/* Bottom Accent Line */}
+                <div className="flex items-center gap-2 pt-5 border-t border-black/8 group-hover:border-black/15 transition-all duration-300">
+                  <motion.div
+                    className="h-0.5 bg-black/40 group-hover:bg-black/60 transition-colors duration-300"
+                    animate={{ width: ['32px', '48px', '32px'] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                  <span className="text-xs font-black uppercase tracking-widest text-black/50 group-hover:text-black/70 transition-colors duration-300">
+                    SUI
+                  </span>
+                </div>
               </div>
             </motion.div>
           ))}
         </motion.div>
 
+        {/* Built on Sui Section - transparent background */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center"
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="w-full flex justify-center pt-16 mt-12 border-t border-black/10"
         >
-          <div className="inline-flex items-center gap-3 rounded-3xl border border-[#1f1f1f]/15 bg-white/80 px-8 py-5 shadow-[0_12px_30px_rgba(23,23,23,0.08)]">
-            <SuiIcon />
-            <div className="text-left">
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#4a4a4a]">Built on</p>
-              <p className="text-2xl font-black text-[#121212] leading-tight">Sui — developer-first blockchain</p>
+          <motion.div
+            whileHover={{ scale: 1.08, y: -4 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+            className="flex flex-col items-center gap-6"
+          >
+            <span className="text-xs font-black uppercase tracking-widest text-black/60 hover:text-black/80 transition-colors">
+              Built on
+            </span>
+            <div className="w-20 h-20 flex items-center justify-center">
+              <Image
+                src="/suilogo.png"
+                alt="Sui"
+                width={80}
+                height={80}
+                className="h-16 w-auto object-contain"
+              />
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>

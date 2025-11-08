@@ -61,7 +61,7 @@ export default function HowItWorks() {
     <section 
       ref={sectionRef} 
       id="how-it-works" 
-      className="section-padding bg-[#1a1a1a] relative overflow-hidden w-full py-20"
+      className="section-padding bg-[#1a1a1a] relative overflow-hidden w-full py-24 md:py-32"
     >
       {/* Background effects */}
       <div className="absolute inset-0 opacity-30">

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Twitter, Github, Linkedin, Mail } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Footer() {
   const footerLinks = {
@@ -39,7 +40,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-gradient-to-b from-[#474747] to-[#353535] border-t border-[#919191]/20 relative overflow-hidden">
+    <footer className="bg-gradient-to-b from-[#474747] to-[#353535] border-t border-[#919191]/20 relative overflow-hidden pb-20">
       {/* Background effect */}
       <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
         <div className="w-full max-w-5xl h-[400px] bg-[#CECECE] blur-[150px] rounded-full translate-y-1/2" />
@@ -52,9 +53,15 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="text-4xl font-black text-[#CECECE] mb-4"
+              className="mb-4"
             >
-              SOURCE<span className="text-[#FFFFFF]">NET</span>
+              <Image
+                src="/sourcenet.png"
+                alt="SourceNet"
+                width={280}
+                height={80}
+                className="h-20 w-auto drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)]"
+              />
             </motion.div>
             <p className="text-[#FFFFFF]/80 mb-6 leading-relaxed">
               The Web2 Data Marketplace Without Friction. Own your data, control your value.
@@ -146,52 +153,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Newsletter Section */}
-        <div className="bg-gradient-to-r from-[#353535] to-[#474747] border border-[#919191]/20 rounded-2xl p-8 mb-12 shadow-sm">
-          <div className="max-w-2xl mx-auto text-center">
-            <h3 className="text-2xl font-black text-[#CECECE] mb-2">Stay Updated</h3>
-            <p className="text-[#FFFFFF]/80 mb-6">Get the latest news and updates about SourceNet</p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 bg-[#919191]/20 border border-[#919191]/20 rounded-lg text-[#FFFFFF] placeholder-[#FFFFFF]/50 focus:outline-none focus:border-[#CECECE] transition-colors"
-              />
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-[#CECECE] text-[#353535] px-6 py-3 rounded-lg font-bold hover:bg-[#FFFFFF] transition-colors whitespace-nowrap"
-              >
-                Subscribe
-              </motion.button>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Section */}
-        <div className="border-t border-[#919191]/20 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-[#FFFFFF]/60 text-sm">
-              © {new Date().getFullYear()} SourceNet. All rights reserved.
-            </p>
-            <div className="flex items-center gap-6">
-              <a href="#" className="text-[#FFFFFF]/60 hover:text-[#CECECE] text-sm transition-colors">
-                Privacy
-              </a>
-              <a href="#" className="text-[#FFFFFF]/60 hover:text-[#CECECE] text-sm transition-colors">
-                Terms
-              </a>
-              <a href="#" className="text-[#FFFFFF]/60 hover:text-[#CECECE] text-sm transition-colors">
-                Cookies
-              </a>
-            </div>
-          </div>
-          <div className="mt-6 text-center">
-            <p className="text-[#FFFFFF]/50 text-xs">
-              Built with ❤️ on Sui Blockchain | Powered by ZKLogin, Sponsored Transactions & Walrus Protocol
-            </p>
-          </div>
-        </div>
       </div>
     </footer>
   );
