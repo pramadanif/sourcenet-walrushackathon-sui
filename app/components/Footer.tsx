@@ -40,7 +40,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-gradient-to-b from-[#474747] to-[#353535] border-t border-[#919191]/20 relative overflow-hidden pb-20">
+    <footer className="bg-gradient-to-b from-[#474747] to-[#353535] border-t border-[#919191]/20 relative overflow-hidden pt-40 sm:pt-48 md:pt-56 pb-20">
       {/* Background effect */}
       <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none">
         <div className="w-full max-w-5xl h-[400px] bg-[#CECECE] blur-[150px] rounded-full translate-y-1/2" />

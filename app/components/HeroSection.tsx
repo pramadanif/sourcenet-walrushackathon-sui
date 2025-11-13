@@ -18,8 +18,8 @@ MemoizedSpline.displayName = 'MemoizedSpline';
 
 // Optimize particle count based on device
 const getParticleCount = () => {
-  if (typeof window === 'undefined') return 15;
-  return window.innerWidth < 768 ? 8 : 15;
+  if (typeof window === 'undefined') return 8;
+  return window.innerWidth < 768 ? 4 : 8;
 };
 
 const HERO_PARTICLES = Array.from({ length: getParticleCount() }, (_, i) => ({
@@ -138,11 +138,13 @@ export default function SplineHeroSection() {
     return () => clearInterval(interval);
   }, []);
 
-  // Preload Spline scene for better performance
+  // Lazy load Spline scene for better performance
   useEffect(() => {
-    const preloadSpline = async () => {
+    const loadSpline = async () => {
+      // Add small delay to prioritize initial page render
+      await new Promise(resolve => setTimeout(resolve, 1500));
       try {
-        await fetch('https://prod.spline.design/hw1emnNezRQpqBrW/scene.splinecode', {
+        await fetch('https://prod.spline.design/9NmsWPnV9H3h3V0B/scene.splinecode', {
           method: 'HEAD',
         });
         setSplineLoaded(true);
@@ -151,7 +153,7 @@ export default function SplineHeroSection() {
         setTimeout(() => setSplineLoaded(true), 2000);
       }
     };
-    preloadSpline();
+    loadSpline();
   }, []);
 
   return (
@@ -218,7 +220,7 @@ export default function SplineHeroSection() {
         >
           <div className="relative w-full h-full pointer-events-auto">
             <MemoizedSpline 
-              scene="https://prod.spline.design/hw1emnNezRQpqBrW/scene.splinecode"
+              scene="https://prod.spline.design/9NmsWPnV9H3h3V0B/scene.splinecode"
             />
           </div>
         </motion.div>
@@ -227,15 +229,15 @@ export default function SplineHeroSection() {
         )}
       </div>
 
-      {/* Subtle Floating Particles */}
+      {/* Subtle Floating Particles - Reduced on mobile */}
       {HERO_PARTICLES.map((particle, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 bg-[#474747] rounded-full opacity-10"
+          className="absolute w-1 h-1 bg-[#474747] rounded-full opacity-10 hidden sm:block"
           style={{ left: particle.left, top: particle.top }}
           animate={{
             y: [0, -particle.amplitude, 0],
-            opacity: [0.05, 0.2, 0.05],
+            opacity: [0.05, 0.15, 0.05],
           }}
           transition={{
             duration: particle.duration,

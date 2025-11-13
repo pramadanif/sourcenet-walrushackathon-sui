@@ -64,30 +64,30 @@ export default function WhyWeWin() {
   ];
 
   return (
-    <section ref={sectionRef} id="about" className="section-padding bg-[#F0F0F0] relative overflow-hidden flex flex-col items-center w-full py-16 md:py-24">
+    <section ref={sectionRef} id="about" className="section-padding bg-[#F0F0F0] relative overflow-hidden flex flex-col items-center w-full pt-40 sm:pt-48 md:pt-56 py-16 md:py-24">
       {/* Subtle Background effects */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#000000] opacity-20 blur-[200px] rounded-full" />
       </div>
 
-      {/* Flowing data animation */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(8)].map((_, i) => (
+      {/* Flowing data animation - Reduced on mobile */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
+        {[...Array(4)].map((_, i) => (
           <motion.div
             key={i}
             className="data-flow absolute w-16 h-16 rounded-lg bg-[#1a1a1a]/5 border border-[#1a1a1a]/10"
             style={{
-              left: `${-10 + i * 15}%`,
-              top: `${20 + (i % 3) * 25}%`,
+              left: `${-10 + i * 30}%`,
+              top: `${20 + (i % 2) * 40}%`,
             }}
             animate={{
               x: [0, 50, 0],
               opacity: [0.2, 0.4, 0.2],
             }}
             transition={{
-              duration: 4 + i * 0.5,
+              duration: 5 + i * 0.5,
               repeat: Infinity,
-              delay: i * 0.3,
+              delay: i * 0.5,
             }}
           />
         ))}

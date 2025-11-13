@@ -88,7 +88,7 @@ export default function Technology() {
   return (
     <section
       id="technology"
-      className="relative w-full overflow-hidden bg-[#F0F0F0] pt-56 sm:pt-64 md:pt-72 pb-32 flex flex-col items-center"
+      className="relative w-full overflow-hidden bg-[#F0F0F0] pt-80 sm:pt-96 md:pt-[120px] pb-32 flex flex-col items-center"
     >
       {/* Subtle background elements */}
       <div className="absolute inset-0 opacity-5">
@@ -98,7 +98,7 @@ export default function Technology() {
 
       <div className="section-inner relative z-10 flex w-full max-w-6xl flex-col items-center gap-16 px-4">
         {/* Header Section */}
-        <div className="text-center flex flex-col items-center gap-6 w-full">
+        <div className="text-center flex flex-col items-center gap-6 w-full pt-20">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -139,58 +139,46 @@ export default function Technology() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
-          className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7"
+          className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {technologies.map((tech, index) => (
             <motion.div
               key={tech.name}
               variants={cardVariants}
-              className="group relative h-full"
+              className="group"
             >
-              {/* Card Background with Border */}
-              <div className="absolute inset-0 bg-white rounded-2xl border border-black/10 transition-all duration-500 group-hover:border-black/30 group-hover:shadow-xl" />
-              
-              {/* Gradient Overlay on Hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-black/0 via-black/0 to-black/3 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              {/* Content */}
-              <div className="relative z-10 p-8 h-full flex flex-col">
-                {/* Icon Container */}
+              {/* Card Container */}
+              <div className="bg-white rounded-2xl border border-black/10 transition-all duration-500 group-hover:border-black/30 group-hover:shadow-xl h-full flex flex-col p-8">
+                
+                {/* Icon Container - Centered */}
                 <motion.div
                   whileHover={{ scale: 1.12, rotate: 5 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-                  className={`${tech.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 ${tech.isLogo ? 'shadow-none' : 'shadow-lg'} transition-all duration-500 ${!tech.isLogo && 'group-hover:shadow-2xl'}`}
+                  className="flex justify-center mb-8"
                 >
-                  {tech.isLogo ? (
-                    <div className="w-12 h-12 flex items-center justify-center">
-                      <tech.icon />
-                    </div>
-                  ) : (
-                    <tech.icon size={28} className="text-white" strokeWidth={2} />
-                  )}
+                  <div className={`${tech.color} w-16 h-16 rounded-xl flex items-center justify-center ${tech.isLogo ? 'shadow-none' : 'shadow-lg'} transition-all duration-500 ${!tech.isLogo && 'group-hover:shadow-2xl'}`}>
+                    {tech.isLogo ? (
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <tech.icon />
+                      </div>
+                    ) : (
+                      <tech.icon size={28} className="text-white" strokeWidth={2} />
+                    )}
+                  </div>
                 </motion.div>
 
-                {/* Title */}
-                <h3 className="text-xl font-black text-black mb-3 tracking-tight group-hover:text-gray-800 transition-colors duration-300">
+                {/* Title - Centered */}
+                <h3 className="text-xl font-black text-black mb-3 tracking-tight group-hover:text-gray-800 transition-colors duration-300 text-center">
                   {tech.name}
                 </h3>
 
-                {/* Description */}
-                <p className="text-sm text-gray-600 leading-relaxed flex-1 mb-6 font-light group-hover:text-gray-700 transition-colors duration-300">
+                {/* Description - Centered */}
+                <p className="text-sm text-gray-600 leading-relaxed text-center flex-1 mb-8 font-light group-hover:text-gray-700 transition-colors duration-300">
                   {tech.description}
                 </p>
 
                 {/* Bottom Accent Line */}
-                <div className="flex items-center gap-2 pt-5 border-t border-black/8 group-hover:border-black/15 transition-all duration-300">
-                  <motion.div
-                    className="h-0.5 bg-black/40 group-hover:bg-black/60 transition-colors duration-300"
-                    animate={{ width: ['32px', '48px', '32px'] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                  <span className="text-xs font-black uppercase tracking-widest text-black/50 group-hover:text-black/70 transition-colors duration-300">
-                    SUI
-                  </span>
-                </div>
+                <div className="pt-6 border-t border-black/8 group-hover:border-black/15 transition-all duration-300" />
               </div>
             </motion.div>
           ))}

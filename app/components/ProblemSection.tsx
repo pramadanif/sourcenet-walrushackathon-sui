@@ -75,7 +75,7 @@ const listVariants = {
 export default function ProblemSection() {
   return (
     <section
-      className="relative z-10 w-full pt-24 sm:pt-28 md:pt-32 lg:pt-36 pb-28 sm:pb-32 md:pb-36 lg:pb-40 bg-[#CECECE] text-[#474747] overflow-hidden flex flex-col items-center"
+      className="relative z-10 w-full pt-40 sm:pt-48 md:pt-56 lg:pt-64 pb-28 sm:pb-32 md:pb-36 lg:pb-40 bg-[#CECECE] text-[#474747] overflow-hidden flex flex-col items-center"
     >
       {/* Animated gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#CECECE] via-white to-[#CECECE]" />

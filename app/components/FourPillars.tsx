@@ -143,7 +143,7 @@ export default function FourPillars() {
   return (
     <section
       id="features"
-      className="relative w-full overflow-hidden bg-gradient-to-b from-[#171717] to-[#252525] py-16 sm:py-20 md:py-24 lg:py-32 flex flex-col items-center"
+      className="relative w-full overflow-hidden bg-gradient-to-b from-[#171717] to-[#252525] pt-40 sm:pt-48 md:pt-56 py-16 sm:py-20 md:py-24 lg:py-32 flex flex-col items-center"
     >
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#1C1C1C] via-[#222222] to-[#2A2A2A]" />
