@@ -415,23 +415,35 @@ export default function SplineHeroSection() {
                     />
                   ))}
                 </div>
-                <p className="text-xs sm:text-sm text-[#474747]/80">
-                  <span className="text-[#353535] font-semibold">10K+</span> data producers already joined
+                <p
+                  className="text-sm sm:text-base font-medium"
+                  style={{ color: '#FFFFFF', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}
+                >
+                  <span className="font-semibold" style={{ color: '#FFFFFF' }}>10K+</span> data producers already joined
                 </p>
               </div>
 
               {/* Trust Badges */}
               <div className="flex flex-wrap gap-3 sm:gap-4 pt-2">
-                <div className="flex items-center gap-1.5 sm:gap-2 text-xs text-[#474747]/70">
-                  <Lock size={12} className="text-[#353535]" />
+                <div
+                  className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/80"
+                  style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.35)' }}
+                >
+                  <Lock size={12} className="text-white" />
                   End-to-end encrypted
                 </div>
-                <div className="flex items-center gap-1.5 sm:gap-2 text-xs text-[#474747]/70">
-                  <DollarSign size={12} className="text-[#353535]" />
+                <div
+                  className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/80"
+                  style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.35)' }}
+                >
+                  <DollarSign size={12} className="text-white" />
                   Instant payouts
                 </div>
-                <div className="flex items-center gap-1.5 sm:gap-2 text-xs text-[#474747]/70">
-                  <Users size={12} className="text-[#353535]" />
+                <div
+                  className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/80"
+                  style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.35)' }}
+                >
+                  <Users size={12} className="text-white" />
                   Zero technical skills
                 </div>
               </div>
