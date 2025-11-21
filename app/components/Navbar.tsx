@@ -15,7 +15,7 @@ export default function Navbar() {
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  
+
   const springConfig = { damping: 25, stiffness: 150 };
   const smoothMouseX = useSpring(mouseX, springConfig);
   const smoothMouseY = useSpring(mouseY, springConfig);
@@ -56,44 +56,44 @@ export default function Navbar() {
   // Animasi untuk desktop nav
   const desktopNavVariants = {
     hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1, 
-      transition: { 
+    visible: {
+      opacity: 1,
+      transition: {
         staggerChildren: 0.08,
-        delayChildren: 0.2 
-      } 
+        delayChildren: 0.2
+      }
     },
   };
 
   const desktopNavItemVariants = {
     hidden: { y: -15, opacity: 0, filter: 'blur(3px)' },
-    visible: { 
-      y: 0, 
-      opacity: 1, 
-      filter: 'blur(0px)', 
-      transition: { 
-        type: 'spring', 
-        stiffness: 350, 
+    visible: {
+      y: 0,
+      opacity: 1,
+      filter: 'blur(0px)',
+      transition: {
+        type: 'spring',
+        stiffness: 350,
         damping: 22,
-        mass: 0.8 
-      } 
+        mass: 0.8
+      }
     },
   };
 
   // Animasi untuk mobile menu
   const mobileMenuVariants = {
-    hidden: { 
-      opacity: 0, 
+    hidden: {
+      opacity: 0,
       scale: 0.92,
-      y: 40 
+      y: 40
     },
     visible: {
       opacity: 1,
       scale: 1,
       y: 0,
-      transition: { 
-        type: 'spring', 
-        stiffness: 300, 
+      transition: {
+        type: 'spring',
+        stiffness: 300,
         damping: 28,
         mass: 0.7
       },
@@ -102,9 +102,9 @@ export default function Navbar() {
       opacity: 0,
       scale: 0.9,
       y: 20,
-      transition: { 
+      transition: {
         duration: 0.25,
-        ease: 'easeInOut' 
+        ease: 'easeInOut'
       }
     }
   };
@@ -113,35 +113,34 @@ export default function Navbar() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { 
+      transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2 
+        delayChildren: 0.2
       },
     },
   };
 
   const mobileNavItemVariants = {
     hidden: { x: -40, opacity: 0, filter: 'blur(4px)' },
-    visible: { 
-      x: 0, 
-      opacity: 1, 
+    visible: {
+      x: 0,
+      opacity: 1,
       filter: 'blur(0px)',
-      transition: { 
+      transition: {
         type: 'spring',
         stiffness: 250,
-        damping: 20 
-      } 
+        damping: 20
+      }
     },
   };
 
   return (
     <>
       <motion.nav
-        className={`fixed left-1/2 z-50 w-full max-w-[1400px] -translate-x-1/2 px-4 md:px-6 transition-all duration-500 ${
-          isScrolled 
+        className={`fixed left-1/2 z-50 w-full max-w-[1400px] -translate-x-1/2 px-4 md:px-6 transition-all duration-500 ${isScrolled
             ? 'top-3 md:top-4'
             : 'top-6 md:top-8'
-        }`}
+          }`}
         aria-label="Main navigation"
       >
         <motion.div
@@ -155,24 +154,23 @@ export default function Navbar() {
           }}
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ 
-            type: 'spring', 
-            stiffness: 120, 
-            damping: 22, 
-            delay: 0.15 
+          transition={{
+            type: 'spring',
+            stiffness: 120,
+            damping: 22,
+            delay: 0.15
           }}
           role="navigation"
         >
           {/* ✅ Lapisan Background Glassmorphism */}
           <div
-            className={`absolute inset-0 rounded-[28px] ${
-              isScrolled ? 'bg-[#CECECE]/70 backdrop-blur-3xl' : 'bg-[#CECECE]/55 backdrop-blur-2xl'
-            }`}
+            className={`absolute inset-0 rounded-[28px] ${isScrolled ? 'bg-[#E5E5E5]/80 backdrop-blur-3xl' : 'bg-[#E5E5E5]/65 backdrop-blur-2xl'
+              }`}
           />
-          <div className="absolute inset-0 rounded-[28px] bg-gradient-to-br from-[#474747]/10 via-transparent to-[#919191]/15" />
-          
+          <div className="absolute inset-0 rounded-[28px] bg-gradient-to-br from-[#3D3D3D]/10 via-transparent to-[#919191]/15" />
+
           {/* Animated Grain Texture */}
-          <motion.div 
+          <motion.div
             className="absolute inset-0 rounded-[28px] opacity-15 pointer-events-none"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
@@ -197,10 +195,10 @@ export default function Navbar() {
 
           {/* ✅ Border & Shadow Profesional */}
           <div className="absolute inset-0 rounded-[28px] 
-            border border-[#474747]/25 
-            shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_25px_60px_-20px_rgba(71,71,71,0.25)]" 
+            border border-[#3D3D3D]/25 
+            shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_25px_60px_-20px_rgba(61,61,61,0.25)]"
           />
-          
+
           {/* Shimmer Effect */}
           <motion.div
             className="absolute inset-0 rounded-[28px]"
@@ -243,10 +241,10 @@ export default function Navbar() {
                     priority
                     className="h-12 w-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
                   />
-                  <span className="hidden sm:inline text-lg font-black text-[#353535] drop-shadow-[0_2px_3px_rgba(53,53,53,0.25)]">SourceNet</span>
+                  <span className="hidden sm:inline text-lg font-black text-[#2A2A2A] drop-shadow-[0_2px_3px_rgba(42,42,42,0.25)]">SourceNet</span>
                 </motion.div>
               </Link>
-              
+
               {/* Logo Glow */}
               <motion.div
                 className="absolute -inset-2.5 bg-gradient-to-r from-[#919191]/30 to-[#474747]/20 rounded-full blur-xl opacity-0 group-hover/logo:opacity-100"
@@ -259,7 +257,7 @@ export default function Navbar() {
               variants={desktopNavVariants}
               initial="hidden"
               animate="visible"
-              className="hidden md:flex items-center gap-6 ml-8" // 🔥 gap-1 → gap-6 + ml-8
+              className="hidden md:flex items-center gap-8 ml-10" // 🔥 gap-6 → gap-8 + ml-10
             >
               {navLinks.map((link, index) => (
                 <motion.a
@@ -284,10 +282,10 @@ export default function Navbar() {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
-                        transition={{ 
-                          type: 'spring', 
-                          stiffness: 450, 
-                          damping: 28 
+                        transition={{
+                          type: 'spring',
+                          stiffness: 450,
+                          damping: 28
                         }}
                       />
                     )}
@@ -305,7 +303,7 @@ export default function Navbar() {
                     />
                   )}
 
-                  <span className="relative z-10 text-[#474747] group-hover/link:text-[#353535] font-semibold text-base md:text-[15px] transition-colors duration-300">
+                  <span className="relative z-10 text-[#333333] group-hover/link:text-[#1a1a1a] font-semibold text-base md:text-[15px] transition-colors duration-300">
                     {link.name}
                   </span>
 
@@ -317,11 +315,11 @@ export default function Navbar() {
                       initial={{ width: '0%', opacity: 0 }}
                       animate={{ width: '85%', opacity: 1 }}
                       exit={{ width: '0%', opacity: 0 }}
-                      transition={{ 
-                        type: 'spring', 
-                        stiffness: 550, 
+                      transition={{
+                        type: 'spring',
+                        stiffness: 550,
                         damping: 32,
-                        mass: 0.7 
+                        mass: 0.7
                       }}
                     />
                   )}
@@ -340,19 +338,19 @@ export default function Navbar() {
               aria-label="Get started with SourceNet"
             >
               {/* Background Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#353535] to-[#000000]" />
-              
+              <div className="absolute inset-0 bg-gradient-to-r from-[#2A2A2A] to-[#000000]" />
+
               {/* Shine Effect */}
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-[#CECECE]/30 to-transparent"
                 animate={{ x: ['-120%', '220%'] }}
-                transition={{ 
-                  duration: 2.2, 
-                  repeat: Infinity, 
-                  repeatDelay: 1.2 
+                transition={{
+                  duration: 2.2,
+                  repeat: Infinity,
+                  repeatDelay: 1.2
                 }}
               />
-              
+
               {/* Outer Glow */}
               <motion.div
                 className="absolute -inset-1 bg-gradient-to-r from-[#919191] to-[#474747] rounded-full opacity-0 group-hover/cta:opacity-70 blur-lg"
@@ -363,8 +361,8 @@ export default function Navbar() {
                 Launch App
                 <motion.span
                   animate={{ x: [0, 4, 0] }}
-                  transition={{ 
-                    duration: 1.8, 
+                  transition={{
+                    duration: 1.8,
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
@@ -383,7 +381,7 @@ export default function Navbar() {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               whileHover={{ scale: 1.12 }}
               whileTap={{ scale: 0.92 }}
-              className="md:hidden relative w-12 h-12 rounded-xl bg-[#474747]/15 backdrop-blur-xl border border-[#474747]/30 flex items-center justify-center overflow-hidden group/mobile shadow-lg"
+              className="md:hidden relative w-12 h-12 rounded-xl bg-[#3D3D3D]/15 backdrop-blur-xl border border-[#3D3D3D]/30 flex items-center justify-center overflow-hidden group/mobile shadow-lg"
               aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMobileMenuOpen}
             >
@@ -400,10 +398,10 @@ export default function Navbar() {
                     initial={{ scale: 0, rotate: -90 }}
                     animate={{ scale: 1, rotate: 0 }}
                     exit={{ scale: 0, rotate: 90 }}
-                    transition={{ 
-                      type: 'spring', 
-                      stiffness: 350, 
-                      damping: 22 
+                    transition={{
+                      type: 'spring',
+                      stiffness: 350,
+                      damping: 22
                     }}
                   >
                     <X className="w-6 h-6 text-[#353535]" />
@@ -414,10 +412,10 @@ export default function Navbar() {
                     initial={{ scale: 0, rotate: 90 }}
                     animate={{ scale: 1, rotate: 0 }}
                     exit={{ scale: 0, rotate: -90 }}
-                    transition={{ 
-                      type: 'spring', 
-                      stiffness: 350, 
-                      damping: 22 
+                    transition={{
+                      type: 'spring',
+                      stiffness: 350,
+                      damping: 22
                     }}
                   >
                     <Menu className="w-6 h-6 text-[#353535]" />
@@ -454,10 +452,10 @@ export default function Navbar() {
               initial={{ scale: 0.85, opacity: 0, y: 50 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.85, opacity: 0, y: 30 }}
-              transition={{ 
-                type: 'spring', 
-                stiffness: 280, 
-                damping: 25 
+              transition={{
+                type: 'spring',
+                stiffness: 280,
+                damping: 25
               }}
             >
               <div className="relative rounded-3xl overflow-hidden">
@@ -478,10 +476,10 @@ export default function Navbar() {
                   <motion.div
                     initial={{ scale: 0, y: -20 }}
                     animate={{ scale: 1, y: 0 }}
-                    transition={{ 
-                      type: 'spring', 
-                      stiffness: 250, 
-                      delay: 0.15 
+                    transition={{
+                      type: 'spring',
+                      stiffness: 250,
+                      delay: 0.15
                     }}
                     className="mb-2"
                   >
@@ -512,7 +510,7 @@ export default function Navbar() {
                           transition={{ duration: 0.35 }}
                         />
                         <div className="absolute inset-0 rounded-2xl border border-[#474747]/0 group-hover:border-[#474747]/35 transition-colors duration-300" />
-                        
+
                         <div className="relative z-10 px-7 py-4.5 flex items-center justify-center">
                           <span className="text-[#474747] group-hover:text-[#353535] font-semibold text-xl transition-colors duration-250">
                             {link.name}
@@ -540,9 +538,9 @@ export default function Navbar() {
                       Launch App
                       <motion.span
                         animate={{ x: [0, 6, 0] }}
-                        transition={{ 
-                          duration: 1.8, 
-                          repeat: Infinity 
+                        transition={{
+                          duration: 1.8,
+                          repeat: Infinity
                         }}
                         className="text-xl"
                       >

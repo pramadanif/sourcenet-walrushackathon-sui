@@ -4,23 +4,23 @@
   /* Core Colors - SourceNet Palette */
   --background: #ffffff;      /* Light cream background */
   --foreground: #000000;      /* Secondary dark for text */
-  --primary: #353535;         /* Primary dark - main brand color */
-  --secondary: #474747;       /* Secondary dark */
+  --primary: #2A2A2A;         /* Primary dark - main brand color (Darker) */
+  --secondary: #3D3D3D;       /* Secondary dark (Darker) */
   --accent: #919191;          /* Accent yellow/cream highlight */
 
   /* Neutrals */
-  --dark-bg: #353535;         /* Primary dark for sections */
-  --light-bg: #CECECE;        /* Light background */
-  --gray-text: #474747;       /* Dark text for readability */
-  --border-color: #474747;    /* Primary dark borders */
+  --dark-bg: #2A2A2A;         /* Primary dark for sections */
+  --light-bg: #E5E5E5;        /* Light background (Slightly darker for better separation) */
+  --gray-text: #333333;       /* Dark text for readability (Much darker) */
+  --border-color: #3D3D3D;    /* Primary dark borders */
 
   /* Gradients */
-  --gradient-1: linear-gradient(135deg, #34656D 0%, #334443 100%);
+  --gradient-1: linear-gradient(135deg, #2A2A2A 0%, #1F1F1F 100%);
   --gradient-2: linear-gradient(135deg, #FAEAB1 0%, #FAF8F1 100%);
 
   /* Layout */
   --max-width: 1280px;
-  --content-padding: 1.5rem;
+  --content-padding: 2rem; /* Increased base padding */
 }
 
 @theme inline {

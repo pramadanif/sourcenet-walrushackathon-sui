@@ -14,7 +14,7 @@ export default function WhyWeWin() {
   const sectionRef = useRef<HTMLElement>(null);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (!sectionRef.current) return;
 
     const ctx = gsap.context(() => {
@@ -64,7 +64,7 @@ export default function WhyWeWin() {
   ];
 
   return (
-    <section ref={sectionRef} id="about" className="section-padding bg-[#F0F0F0] relative overflow-hidden flex flex-col items-center w-full pt-40 sm:pt-48 md:pt-56 py-16 md:py-24">
+    <section ref={sectionRef} id="about" className="section-padding bg-[#F0F0F0] relative overflow-hidden flex flex-col items-center w-full pt-32 sm:pt-40 md:pt-48 py-20 md:py-32">
       {/* Subtle Background effects */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#000000] opacity-20 blur-[200px] rounded-full" />
@@ -108,7 +108,7 @@ export default function WhyWeWin() {
                 <span className="text-[#4a4a4a]">for Data Producers</span>
               </h2>
 
-              <p className="text-base md:text-lg text-[#5a5a5a] mb-6 md:mb-10 leading-relaxed font-light">
+              <p className="text-base md:text-lg text-[#333333] mb-8 md:mb-12 leading-relaxed font-light max-w-xl">
                 Combining ZKLogin, Sponsored Tx, Kiosk, and PTB, SourceNet makes onboarding millions of new data producers to Sui effortless.
               </p>
             </motion.div>
@@ -132,7 +132,7 @@ export default function WhyWeWin() {
                   animate={isButtonHovered ? { x: [0, 10, 0] } : { x: 0 }}
                   transition={{ duration: 0.6, repeat: isButtonHovered ? Infinity : 0 }}
                 />
-                
+
                 {/* Button content */}
                 <div className="relative z-10 flex items-center gap-3 justify-center text-white">
                   <span className="text-white">Start Earning Today</span>
@@ -156,28 +156,28 @@ export default function WhyWeWin() {
           </div>
 
           {/* Right Content - Features List */}
-          <div className="features-list space-y-2 md:space-y-3 w-full">
+          <div className="features-list space-y-3 md:space-y-4 w-full pl-0 lg:pl-10">
             {features.map((feature, index) => (
               <motion.div
                 key={index}
-                whileHover={{ x: 12, backgroundColor: '#f5f5f5' }}
-                className="feature-item flex items-center gap-4 bg-white border border-[#d0d0d0] rounded-xl p-4 hover:border-[#000000]/30 transition-all group shadow-sm hover:shadow-md"
+                whileHover={{ x: 12, backgroundColor: '#ffffff', borderColor: '#000000' }}
+                className="feature-item flex items-center gap-5 bg-white border border-[#dcdcdc] rounded-xl p-5 hover:shadow-lg transition-all group"
               >
-                <motion.div 
+                <motion.div
                   className="w-8 h-8 rounded-lg bg-black flex items-center justify-center flex-shrink-0"
                   animate={isButtonHovered ? { rotate: 360 } : { rotate: 0 }}
                   transition={{ duration: 0.5, type: 'spring' }}
                 >
                   <Check size={18} className="text-white font-bold" strokeWidth={3} />
                 </motion.div>
-                <span className="text-[#1a1a1a] font-semibold text-sm">{feature}</span>
+                <span className="text-[#1a1a1a] font-medium text-base">{feature}</span>
               </motion.div>
             ))}
           </div>
         </div>
 
         {/* Bottom Stats */}
-        <div className="mt-16 md:mt-24 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-4xl mx-auto w-full px-4 md:px-0">
+        <div className="mt-20 md:mt-32 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 max-w-5xl mx-auto w-full px-4 md:px-0">
           {[
             { value: '< 30s', label: 'Onboarding Time' },
             { value: '1-Click', label: 'To Sell Data' },
@@ -198,6 +198,6 @@ export default function WhyWeWin() {
           ))}
         </div>
       </div>
-    </section>
+    </section >
   );
 }

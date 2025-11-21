@@ -143,7 +143,7 @@ export default function FourPillars() {
   return (
     <section
       id="features"
-      className="relative w-full overflow-hidden bg-gradient-to-b from-[#171717] to-[#252525] pt-40 sm:pt-48 md:pt-56 py-16 sm:py-20 md:py-24 lg:py-32 flex flex-col items-center"
+      className="relative w-full overflow-hidden bg-gradient-to-b from-[#171717] to-[#252525] pt-32 sm:pt-40 md:pt-48 py-20 sm:py-24 md:py-32 lg:py-40 flex flex-col items-center"
     >
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#1C1C1C] via-[#222222] to-[#2A2A2A]" />
@@ -203,23 +203,23 @@ export default function FourPillars() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
-          className="pillars-grid mx-auto grid w-full grid-cols-1 gap-6 md:grid-cols-2"
+          className="pillars-grid mx-auto grid w-full grid-cols-1 gap-8 md:grid-cols-2 max-w-5xl"
         >
           {pillars.map((pillar, index) => (
             <motion.div
               key={index}
               variants={pillarCardVariants}
               whileHover="hover"
-              className="pillar-card group relative"
+              className="pillar-card group relative h-full"
             >
-              <div className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#474747] bg-[#0A0A0A] p-7 sm:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-[#919191] hover:shadow-[0_15px_40px_rgba(0,0,0,0.7)]">
+              <div className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-[#474747] bg-[#0A0A0A] p-8 sm:p-12 shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 hover:border-[#919191] hover:shadow-[0_15px_40px_rgba(0,0,0,0.7)]">
                 {/* Hover Accent */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500" style={{
                   background: `radial-gradient(circle at ${pillar.direction === 'left' ? '25%' : '75%'} 20%, rgba(255,255,255,0.1), transparent 60%)`,
                 }} />
 
                 {/* Number & Icon Row */}
-                <div className="relative z-10 mb-6 flex items-start justify-between">
+                <div className="relative z-10 mb-8 flex items-start justify-between">
                   <div className="text-7xl font-black text-[#E0E0E0] sm:text-8xl">
                     {pillar.number}
                   </div>
@@ -229,11 +229,11 @@ export default function FourPillars() {
                 </div>
 
                 {/* Title & Features */}
-                <div className="relative z-10 flex-1 space-y-4 text-white">
-                  <h3 className="text-xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)] transition-colors duration-300 sm:text-2xl">
+                <div className="relative z-10 flex-1 space-y-6 text-white">
+                  <h3 className="text-2xl font-bold !text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)] transition-colors duration-300 sm:text-3xl mb-3">
                     {pillar.title}
                   </h3>
-                  <ul className="space-y-3">
+                  <ul className="space-y-5">
                     {pillar.features.map((feature, i) => (
                       <li key={i} className="flex items-start gap-3">
                         <div className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-white/80" />

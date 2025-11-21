@@ -5,9 +5,9 @@ import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motio
 import { ArrowRight, Shield, Users, DollarSign, Lock } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
-const Spline = dynamic(() => import('@splinetool/react-spline'), { 
+const Spline = dynamic(() => import('@splinetool/react-spline'), {
   ssr: false,
-  loading: () => null 
+  loading: () => null
 });
 
 // Memoized Spline component to prevent unnecessary re-renders
@@ -36,7 +36,7 @@ export default function SplineHeroSection() {
   const [isHovered, setIsHovered] = useState(false);
   const [splineLoaded, setSplineLoaded] = useState(false);
   const mouseEventTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  
+
   // Smooth mouse tracking
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -91,7 +91,7 @@ export default function SplineHeroSection() {
         const y = e.clientY - rect.top - rect.height / 2;
         const distance = Math.sqrt(x * x + y * y);
         const maxDistance = 150;
-        
+
         if (distance < maxDistance) {
           const strength = (maxDistance - distance) / maxDistance;
           button.style.transform = `translate(${x * strength * 0.3}px, ${y * strength * 0.3}px)`;
@@ -157,13 +157,13 @@ export default function SplineHeroSection() {
   }, []);
 
   return (
-    <motion.section 
+    <motion.section
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#f5f5f5]"
     >
       {/* Subtle Animated Grid */}
       <div className="absolute inset-0 opacity-[0.015]">
-        <div 
+        <div
           className="absolute inset-0"
           style={{
             backgroundImage: `
@@ -176,7 +176,7 @@ export default function SplineHeroSection() {
       </div>
 
       {/* Elegant Gradient Orbs with Mouse Tracking */}
-      <motion.div 
+      <motion.div
         className="absolute top-1/4 -left-1/4 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-[#919191] opacity-5 blur-[100px] sm:blur-[140px] rounded-full"
         animate={{
           scale: [1, 1.05, 1],
@@ -192,7 +192,7 @@ export default function SplineHeroSection() {
           y: smoothMouseY,
         }}
       />
-      <motion.div 
+      <motion.div
         className="absolute bottom-1/4 -right-1/4 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-[#474747] opacity-5 blur-[100px] sm:blur-[140px] rounded-full"
         animate={{
           scale: [1.05, 1, 1.05],
@@ -219,7 +219,7 @@ export default function SplineHeroSection() {
           className="w-full h-full"
         >
           <div className="relative w-full h-full pointer-events-auto">
-            <MemoizedSpline 
+            <MemoizedSpline
               scene="https://prod.spline.design/9NmsWPnV9H3h3V0B/scene.splinecode"
             />
           </div>
@@ -251,9 +251,9 @@ export default function SplineHeroSection() {
       {/* ✅ Konten Utama */}
       <div className="section-inner py-16 sm:py-24 relative z-30">
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-20 items-center">
-          
+
           {/* Left Content */}
-          <motion.div 
+          <motion.div
             className="space-y-6 sm:space-y-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -270,7 +270,7 @@ export default function SplineHeroSection() {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                <span className="px-4 py-2 bg-white/60 border border-[#474747]/20 rounded-full text-[#353535] text-xs sm:text-sm font-semibold backdrop-blur-md flex items-center gap-1.5 sm:gap-2 inline-flex">
+                <span className="px-4 py-2 bg-white/70 border border-[#3D3D3D]/20 rounded-full text-[#2A2A2A] text-xs sm:text-sm font-semibold backdrop-blur-md flex items-center gap-1.5 sm:gap-2 inline-flex">
                   <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   Web3 Frictionless Data Marketplace
                 </span>
@@ -278,14 +278,14 @@ export default function SplineHeroSection() {
             </motion.div>
 
             {/* Main Title — Cohesive unit with enhanced animations */}
-            <div className="space-y-2 overflow-hidden">
-              <motion.h1 
-                className="font-bold tracking-tight text-[#353535] leading-[1.1]"
+            <div className="space-y-4 overflow-hidden">
+              <motion.h1
+                className="font-bold tracking-tight text-[#2A2A2A] leading-[1.1]"
                 style={{
                   fontSize: 'clamp(2rem, 8vw, 4rem)',
                 }}
               >
-                <motion.span 
+                <motion.span
                   className="block overflow-hidden"
                   initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -300,8 +300,8 @@ export default function SplineHeroSection() {
                     SourceNet
                   </motion.span>
                 </motion.span>
-                <motion.span 
-                  className="block mt-2 text-[#474747] font-medium overflow-hidden"
+                <motion.span
+                  className="block mt-4 text-[#3D3D3D] font-medium overflow-hidden"
                   style={{ fontSize: 'clamp(1.1rem, 4vw, 1.5rem)' }}
                   initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -320,7 +320,7 @@ export default function SplineHeroSection() {
             </div>
 
             {/* Dynamic Subtitle with enhanced animations */}
-            <motion.div 
+            <motion.div
               className="space-y-4 max-w-xl pt-2 overflow-hidden"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -332,11 +332,11 @@ export default function SplineHeroSection() {
                   initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                   exit={{ opacity: 0, y: -30, filter: "blur(10px)" }}
-                  transition={{ 
+                  transition={{
                     duration: 0.7,
                     ease: "easeOut"
                   }}
-                  className="font-medium text-[#474747] leading-relaxed"
+                  className="font-medium text-[#333333] leading-relaxed"
                   style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)' }}
                 >
                   {subtitles[currentSubtitleIndex]}
@@ -345,7 +345,7 @@ export default function SplineHeroSection() {
             </motion.div>
 
             {/* ✅ CTA Button - Launch App */}
-            <motion.div 
+            <motion.div
               className="flex flex-col sm:flex-row gap-4 pt-4"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -360,9 +360,9 @@ export default function SplineHeroSection() {
                 whileTap={{ scale: 0.98 }}
                 onHoverStart={() => setIsHovered(true)}
                 onHoverEnd={() => setIsHovered(false)}
-                className="group relative bg-[#353535] text-white px-7 py-4 sm:px-8 sm:py-4 rounded-full font-bold text-base sm:text-lg flex items-center justify-center gap-3 transition-all overflow-hidden shadow-lg"
+                className="group relative bg-[#2A2A2A] text-white px-8 py-5 sm:px-9 sm:py-5 rounded-full font-bold text-base sm:text-lg flex items-center justify-center gap-3 transition-all overflow-hidden shadow-lg"
                 style={{
-                  boxShadow: '0 4px 20px rgba(53, 53, 53, 0.3)',
+                  boxShadow: '0 4px 20px rgba(42, 42, 42, 0.3)',
                 }}
               >
                 <motion.div
@@ -388,7 +388,7 @@ export default function SplineHeroSection() {
             </motion.div>
 
             {/* Social Proof & Trust Indicators */}
-            <motion.div 
+            <motion.div
               className="pt-6 sm:pt-8 space-y-4 sm:space-y-5"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -401,13 +401,13 @@ export default function SplineHeroSection() {
                       key={i}
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
-                      transition={{ 
+                      transition={{
                         delay: 2.0 + i * 0.08,
                         type: "spring",
                         stiffness: 200
                       }}
-                      whileHover={{ 
-                        scale: 1.15, 
+                      whileHover={{
+                        scale: 1.15,
                         zIndex: 10,
                         transition: { duration: 0.2 }
                       }}
@@ -451,7 +451,7 @@ export default function SplineHeroSection() {
           </motion.div>
 
           {/* Right - Spacer for Spline visibility */}
-          <motion.div 
+          <motion.div
             className="relative min-h-[500px] flex items-center justify-center lg:justify-end"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -474,14 +474,14 @@ export default function SplineHeroSection() {
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
         >
           <div className="w-5 h-9 border-2 border-[#474747]/30 rounded-full flex justify-center pt-1.5">
-            <motion.div 
+            <motion.div
               className="w-1 h-3 bg-[#474747]/60 rounded-full"
-              animate={{ 
+              animate={{
                 y: [0, 10, 0],
                 opacity: [0.4, 0.8, 0.4]
               }}
-              transition={{ 
-                duration: 2.5, 
+              transition={{
+                duration: 2.5,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}

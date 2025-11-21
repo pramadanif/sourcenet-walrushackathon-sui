@@ -80,16 +80,16 @@ export default function ProblemSection() {
     >
       {/* Animated gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#CECECE] via-white to-[#CECECE]" />
-      
+
       {/* Multiple glow effects for depth */}
-      <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-[#919191]/20 blur-[150px] rounded-full animate-pulse" 
-           style={{ animationDuration: "4s" }} />
-      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#474747]/10 blur-[120px] rounded-full animate-pulse" 
-           style={{ animationDuration: "6s" }} />
+      <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-[#919191]/20 blur-[150px] rounded-full animate-pulse"
+        style={{ animationDuration: "4s" }} />
+      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#474747]/10 blur-[120px] rounded-full animate-pulse"
+        style={{ animationDuration: "6s" }} />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-[#353535]/5 blur-[180px] rounded-full" />
 
       {/* Grid pattern overlay */}
-      <div 
+      <div
         className="absolute inset-0 opacity-[0.05]"
         style={{
           backgroundImage: `
@@ -135,7 +135,7 @@ export default function ProblemSection() {
               <motion.div
                 key={problem.id}
                 variants={cardVariants}
-                className="group relative flex h-full min-h-[240px] flex-col gap-6 overflow-hidden rounded-3xl border border-[#2e2e2e]/15 bg-gradient-to-br from-[#f3f3f3] via-[#dcdcdc] to-[#c6c6c6] p-7 shadow-[0_20px_50px_rgba(38,38,38,0.12)] backdrop-blur-sm transition-all duration-300 hover:border-[#2e2e2e]/35 hover:shadow-[0_26px_60px_rgba(38,38,38,0.18)]"
+                className="group relative flex h-full min-h-[280px] flex-col gap-8 overflow-hidden rounded-[2rem] border border-[#2e2e2e]/15 bg-gradient-to-br from-[#f3f3f3] via-[#dcdcdc] to-[#c6c6c6] p-8 sm:p-10 shadow-[0_20px_50px_rgba(38,38,38,0.12)] backdrop-blur-sm transition-all duration-300 hover:border-[#2e2e2e]/35 hover:shadow-[0_26px_60px_rgba(38,38,38,0.18)]"
                 whileHover={{ y: -6 }}
               >
                 <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-40" style={{ background: "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.4), transparent 60%)" }} />
@@ -144,12 +144,12 @@ export default function ProblemSection() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/45 text-[#1e1e1e] shadow-inner shadow-white/60">
                     <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={2.4} />
                   </div>
-                  <h3 className="text-xl font-semibold text-[#111] sm:text-2xl">
+                  <h3 className="text-xl font-bold text-[#111] sm:text-2xl leading-tight">
                     {problem.title}
                   </h3>
                 </div>
 
-                <p className="relative z-10 text-base text-[#2f2f2f] leading-relaxed">
+                <p className="relative z-10 text-base sm:text-lg text-[#2f2f2f] leading-relaxed">
                   {problem.desc}
                 </p>
 
