@@ -229,15 +229,15 @@ export default function FourPillars() {
                 </div>
 
                 {/* Title & Features */}
-                <div className="relative z-10 flex-1 space-y-4">
-                  <h3 className="text-xl font-semibold text-[#F0F0F0] transition-colors duration-300 sm:text-2xl">
+                <div className="relative z-10 flex-1 space-y-4 text-white">
+                  <h3 className="text-xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)] transition-colors duration-300 sm:text-2xl">
                     {pillar.title}
                   </h3>
                   <ul className="space-y-3">
                     {pillar.features.map((feature, i) => (
                       <li key={i} className="flex items-start gap-3">
-                        <div className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#919191]" />
-                        <span className="text-sm text-[#E0E0E0] sm:text-base">{feature}</span>
+                        <div className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-white/80" />
+                        <span className="text-sm text-white/90 drop-shadow-[0_1px_4px_rgba(0,0,0,0.45)] sm:text-base">{feature}</span>
                       </li>
                     ))}
                   </ul>

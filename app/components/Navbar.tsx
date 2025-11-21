@@ -46,6 +46,7 @@ export default function Navbar() {
   };
 
   const navLinks = [
+    { name: 'Problem', href: '#problem' },
     { name: 'Features', href: '#features' },
     { name: 'How It Works', href: '#how-it-works' },
     { name: 'Technology', href: '#technology' },
@@ -146,7 +147,7 @@ export default function Navbar() {
         <motion.div
           ref={navRef}
           onMouseMove={handleMouseMove}
-          className="relative mx-auto flex items-center justify-between rounded-[28px] px-5 md:px-7 py-4 overflow-hidden group/nav transition-shadow duration-500"
+          className="relative mx-auto flex items-center justify-between rounded-[28px] pl-10 pr-6 md:pl-14 md:pr-9 py-4 overflow-hidden group/nav transition-shadow duration-500"
           style={{
             boxShadow: isScrolled
               ? '0 30px 70px -32px rgba(34,34,34,0.55)'
@@ -232,7 +233,7 @@ export default function Navbar() {
                 <motion.div
                   whileHover={{ scale: 1.06 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 pl-2"
                 >
                   <Image
                     src="/sourcenet.png"
