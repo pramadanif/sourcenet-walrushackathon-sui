@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { AnimatePresence, motion, useMotionValue, useSpring, Variants } from 'framer-motion';
 import { ArrowRight, Shield, Users, DollarSign, Lock } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 // --- OPTIMIZATION 1: Spline Loading Strategy ---
 const Spline = dynamic(() => import('@splinetool/react-spline'), {
@@ -21,7 +22,7 @@ MemoizedSpline.displayName = 'MemoizedSpline';
 const getParticleCount = () => {
   if (typeof window === 'undefined') return 8;
   // Kurangi partikel di mobile biar GPU napas
-  return window.innerWidth < 768 ? 3 : 6; 
+  return window.innerWidth < 768 ? 3 : 6;
 };
 
 const HERO_PARTICLES = Array.from({ length: getParticleCount() }, (_, i) => ({
@@ -34,7 +35,7 @@ const HERO_PARTICLES = Array.from({ length: getParticleCount() }, (_, i) => ({
 
 // --- OPTIMIZATION 2: Sederhanakan Animasi ---
 // Hapus 'blur' filter karena itu musuh utama performa di atas WebGL
-const EASE_CUSTOM = [0.33, 1, 0.68, 1]; 
+const EASE_CUSTOM = [0.33, 1, 0.68, 1];
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -49,21 +50,21 @@ const containerVariants: Variants = {
 
 const textRevealVariants: Variants = {
   hidden: { y: "100%", opacity: 0 }, // Hapus rotateX, berat di komposit
-  visible: { 
-    y: "0%", 
-    opacity: 1, 
-    transition: { 
-      duration: 1.0, 
-      ease: EASE_CUSTOM 
-    } 
+  visible: {
+    y: "0%",
+    opacity: 1,
+    transition: {
+      duration: 1.0,
+      ease: EASE_CUSTOM
+    }
   }
 };
 
 const fadeUpVariants: Variants = {
   hidden: { opacity: 0, y: 15 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
+  visible: {
+    opacity: 1,
+    y: 0,
     transition: { duration: 0.6, ease: "easeOut" } // Pakai standard ease biar ringan
   }
 };
@@ -73,7 +74,7 @@ export default function SplineHeroSection() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [splineLoaded, setSplineLoaded] = useState(false);
-  
+
   // Mouse logic tetap sama, ini sudah efisien karena pakai useSpring (bypass React render)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -217,8 +218,8 @@ export default function SplineHeroSection() {
             {/* Badge - Removed backdrop-blur if it overlaps 3D heavily */}
             <motion.div variants={fadeUpVariants} className="inline-block">
               <div className="px-4 py-2 bg-white/80 border border-[#3D3D3D]/20 rounded-full text-[#2A2A2A] text-xs sm:text-sm font-semibold flex items-center gap-1.5 sm:gap-2">
-                  <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  Web3 Frictionless Data Marketplace
+                <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                Web3 Frictionless Data Marketplace
               </div>
             </motion.div>
 
@@ -234,7 +235,7 @@ export default function SplineHeroSection() {
                   SourceNet
                 </motion.h1>
               </div>
-              
+
               <div className="overflow-hidden pt-2">
                 <motion.p
                   variants={textRevealVariants}
@@ -247,7 +248,7 @@ export default function SplineHeroSection() {
             </div>
 
             {/* Dynamic Subtitle - REMOVED BLUR EFFECT FOR PERFORMANCE */}
-            <motion.div 
+            <motion.div
               variants={fadeUpVariants}
               className="relative h-[60px] sm:h-[72px] overflow-hidden max-w-xl"
             >
@@ -258,9 +259,9 @@ export default function SplineHeroSection() {
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -20, opacity: 0 }}
-                  transition={{ 
-                    duration: 0.5, 
-                    ease: "easeOut" 
+                  transition={{
+                    duration: 0.5,
+                    ease: "easeOut"
                   }}
                   className="absolute top-0 left-0 font-medium text-[#555555] leading-relaxed will-change-transform"
                   style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)' }}
@@ -271,38 +272,40 @@ export default function SplineHeroSection() {
             </motion.div>
 
             {/* CTA Buttons */}
-            <motion.div 
+            <motion.div
               variants={fadeUpVariants}
               className="flex flex-col sm:flex-row gap-4 pt-2"
             >
-              <motion.button
-                ref={buttonRef}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onHoverStart={() => setIsHovered(true)}
-                onHoverEnd={() => setIsHovered(false)}
-                className="group relative bg-[#2A2A2A] text-white px-8 py-5 sm:px-9 sm:py-5 rounded-full font-bold text-base sm:text-lg flex items-center justify-center gap-3 transition-all overflow-hidden shadow-xl"
-              >
-                {/* Simplified hover effect */}
-                <motion.div
-                  className="absolute inset-0 bg-white/20"
-                  initial={{ x: '-100%' }}
-                  animate={{ x: isHovered ? '100%' : '-100%' }}
-                  transition={{ duration: 0.4 }}
-                />
-                {/* FIXED: Added text-white explicitly */}
-                <span className="relative z-10 text-white">Launch App</span>
-                <motion.div
-                  animate={{ x: isHovered ? 5 : 0 }}
-                  transition={{ duration: 0.2 }}
+              <Link href="https://sourcenet-fe.vercel.app/" passHref>
+                <motion.button
+                  ref={buttonRef}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onHoverStart={() => setIsHovered(true)}
+                  onHoverEnd={() => setIsHovered(false)}
+                  className="group relative bg-[#2A2A2A] text-white px-8 py-5 sm:px-9 sm:py-5 rounded-full font-bold text-base sm:text-lg flex items-center justify-center gap-3 transition-all overflow-hidden shadow-xl"
                 >
-                  <ArrowRight className="text-white" size={20} />
-                </motion.div>
-              </motion.button>
+                  {/* Simplified hover effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-white/20"
+                    initial={{ x: '-100%' }}
+                    animate={{ x: isHovered ? '100%' : '-100%' }}
+                    transition={{ duration: 0.4 }}
+                  />
+                  {/* FIXED: Added text-white explicitly */}
+                  <span className="relative z-10 text-white">Launch App</span>
+                  <motion.div
+                    animate={{ x: isHovered ? 5 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ArrowRight className="text-white" size={20} />
+                  </motion.div>
+                </motion.button>
+              </Link>
             </motion.div>
 
             {/* Trust Badges */}
-            <motion.div 
+            <motion.div
               variants={fadeUpVariants}
               className="pt-6 flex flex-wrap gap-4 sm:gap-6"
             >

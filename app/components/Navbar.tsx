@@ -328,50 +328,52 @@ export default function Navbar() {
             </motion.div>
 
             {/* ✅ CTA Button — spacing & interaksi diperbaiki */}
-            <motion.button
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.4, type: 'spring', stiffness: 220 }}
-              whileHover={{ scale: 1.1, y: -3 }}
-              whileTap={{ scale: 0.95, y: 0 }}
-              className="hidden md:block relative px-8 py-3.5 rounded-full font-bold text-base md:text-[15px] overflow-hidden group/cta mr-2" // 🔥 px-7 → px-8, py-3 → py-3.5, + mr-2
-              aria-label="Get started with SourceNet"
-            >
-              {/* Background Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#2A2A2A] to-[#000000]" />
+            <Link href="https://sourcenet-fe.vercel.app/" passHref>
+              <motion.button
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.4, type: 'spring', stiffness: 220 }}
+                whileHover={{ scale: 1.1, y: -3 }}
+                whileTap={{ scale: 0.95, y: 0 }}
+                className="hidden md:block relative px-8 py-3.5 rounded-full font-bold text-base md:text-[15px] overflow-hidden group/cta mr-2" // 🔥 px-7 → px-8, py-3 → py-3.5, + mr-2
+                aria-label="Get started with SourceNet"
+              >
+                {/* Background Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#2A2A2A] to-[#000000]" />
 
-              {/* Shine Effect */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-[#CECECE]/30 to-transparent"
-                animate={{ x: ['-120%', '220%'] }}
-                transition={{
-                  duration: 2.2,
-                  repeat: Infinity,
-                  repeatDelay: 1.2
-                }}
-              />
-
-              {/* Outer Glow */}
-              <motion.div
-                className="absolute -inset-1 bg-gradient-to-r from-[#919191] to-[#474747] rounded-full opacity-0 group-hover/cta:opacity-70 blur-lg"
-                transition={{ duration: 0.35 }}
-              />
-
-              <span className="relative z-10 text-white flex items-center gap-2">
-                Launch App
-                <motion.span
-                  animate={{ x: [0, 4, 0] }}
+                {/* Shine Effect */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-[#CECECE]/30 to-transparent"
+                  animate={{ x: ['-120%', '220%'] }}
                   transition={{
-                    duration: 1.8,
+                    duration: 2.2,
                     repeat: Infinity,
-                    ease: "easeInOut"
+                    repeatDelay: 1.2
                   }}
-                  className="text-lg"
-                >
-                  →
-                </motion.span>
-              </span>
-            </motion.button>
+                />
+
+                {/* Outer Glow */}
+                <motion.div
+                  className="absolute -inset-1 bg-gradient-to-r from-[#919191] to-[#474747] rounded-full opacity-0 group-hover/cta:opacity-70 blur-lg"
+                  transition={{ duration: 0.35 }}
+                />
+
+                <span className="relative z-10 text-white flex items-center gap-2">
+                  Launch App
+                  <motion.span
+                    animate={{ x: [0, 4, 0] }}
+                    transition={{
+                      duration: 1.8,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className="text-lg"
+                  >
+                    →
+                  </motion.span>
+                </span>
+              </motion.button>
+            </Link>
 
             {/* ✅ Mobile Menu Button — ukuran & spacing diperbesar */}
             <motion.button
@@ -521,33 +523,35 @@ export default function Navbar() {
                   ))}
 
                   {/* ✅ Mobile CTA — ukuran diperbesar */}
-                  <motion.button
-                    variants={mobileNavItemVariants}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    whileHover={{ scale: 1.06, y: -3 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-full max-w-[280px] relative mt-3 px-8 py-4.5 rounded-2xl font-bold text-lg overflow-hidden group/mobile-cta"
-                    aria-label="Get started with SourceNet"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#353535] to-[#000000]" />
-                    <motion.div
-                      className="absolute -inset-1.5 bg-gradient-to-r from-[#919191] to-[#474747] rounded-2xl opacity-0 group-hover/mobile-cta:opacity-70 blur-xl"
-                      transition={{ duration: 0.35 }}
-                    />
-                    <span className="relative z-10 text-white flex items-center justify-center gap-2.5">
-                      Launch App
-                      <motion.span
-                        animate={{ x: [0, 6, 0] }}
-                        transition={{
-                          duration: 1.8,
-                          repeat: Infinity
-                        }}
-                        className="text-xl"
-                      >
-                        →
-                      </motion.span>
-                    </span>
-                  </motion.button>
+                  <Link href="https://sourcenet-fe.vercel.app/" passHref className="w-full max-w-[280px]">
+                    <motion.button
+                      variants={mobileNavItemVariants}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      whileHover={{ scale: 1.06, y: -3 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-full relative mt-3 px-8 py-4.5 rounded-2xl font-bold text-lg overflow-hidden group/mobile-cta"
+                      aria-label="Get started with SourceNet"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#353535] to-[#000000]" />
+                      <motion.div
+                        className="absolute -inset-1.5 bg-gradient-to-r from-[#919191] to-[#474747] rounded-2xl opacity-0 group-hover/mobile-cta:opacity-70 blur-xl"
+                        transition={{ duration: 0.35 }}
+                      />
+                      <span className="relative z-10 text-white flex items-center justify-center gap-2.5">
+                        Launch App
+                        <motion.span
+                          animate={{ x: [0, 6, 0] }}
+                          transition={{
+                            duration: 1.8,
+                            repeat: Infinity
+                          }}
+                          className="text-xl"
+                        >
+                          →
+                        </motion.span>
+                      </span>
+                    </motion.button>
+                  </Link>
                 </motion.div>
               </div>
             </motion.div>
