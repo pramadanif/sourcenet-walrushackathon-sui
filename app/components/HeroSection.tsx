@@ -1,25 +1,27 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
-import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { AnimatePresence, motion, useMotionValue, useSpring, Variants } from 'framer-motion';
 import { ArrowRight, Shield, Users, DollarSign, Lock } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
+// --- OPTIMIZATION 1: Spline Loading Strategy ---
 const Spline = dynamic(() => import('@splinetool/react-spline'), {
   ssr: false,
-  loading: () => null
+  loading: () => <div className="w-full h-full bg-transparent" />, // Ringan saat loading
 });
 
-// Memoized Spline component to prevent unnecessary re-renders
+// Memoized Spline yang BENAR-BENAR Strict
+// Kita pastikan dia tidak re-render sama sekali kecuali URL scene berubah
 const MemoizedSpline = React.memo(({ scene }: { scene: string }) => (
   <Spline scene={scene} className="pointer-events-auto" />
-));
+), (prev, next) => prev.scene === next.scene);
 MemoizedSpline.displayName = 'MemoizedSpline';
 
-// Optimize particle count based on device
 const getParticleCount = () => {
   if (typeof window === 'undefined') return 8;
-  return window.innerWidth < 768 ? 4 : 8;
+  // Kurangi partikel di mobile biar GPU napas
+  return window.innerWidth < 768 ? 3 : 6; 
 };
 
 const HERO_PARTICLES = Array.from({ length: getParticleCount() }, (_, i) => ({
@@ -30,20 +32,55 @@ const HERO_PARTICLES = Array.from({ length: getParticleCount() }, (_, i) => ({
   delay: (i % 6) * 0.3,
 }));
 
+// --- OPTIMIZATION 2: Sederhanakan Animasi ---
+// Hapus 'blur' filter karena itu musuh utama performa di atas WebGL
+const EASE_CUSTOM = [0.33, 1, 0.68, 1]; 
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1, // Percepat sedikit
+      delayChildren: 0.2,
+    }
+  }
+};
+
+const textRevealVariants: Variants = {
+  hidden: { y: "100%", opacity: 0 }, // Hapus rotateX, berat di komposit
+  visible: { 
+    y: "0%", 
+    opacity: 1, 
+    transition: { 
+      duration: 1.0, 
+      ease: EASE_CUSTOM 
+    } 
+  }
+};
+
+const fadeUpVariants: Variants = {
+  hidden: { opacity: 0, y: 15 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { duration: 0.6, ease: "easeOut" } // Pakai standard ease biar ringan
+  }
+};
+
 export default function SplineHeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [splineLoaded, setSplineLoaded] = useState(false);
-  const mouseEventTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Smooth mouse tracking
+  
+  // Mouse logic tetap sama, ini sudah efisien karena pakai useSpring (bypass React render)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const smoothMouseX = useSpring(mouseX, { damping: 40, stiffness: 80 });
   const smoothMouseY = useSpring(mouseY, { damping: 40, stiffness: 80 });
+  const mouseEventTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Debounced mouse move handler
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
@@ -54,106 +91,77 @@ export default function SplineHeroSection() {
     }
   }, [mouseX, mouseY]);
 
-  // Track mouse for subtle parallax with debouncing
   useEffect(() => {
+    // Throttle event listener ke ~60fps (16ms)
     const debouncedMouseMove = (e: MouseEvent) => {
-      if (mouseEventTimeoutRef.current) {
-        clearTimeout(mouseEventTimeoutRef.current);
-      }
-      mouseEventTimeoutRef.current = setTimeout(() => {
-        handleMouseMove(e);
-      }, 16); // ~60fps
+      if (mouseEventTimeoutRef.current) clearTimeout(mouseEventTimeoutRef.current);
+      mouseEventTimeoutRef.current = setTimeout(() => handleMouseMove(e), 16);
     };
-
     window.addEventListener('mousemove', debouncedMouseMove, { passive: true });
     return () => {
       window.removeEventListener('mousemove', debouncedMouseMove);
-      if (mouseEventTimeoutRef.current) {
-        clearTimeout(mouseEventTimeoutRef.current);
-      }
+      if (mouseEventTimeoutRef.current) clearTimeout(mouseEventTimeoutRef.current);
     };
   }, [handleMouseMove]);
 
-  // Magnetic button effect with optimized event handling
+  // Magnetic button logic (Optimized with cancelAnimationFrame)
   useEffect(() => {
     const button = buttonRef.current;
     if (!button) return;
+    let rafId: number | null = null;
 
-    let animationFrameId: number | null = null;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      animationFrameId = requestAnimationFrame(() => {
+    const handleMouseMoveBtn = (e: MouseEvent) => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
         const rect = button.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
-        const distance = Math.sqrt(x * x + y * y);
-        const maxDistance = 150;
+        const dist = Math.sqrt(x * x + y * y);
+        const maxDist = 100; // Kurangi radius deteksi biar gak sering trigger
 
-        if (distance < maxDistance) {
-          const strength = (maxDistance - distance) / maxDistance;
-          button.style.transform = `translate(${x * strength * 0.3}px, ${y * strength * 0.3}px)`;
+        if (dist < maxDist) {
+          const strength = (maxDist - dist) / maxDist;
+          // Gunakan translate3d untuk memaksa GPU rendering
+          button.style.transform = `translate3d(${x * strength * 0.3}px, ${y * strength * 0.3}px, 0)`;
         } else {
-          button.style.transform = 'translate(0, 0)';
+          button.style.transform = 'translate3d(0, 0, 0)';
         }
       });
     };
 
-    const handleMouseLeave = () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      if (button) button.style.transform = 'translate(0, 0)';
+    const handleMouseLeaveBtn = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      if (button) button.style.transform = 'translate3d(0, 0, 0)';
     };
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('mousemove', handleMouseMoveBtn, { passive: true });
+    button.addEventListener('mouseleave', handleMouseLeaveBtn);
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseleave', handleMouseLeave);
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
+      window.removeEventListener('mousemove', handleMouseMoveBtn);
+      button.removeEventListener('mouseleave', handleMouseLeaveBtn);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
-  // ✅ Dynamic Subtitle Logic
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(0);
-
   const subtitles = [
-    "Sell your Web2 data anonymously, without gas, directly from Google or Steam accounts.",
+    "Sell your Web2 data anonymously, without gas.",
     "Monetize your digital footprint — no blockchain required.",
     "Your data. Your rules. Your earnings. Instantly.",
-    "Turn browsing history into passive income — securely and privately.",
-    "The easiest way to profit from your online activity — zero technical skills needed."
+    "Turn browsing history into passive income securely.",
+    "Profit from online activity — zero technical skills."
   ];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSubtitleIndex((prev) => (prev + 1) % subtitles.length);
-    }, 4000);
-
+    }, 5000); // Perpanjang durasi biar gak sering ganti (re-paint)
     return () => clearInterval(interval);
   }, []);
 
-  // Lazy load Spline scene for better performance
   useEffect(() => {
-    const loadSpline = async () => {
-      // Add small delay to prioritize initial page render
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      try {
-        await fetch('https://prod.spline.design/9NmsWPnV9H3h3V0B/scene.splinecode', {
-          method: 'HEAD',
-        });
-        setSplineLoaded(true);
-      } catch (err) {
-        // Fallback: mark as loaded anyway after delay
-        setTimeout(() => setSplineLoaded(true), 2000);
-      }
-    };
-    loadSpline();
+    // Lazy load logic
+    setTimeout(() => setSplineLoaded(true), 1000);
   }, []);
 
   return (
@@ -161,56 +169,25 @@ export default function SplineHeroSection() {
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#f5f5f5]"
     >
-      {/* Subtle Animated Grid */}
-      <div className="absolute inset-0 opacity-[0.015]">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(71, 71, 71, 0.15) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(71, 71, 71, 0.15) 1px, transparent 1px)
-            `,
-            backgroundSize: '60px 60px',
-          }}
-        />
+      {/* Background Grid - Static is better for perf */}
+      <div className="absolute inset-0 opacity-[0.015] pointer-events-none">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `linear-gradient(rgba(71, 71, 71, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(71, 71, 71, 0.15) 1px, transparent 1px)`,
+          backgroundSize: '60px 60px',
+        }} />
       </div>
 
-      {/* Elegant Gradient Orbs with Mouse Tracking */}
+      {/* Orbs - Reduce blur amount or opacity if still laggy */}
       <motion.div
-        className="absolute top-1/4 -left-1/4 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-[#919191] opacity-5 blur-[100px] sm:blur-[140px] rounded-full"
-        animate={{
-          scale: [1, 1.05, 1],
-          opacity: [0.05, 0.1, 0.05],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        style={{
-          x: smoothMouseX,
-          y: smoothMouseY,
-        }}
+        className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-[#919191] opacity-5 blur-[80px] rounded-full pointer-events-none will-change-transform"
+        style={{ x: smoothMouseX, y: smoothMouseY }}
       />
       <motion.div
-        className="absolute bottom-1/4 -right-1/4 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-[#474747] opacity-5 blur-[100px] sm:blur-[140px] rounded-full"
-        animate={{
-          scale: [1.05, 1, 1.05],
-          opacity: [0.05, 0.08, 0.05],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1
-        }}
-        style={{
-          x: smoothMouseX,
-          y: smoothMouseY,
-        }}
+        className="absolute bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-[#474747] opacity-5 blur-[80px] rounded-full pointer-events-none will-change-transform"
+        style={{ x: smoothMouseX, y: smoothMouseY }}
       />
 
-      {/* ✅ Spline 3D Background - Optimized */}
+      {/* Spline Container - Isolated */}
       <div className="absolute inset-0 z-10 pointer-events-none">
         <motion.div
           initial={{ opacity: 0 }}
@@ -218,125 +195,74 @@ export default function SplineHeroSection() {
           transition={{ duration: 1.5 }}
           className="w-full h-full"
         >
-          <div className="relative w-full h-full pointer-events-auto">
-            <MemoizedSpline
-              scene="https://prod.spline.design/9NmsWPnV9H3h3V0B/scene.splinecode"
-            />
+          {/* Tambahkan will-change pada container wrapper spline */}
+          <div className="relative w-full h-full pointer-events-auto will-change-transform">
+            {splineLoaded && (
+              <MemoizedSpline scene="https://prod.spline.design/9NmsWPnV9H3h3V0B/scene.splinecode" />
+            )}
           </div>
         </motion.div>
-        {!splineLoaded && (
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/5" />
-        )}
       </div>
 
-      {/* Subtle Floating Particles - Reduced on mobile */}
-      {HERO_PARTICLES.map((particle, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 bg-[#474747] rounded-full opacity-10 hidden sm:block"
-          style={{ left: particle.left, top: particle.top }}
-          animate={{
-            y: [0, -particle.amplitude, 0],
-            opacity: [0.05, 0.15, 0.05],
-          }}
-          transition={{
-            duration: particle.duration,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: particle.delay,
-          }}
-        />
-      ))}
-
-      {/* ✅ Konten Utama */}
-      <div className="section-inner py-16 sm:py-24 relative z-30">
+      <div className="section-inner py-16 sm:py-24 relative z-30 w-full max-w-7xl px-4 mx-auto">
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-20 items-center">
 
-          {/* Left Content */}
+          {/* LEFT CONTENT */}
           <motion.div
             className="space-y-6 sm:space-y-8"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
           >
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="inline-block"
-            >
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-              >
-                <span className="px-4 py-2 bg-white/70 border border-[#3D3D3D]/20 rounded-full text-[#2A2A2A] text-xs sm:text-sm font-semibold backdrop-blur-md flex items-center gap-1.5 sm:gap-2 inline-flex">
+            {/* Badge - Removed backdrop-blur if it overlaps 3D heavily */}
+            <motion.div variants={fadeUpVariants} className="inline-block">
+              <div className="px-4 py-2 bg-white/80 border border-[#3D3D3D]/20 rounded-full text-[#2A2A2A] text-xs sm:text-sm font-semibold flex items-center gap-1.5 sm:gap-2">
                   <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   Web3 Frictionless Data Marketplace
-                </span>
-              </motion.div>
+              </div>
             </motion.div>
 
-            {/* Main Title — Cohesive unit with enhanced animations */}
-            <div className="space-y-4 overflow-hidden">
-              <motion.h1
-                className="font-bold tracking-tight text-[#2A2A2A] leading-[1.1]"
-                style={{
-                  fontSize: 'clamp(2rem, 8vw, 4rem)',
-                }}
-              >
-                <motion.span
-                  className="block overflow-hidden"
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.9, delay: 0.4, ease: "easeOut" }}
+            {/* Main Title - Optimized Masked Reveal */}
+            <div className="space-y-1">
+              <div className="overflow-hidden">
+                <motion.h1
+                  variants={textRevealVariants}
+                  // will-change membantu browser menyiapkan layer
+                  className="font-bold tracking-tight text-[#2A2A2A] leading-[1.1] will-change-transform"
+                  style={{ fontSize: 'clamp(3rem, 8vw, 5rem)' }}
                 >
-                  <motion.span
-                    className="inline-block font-black"
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.9, delay: 0.5, ease: "easeOut" }}
-                  >
-                    SourceNet
-                  </motion.span>
-                </motion.span>
-                <motion.span
-                  className="block mt-4 text-[#3D3D3D] font-medium overflow-hidden"
+                  SourceNet
+                </motion.h1>
+              </div>
+              
+              <div className="overflow-hidden pt-2">
+                <motion.p
+                  variants={textRevealVariants}
+                  className="text-[#3D3D3D] font-medium leading-tight will-change-transform"
                   style={{ fontSize: 'clamp(1.1rem, 4vw, 1.5rem)' }}
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.9, delay: 0.7, ease: "easeOut" }}
                 >
-                  <motion.span
-                    className="inline-block"
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.9, delay: 0.8, ease: "easeOut" }}
-                  >
-                    Own & Monetize Your Personal Data
-                  </motion.span>
-                </motion.span>
-              </motion.h1>
+                  Own & Monetize Your Personal Data
+                </motion.p>
+              </div>
             </div>
 
-            {/* Dynamic Subtitle with enhanced animations */}
-            <motion.div
-              className="space-y-4 max-w-xl pt-2 overflow-hidden"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.0, duration: 0.8, ease: "easeOut" }}
+            {/* Dynamic Subtitle - REMOVED BLUR EFFECT FOR PERFORMANCE */}
+            <motion.div 
+              variants={fadeUpVariants}
+              className="relative h-[60px] sm:h-[72px] overflow-hidden max-w-xl"
             >
               <AnimatePresence mode="wait">
                 <motion.p
                   key={currentSubtitleIndex}
-                  initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
-                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, y: -30, filter: "blur(10px)" }}
-                  transition={{
-                    duration: 0.7,
-                    ease: "easeOut"
+                  // Hapus filter blur di sini!
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -20, opacity: 0 }}
+                  transition={{ 
+                    duration: 0.5, 
+                    ease: "easeOut" 
                   }}
-                  className="font-medium text-[#333333] leading-relaxed"
+                  className="absolute top-0 left-0 font-medium text-[#555555] leading-relaxed will-change-transform"
                   style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)' }}
                 >
                   {subtitles[currentSubtitleIndex]}
@@ -344,151 +270,59 @@ export default function SplineHeroSection() {
               </AnimatePresence>
             </motion.div>
 
-            {/* ✅ CTA Button - Launch App */}
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4 pt-4"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.5, duration: 0.8, ease: "easeOut" }}
+            {/* CTA Buttons */}
+            <motion.div 
+              variants={fadeUpVariants}
+              className="flex flex-col sm:flex-row gap-4 pt-2"
             >
               <motion.button
                 ref={buttonRef}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.6, type: "spring", stiffness: 300 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onHoverStart={() => setIsHovered(true)}
                 onHoverEnd={() => setIsHovered(false)}
-                className="group relative bg-[#2A2A2A] text-white px-8 py-5 sm:px-9 sm:py-5 rounded-full font-bold text-base sm:text-lg flex items-center justify-center gap-3 transition-all overflow-hidden shadow-lg"
-                style={{
-                  boxShadow: '0 4px 20px rgba(42, 42, 42, 0.3)',
-                }}
+                className="group relative bg-[#2A2A2A] text-white px-8 py-5 sm:px-9 sm:py-5 rounded-full font-bold text-base sm:text-lg flex items-center justify-center gap-3 transition-all overflow-hidden shadow-xl"
               >
+                {/* Simplified hover effect */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                  animate={{
-                    x: isHovered ? ['-200%', '200%'] : '-200%',
-                  }}
-                  transition={{
-                    duration: 1.2,
-                    repeat: isHovered ? Infinity : 0,
-                    ease: 'linear',
-                  }}
+                  className="absolute inset-0 bg-white/20"
+                  initial={{ x: '-100%' }}
+                  animate={{ x: isHovered ? '100%' : '-100%' }}
+                  transition={{ duration: 0.4 }}
                 />
-                <span className="relative z-10 font-semibold text-white">Launch App</span>
+                {/* FIXED: Added text-white explicitly */}
+                <span className="relative z-10 text-white">Launch App</span>
                 <motion.div
-                  animate={{ x: isHovered ? 4 : 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="relative z-10"
+                  animate={{ x: isHovered ? 5 : 0 }}
+                  transition={{ duration: 0.2 }}
                 >
                   <ArrowRight className="text-white" size={20} />
                 </motion.div>
               </motion.button>
             </motion.div>
 
-            {/* Social Proof & Trust Indicators */}
-            <motion.div
-              className="pt-6 sm:pt-8 space-y-4 sm:space-y-5"
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1.9 }}
+            {/* Trust Badges */}
+            <motion.div 
+              variants={fadeUpVariants}
+              className="pt-6 flex flex-wrap gap-4 sm:gap-6"
             >
-              <div className="flex items-center gap-3 sm:gap-4">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3, 4].map((i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{
-                        delay: 2.0 + i * 0.08,
-                        type: "spring",
-                        stiffness: 200
-                      }}
-                      whileHover={{
-                        scale: 1.15,
-                        zIndex: 10,
-                        transition: { duration: 0.2 }
-                      }}
-                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#353535] to-[#919191] border-2 border-[#CECECE] cursor-pointer"
-                    />
-                  ))}
+              {[
+                { icon: Lock, label: "End-to-end encrypted" },
+                { icon: DollarSign, label: "Instant payouts" },
+                { icon: Users, label: "No-code required" }
+              ].map((item, idx) => (
+                <div key={idx} className="flex items-center gap-2 text-sm font-medium text-[#666]">
+                  <item.icon size={14} className="text-[#2A2A2A]" />
+                  {item.label}
                 </div>
-                <p
-                  className="text-sm sm:text-base font-medium"
-                  style={{ color: '#FFFFFF', textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}
-                >
-                  <span className="font-semibold" style={{ color: '#FFFFFF' }}>10K+</span> data producers already joined
-                </p>
-              </div>
-
-              {/* Trust Badges */}
-              <div className="flex flex-wrap gap-3 sm:gap-4 pt-2">
-                <div
-                  className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/80"
-                  style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.35)' }}
-                >
-                  <Lock size={12} className="text-white" />
-                  End-to-end encrypted
-                </div>
-                <div
-                  className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/80"
-                  style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.35)' }}
-                >
-                  <DollarSign size={12} className="text-white" />
-                  Instant payouts
-                </div>
-                <div
-                  className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/80"
-                  style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.35)' }}
-                >
-                  <Users size={12} className="text-white" />
-                  Zero technical skills
-                </div>
-              </div>
+              ))}
             </motion.div>
           </motion.div>
 
-          {/* Right - Spacer for Spline visibility */}
-          <motion.div
-            className="relative min-h-[500px] flex items-center justify-center lg:justify-end"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-          >
-            {/* Placeholder untuk Spline */}
-          </motion.div>
+          {/* Right Spacer */}
+          <div className="relative min-h-[400px] lg:min-h-[600px] pointer-events-none" />
         </div>
       </div>
-
-      {/* Elegant Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.4 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <div className="w-5 h-9 border-2 border-[#474747]/30 rounded-full flex justify-center pt-1.5">
-            <motion.div
-              className="w-1 h-3 bg-[#474747]/60 rounded-full"
-              animate={{
-                y: [0, 10, 0],
-                opacity: [0.4, 0.8, 0.4]
-              }}
-              transition={{
-                duration: 2.5,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-          </div>
-        </motion.div>
-      </motion.div>
     </motion.section>
   );
 }

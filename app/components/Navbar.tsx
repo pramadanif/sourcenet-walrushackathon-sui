@@ -138,15 +138,15 @@ export default function Navbar() {
     <>
       <motion.nav
         className={`fixed left-1/2 z-50 w-full max-w-[1400px] -translate-x-1/2 px-4 md:px-6 transition-all duration-500 ${isScrolled
-            ? 'top-3 md:top-4'
-            : 'top-6 md:top-8'
+          ? 'top-3 md:top-4'
+          : 'top-6 md:top-8'
           }`}
         aria-label="Main navigation"
       >
         <motion.div
           ref={navRef}
           onMouseMove={handleMouseMove}
-          className="relative mx-auto flex items-center justify-between rounded-[28px] pl-10 pr-6 md:pl-14 md:pr-9 py-4 overflow-hidden group/nav transition-shadow duration-500"
+          className="relative mx-auto flex items-center justify-between rounded-[28px] pl-10 pr-6 md:pl-20 md:pr-9 py-4 group/nav transition-shadow duration-500"
           style={{
             boxShadow: isScrolled
               ? '0 30px 70px -32px rgba(34,34,34,0.55)'
@@ -231,12 +231,12 @@ export default function Navbar() {
                 <motion.div
                   whileHover={{ scale: 1.06 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 pl-2"
+                  className="flex items-center gap-2"
                 >
                   <Image
                     src="/sourcenet.png"
                     alt="SourceNet"
-                    width={180}
+                    width={160}
                     height={50}
                     priority
                     className="h-12 w-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
