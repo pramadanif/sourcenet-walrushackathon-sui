@@ -3,6 +3,14 @@
 import { motion } from "framer-motion";
 import { Lock, Coins, Settings2, XCircle } from "lucide-react";
 
+// --- Types & Data ---
+interface Problem {
+  id: number;
+  title: string;
+  desc: string;
+  icon: React.ElementType;
+}
+
 const ProblemIcons = {
   lock: Lock,
   money: Coins,
@@ -10,53 +18,53 @@ const ProblemIcons = {
   cross: XCircle,
 };
 
-const problems = [
+const problems: Problem[] = [
   {
     id: 1,
     title: "Data Locked Away",
-    desc: "Your data is trapped in Web2 silos.",
+    desc: "Your digital life is trapped in Web2 silos. You generate value, but they keep it trapped.",
     icon: ProblemIcons.lock,
   },
   {
     id: 2,
     title: "Companies Profit, You Don't",
-    desc: "Big tech monetizes your data for billions while you see zero compensation.",
+    desc: "Big tech monetizes your data for billions while you see exactly $0.00 in return.",
     icon: ProblemIcons.money,
   },
   {
     id: 3,
     title: "Web3 Too Complex",
-    desc: "Existing Web3 marketplaces require wallets, gas fees, and technical knowledge.",
+    desc: "Existing marketplaces are impossible to use: wallets, seed phrases, and gas fees.",
     icon: ProblemIcons.gear,
   },
   {
     id: 4,
     title: "No Easy Access",
-    desc: "Selling your data should be simple, but current solutions make it impossible.",
+    desc: "Selling your data should be as easy as browsing. Currently, it is virtually impossible.",
     icon: ProblemIcons.cross,
   },
 ];
 
+// --- Animation Variants ---
 const headerVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 30 },
   show: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.9,
+      duration: 0.8,
       ease: "easeOut",
     },
   },
 };
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 35, scale: 0.96 },
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
   show: {
     opacity: 1,
     y: 0,
-    scale: 1,
     transition: {
-      duration: 0.7,
+      duration: 0.6,
       ease: "easeOut",
     },
   },
@@ -66,8 +74,8 @@ const listVariants = {
   hidden: {},
   show: {
     transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.25,
+      staggerChildren: 0.15,
+      delayChildren: 0.2,
     },
   },
 };
@@ -76,104 +84,102 @@ export default function ProblemSection() {
   return (
     <section
       id="problem"
-      className="relative z-10 w-full pt-40 sm:pt-48 md:pt-56 lg:pt-64 pb-28 sm:pb-32 md:pb-36 lg:pb-40 bg-[#CECECE] text-[#474747] overflow-hidden flex flex-col items-center"
+      // UPDATED: Increased padding-top (pt) significantly to push content down from Hero
+      className="relative z-10 w-full pt-32 sm:pt-40 md:pt-52 lg:pt-64 pb-32 sm:pb-40 md:pb-48 lg:pb-56 bg-[#CECECE] text-[#474747] overflow-hidden flex flex-col items-center"
     >
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#CECECE] via-white to-[#CECECE]" />
+      {/* Animated gradient background - Keeping the same palette */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#CECECE] via-[#dcdcdc] to-[#CECECE]" />
 
-      {/* Multiple glow effects for depth */}
-      <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-[#919191]/20 blur-[150px] rounded-full animate-pulse"
-        style={{ animationDuration: "4s" }} />
-      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#474747]/10 blur-[120px] rounded-full animate-pulse"
-        style={{ animationDuration: "6s" }} />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-[#353535]/5 blur-[180px] rounded-full" />
+      {/* Subtle Glow effects for depth */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-white/20 blur-[120px] rounded-[100%] pointer-events-none" />
 
       {/* Grid pattern overlay */}
       <div
-        className="absolute inset-0 opacity-[0.05]"
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(71, 71, 71, 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(71, 71, 71, 0.3) 1px, transparent 1px)
+            linear-gradient(#333 1px, transparent 1px),
+            linear-gradient(90deg, #333 1px, transparent 1px)
           `,
-          backgroundSize: "50px 50px",
+          backgroundSize: "64px 64px",
         }}
       />
 
-      <div className="section-inner relative z-10 flex flex-col items-center gap-20">
+      {/* Container Inner */}
+      <div className="section-inner relative z-10 flex flex-col items-center gap-24 lg:gap-32 w-full px-6 max-w-7xl mx-auto mt-12 sm:mt-20">
+
+        {/* Header Section */}
         <motion.div
           variants={headerVariants}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.5 }}
-          className="header-content mx-auto flex w-full max-w-4xl flex-col items-center text-center gap-5 sm:gap-6 lg:gap-8"
+          className="header-content mx-auto flex w-full max-w-3xl flex-col items-center text-center gap-8"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#4b4b4b]/30 bg-[#919191]/20 px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#353535] sm:text-sm">
-            The Problem
+          <span className="inline-flex items-center gap-2 rounded-full border border-black/5 bg-black/5 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#333]">
+            
           </span>
-          <h2 className="w-full text-balance text-3xl font-black leading-tight text-[#161616] sm:text-4xl md:text-5xl lg:text-6xl">
-            Your Data is <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2f2f2f] via-[#111111] to-[#3d3d3d]">Locked</span>
-            <br className="hidden sm:block" />
-            and Monetized by <span className="text-[#202020]">Big Web2</span>
+          <h2 className="w-full text-4xl sm:text-5xl md:text-6xl font-black leading-[0.95] text-[#161616] tracking-tight mb-2">
+            Your Data is <span className="opacity-40">Locked.</span>
+            <br />
+            Big Tech <span className="opacity-40">Profits.</span>
           </h2>
-          <p className="text-pretty text-center text-sm text-[#4f4f4f] sm:text-base md:text-lg lg:text-xl">
-            Your browsing history, game history, and personal data are <span className="font-semibold text-[#282828]">locked by companies.</span>
-            <span className="mt-1 block">Existing Web3 marketplaces are too complex: wallets, gas fees, and setup.</span>
+          <p className="text-lg sm:text-xl text-[#555] max-w-2xl leading-relaxed mt-2">
+            The internet is broken. You create the value, they capture it.
+            <br className="hidden sm:block" />
+            SourceNet changes the equation permanently.
           </p>
         </motion.div>
 
+        {/* Clean Icon Grid */}
         <motion.div
           variants={listVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.25 }}
-          className="cards-grid mx-auto mt-12 grid w-full max-w-6xl grid-cols-1 gap-10 sm:grid-cols-2 xl:grid-cols-4"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-24 lg:gap-x-16"
         >
           {problems.map((problem) => {
             const Icon = problem.icon;
             return (
               <motion.div
                 key={problem.id}
-                variants={cardVariants}
-                className="group relative flex h-full min-h-[280px] flex-col gap-8 overflow-hidden rounded-[2rem] border border-[#2e2e2e]/15 bg-gradient-to-br from-[#f3f3f3] via-[#dcdcdc] to-[#c6c6c6] p-8 sm:p-10 shadow-[0_20px_50px_rgba(38,38,38,0.12)] backdrop-blur-sm transition-all duration-300 hover:border-[#2e2e2e]/35 hover:shadow-[0_26px_60px_rgba(38,38,38,0.18)]"
-                whileHover={{ y: -6 }}
+                variants={itemVariants}
+                className="group flex flex-col items-center text-center"
               >
-                <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-40" style={{ background: "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.4), transparent 60%)" }} />
-
-                <div className="relative z-10 flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/45 text-[#1e1e1e] shadow-inner shadow-white/60">
-                    <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={2.4} />
+                {/* Icon Container - Increased margin bottom (mb-10 -> mb-14) for more space before title */}
+                <div className="relative mb-14 group-hover:-translate-y-2 transition-transform duration-500 ease-out">
+                  {/* Circle Background */}
+                  <div className="w-24 h-24 rounded-full bg-[#E5E5E5] border border-white/40 shadow-inner flex items-center justify-center relative z-10">
+                    <Icon className="h-9 w-9 text-[#222]" strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-xl font-bold text-[#111] sm:text-2xl leading-tight">
-                    {problem.title}
-                  </h3>
+
+                  {/* Subtle Shadow/Glow under icon */}
+                  <div className="absolute inset-0 bg-white/40 blur-xl rounded-full scale-150 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
 
-                <p className="relative z-10 text-base sm:text-lg text-[#2f2f2f] leading-relaxed">
+                {/* Text Content - Increased margin bottom (mb-5 -> mb-6) */}
+                <h3 className="text-xl sm:text-2xl font-bold text-[#111] mb-6 leading-tight tracking-tight">
+                  {problem.title}
+                </h3>
+
+                <p className="text-[16px] leading-relaxed text-[#555] max-w-[280px]">
                   {problem.desc}
                 </p>
-
-                <div className="relative z-10 mt-auto h-[2px] w-0 bg-gradient-to-r from-[#1b1b1b] via-[#000000] to-transparent transition-all duration-500 group-hover:w-full" />
               </motion.div>
             );
           })}
         </motion.div>
 
+        {/* Bottom CTA / Tagline */}
         <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.4 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="mt-24 sm:mt-28 text-center"
-        >
-          <div className="inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 rounded-full
-                        border border-[#353535]/25 bg-white/80 backdrop-blur-md shadow-sm">
-            <div className="w-2 h-2 rounded-full bg-[#353535] animate-pulse" />
-            <span className="text-[#474747] text-sm md:text-base">
-              <span className="text-[#353535] font-bold">SourceNet</span> makes data ownership simple and profitable
-            </span>
-          </div>
-        </motion.div>
+          transition={{ delay: 0.6, duration: 1 }}
+          className="mt-16 h-px w-full max-w-xs bg-gradient-to-r from-transparent via-black/10 to-transparent"
+        />
+
       </div>
     </section>
   );

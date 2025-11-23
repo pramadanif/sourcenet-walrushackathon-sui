@@ -1,203 +1,146 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Check, ArrowRight } from 'lucide-react';
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { ArrowRight, Terminal as TerminalIcon, Code2, Cpu } from 'lucide-react';
+import {
+  AnimatedSpan,
+  Terminal,
+  TypingAnimation,
+} from "@/components/ui/terminal";
 
 export default function WhyWeWin() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [isButtonHovered, setIsButtonHovered] = useState(false);
-
-  useEffect(() => {
-    if (!sectionRef.current) return;
-
-    const ctx = gsap.context(() => {
-      gsap.from('.feature-item', {
-        scrollTrigger: {
-          trigger: '.features-list',
-          start: 'top 80%',
-        },
-        x: -50,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: 'power3.out',
-      });
-
-      gsap.to('.data-flow', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top center',
-          end: 'bottom center',
-          scrub: 1,
-        },
-        x: 100,
-        keyframes: [
-          { opacity: 0 },
-          { opacity: 1 },
-          { opacity: 0 },
-        ],
-        stagger: 0.2,
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const features = [
-    'Zero crypto knowledge required',
-    'No gas fees for users',
-    'One-click data monetization',
-    'ZKLogin for instant onboarding',
-    'Sponsored transactions',
-    'Mobile-first experience',
-    'Privacy-preserving encryption',
-    'Automated Kiosk listings',
-    'Real-time earnings tracking',
-    'Multi-platform data support',
-  ];
-
   return (
-    <section ref={sectionRef} id="about" className="section-padding bg-[#F0F0F0] relative overflow-hidden flex flex-col items-center w-full pt-32 sm:pt-40 md:pt-48 py-20 md:py-32">
-      {/* Subtle Background effects */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#000000] opacity-20 blur-[200px] rounded-full" />
-      </div>
+    <section id="developers" className="relative w-full bg-white py-32 sm:py-48 overflow-hidden">
+      <div className="section-inner relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-12 lg:px-24">
 
-      {/* Flowing data animation - Reduced on mobile */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
-        {[...Array(4)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="data-flow absolute w-16 h-16 rounded-lg bg-[#1a1a1a]/5 border border-[#1a1a1a]/10"
-            style={{
-              left: `${-10 + i * 30}%`,
-              top: `${20 + (i % 2) * 40}%`,
-            }}
-            animate={{
-              x: [0, 50, 0],
-              opacity: [0.2, 0.4, 0.2],
-            }}
-            transition={{
-              duration: 5 + i * 0.5,
-              repeat: Infinity,
-              delay: i * 0.5,
-            }}
-          />
-        ))}
-      </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
 
-      <div className="section-inner relative z-10 flex flex-col items-center w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start lg:items-center max-w-6xl mx-auto w-full">
-          {/* Left Content */}
-          <div className="w-full">
+          {/* Left: The Statement */}
+          <div className="flex flex-col gap-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#000000] mb-4 md:mb-6 leading-tight">
-                10x Better UX
-                <br />
-                <span className="text-[#4a4a4a]">for Data Producers</span>
-              </h2>
-
-              <p className="text-base md:text-lg text-[#333333] mb-8 md:mb-12 leading-relaxed font-light max-w-xl">
-                Combining ZKLogin, Sponsored Tx, Kiosk, and PTB, SourceNet makes onboarding millions of new data producers to Sui effortless.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              onMouseEnter={() => setIsButtonHovered(true)}
-              onMouseLeave={() => setIsButtonHovered(false)}
-            >
-              <motion.button
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative group bg-black text-white px-10 py-5 rounded-full font-bold text-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300"
-              >
-                {/* Animated background */}
-                <motion.div
-                  className="absolute inset-0 z-0 bg-gradient-to-r from-[#101010] via-[#141414] to-black"
-                  animate={isButtonHovered ? { x: [0, 10, 0] } : { x: 0 }}
-                  transition={{ duration: 0.6, repeat: isButtonHovered ? Infinity : 0 }}
-                />
-
-                {/* Button content */}
-                <div className="relative z-10 flex items-center gap-3 justify-center text-white">
-                  <span className="text-white">Start Earning Today</span>
-                  <motion.div
-                    animate={isButtonHovered ? { x: [0, 8, 0] } : { x: 0 }}
-                    transition={{ duration: 0.6, repeat: isButtonHovered ? Infinity : 0 }}
-                    className="text-white"
-                  >
-                    <ArrowRight size={20} className="text-white" />
-                  </motion.div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-black/5 rounded-lg">
+                  <Code2 className="w-6 h-6 text-black" />
                 </div>
+                <span className="text-sm font-bold tracking-[0.2em] uppercase text-black/60">
+                  Developer Experience
+                </span>
+              </div>
 
-                {/* Shine effect */}
-                <motion.div
-                  className="absolute inset-0 z-20 bg-white/10 pointer-events-none"
-                  animate={isButtonHovered ? { x: ['-100%', '100%'] } : { x: '-100%' }}
-                  transition={{ duration: 0.8, repeat: isButtonHovered ? Infinity : 0, repeatDelay: 0.3 }}
-                />
-              </motion.button>
-            </motion.div>
-          </div>
+              <h2 className="text-5xl sm:text-7xl font-black text-black leading-[0.9] tracking-tighter mb-8">
+                BUILT FOR <br />
+                BUILDERS.
+              </h2>
+              <p className="text-xl text-black/60 font-medium max-w-xl leading-relaxed mb-10">
+                Integrate privacy-first data monetization into your app in minutes.
+                Our SDK handles encryption, ZKLogin, and on-chain minting automatically.
+              </p>
 
-          {/* Right Content - Features List */}
-          <div className="features-list space-y-3 md:space-y-4 w-full pl-0 lg:pl-10">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ x: 12, backgroundColor: '#ffffff', borderColor: '#000000' }}
-                className="feature-item flex items-center gap-5 bg-white border border-[#dcdcdc] rounded-xl p-5 hover:shadow-lg transition-all group"
-              >
-                <motion.div
-                  className="w-8 h-8 rounded-lg bg-black flex items-center justify-center flex-shrink-0"
-                  animate={isButtonHovered ? { rotate: 360 } : { rotate: 0 }}
-                  transition={{ duration: 0.5, type: 'spring' }}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group relative px-8 py-4 bg-black text-white rounded-full font-bold text-lg flex items-center justify-center gap-3 overflow-hidden"
                 >
-                  <Check size={18} className="text-white font-bold" strokeWidth={3} />
-                </motion.div>
-                <span className="text-[#1a1a1a] font-medium text-base">{feature}</span>
-              </motion.div>
-            ))}
+                  <span className="relative z-10">Read the Docs</span>
+                  <ArrowRight className="w-5 h-5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-8 py-4 bg-black/5 text-black rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:bg-black/10 transition-colors"
+                >
+                  <TerminalIcon className="w-5 h-5" />
+                  <span>View SDK</span>
+                </motion.button>
+              </div>
+            </motion.div>
+
+            {/* Feature list */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-8 border-t border-black/10">
+              <div className="flex flex-col gap-2">
+                <h4 className="font-bold text-lg flex items-center gap-2">
+                  <Cpu className="w-5 h-5" />
+                  Typescript SDK
+                </h4>
+                <p className="text-black/60 text-sm">Full type safety and auto-completion out of the box.</p>
+              </div>
+              <div className="flex flex-col gap-2">
+                <h4 className="font-bold text-lg flex items-center gap-2">
+                  <TerminalIcon className="w-5 h-5" />
+                  CLI Tools
+                </h4>
+                <p className="text-black/60 text-sm">Manage DataPods and sales directly from your terminal.</p>
+              </div>
+            </div>
           </div>
+
+          {/* Right: The Terminal Demo */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative"
+          >
+            {/* Decorative elements */}
+            <div className="absolute -inset-4 bg-gradient-to-r from-black/5 to-transparent rounded-3xl blur-2xl" />
+
+            <div className="relative rounded-2xl shadow-2xl overflow-hidden border border-black/10 bg-white">
+              <Terminal className="w-full shadow-2xl border border-white/10 bg-[#0F0F0F] min-h-[450px] text-[15px]">
+                <TypingAnimation className="text-white/90">&gt; npm install @sourcenet/sdk</TypingAnimation>
+
+                <AnimatedSpan className="text-green-500">
+                  <span>✔ Added 1 package in 842ms</span>
+                </AnimatedSpan>
+
+                <TypingAnimation className="text-white/90" delay={500}>&gt; sourcenet init</TypingAnimation>
+
+                <AnimatedSpan className="text-green-500">
+                  <span>✔ Verifying Sui Network connection...</span>
+                </AnimatedSpan>
+
+                <AnimatedSpan className="text-green-500">
+                  <span>✔ Authenticating with ZKLogin...</span>
+                </AnimatedSpan>
+
+                <AnimatedSpan className="text-green-500">
+                  <span>✔ Generating encryption keys...</span>
+                </AnimatedSpan>
+
+                <TypingAnimation className="text-white/90" delay={500}>&gt; sourcenet publish ./user-data.json</TypingAnimation>
+
+                <AnimatedSpan className="text-green-500">
+                  <span>✔ Encrypting data with AES-256...</span>
+                </AnimatedSpan>
+
+                <AnimatedSpan className="text-green-500">
+                  <span>✔ Uploading to Walrus Storage (Blob ID: 8Gj...9Lp)</span>
+                </AnimatedSpan>
+
+                <AnimatedSpan className="text-green-500">
+                  <span>✔ Minting DataPod Object...</span>
+                </AnimatedSpan>
+
+                <AnimatedSpan className="text-blue-400">
+                  <span>ℹ Transaction Digest: 5Kp...2Xy</span>
+                </AnimatedSpan>
+
+                <TypingAnimation className="text-white/60">
+                  Success! DataPod is live and listed on the marketplace.
+                </TypingAnimation>
+              </Terminal>
+            </div>
+          </motion.div>
+
         </div>
 
-        {/* Bottom Stats */}
-        <div className="mt-20 md:mt-32 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 max-w-5xl mx-auto w-full px-4 md:px-0">
-          {[
-            { value: '< 30s', label: 'Onboarding Time' },
-            { value: '1-Click', label: 'To Sell Data' },
-            { value: '0 Fees', label: 'For Users' },
-            { value: '100%', label: 'Data Ownership' },
-          ].map((stat, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="text-center group hover:bg-white/50 p-6 rounded-lg transition-all"
-            >
-              <div className="text-4xl md:text-5xl font-black text-[#000000] mb-3 group-hover:scale-110 transition-transform">{stat.value}</div>
-              <div className="text-sm text-[#5a5a5a] font-medium">{stat.label}</div>
-            </motion.div>
-          ))}
-        </div>
       </div>
-    </section >
+    </section>
   );
 }

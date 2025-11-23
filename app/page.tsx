@@ -19,7 +19,7 @@ export default function Home() {
       <Statistics />
       <HowItWorks />
       <Technology />
-      <WhyWeWin />
+      {/* <WhyWeWin /> */}
       {/* <CTASection /> */}
       <Footer />
     </main>
