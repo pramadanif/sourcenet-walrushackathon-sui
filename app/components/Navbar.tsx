@@ -146,7 +146,8 @@ export default function Navbar() {
         <motion.div
           ref={navRef}
           onMouseMove={handleMouseMove}
-          className="relative mx-auto flex items-center justify-between rounded-[28px] pl-10 pr-6 md:pl-20 md:pr-9 py-4 group/nav transition-shadow duration-500"
+          // 🔥 MODIFIKASI TERBARU: pl-12 -> pl-16 (Mobile), md:pl-24 -> md:pl-28 (Desktop)
+          className="relative mx-auto flex items-center justify-between rounded-[28px] pl-16 pr-6 md:pl-28 md:pr-9 py-4 group/nav transition-shadow duration-500" 
           style={{
             boxShadow: isScrolled
               ? '0 30px 70px -32px rgba(34,34,34,0.55)'
@@ -236,10 +237,12 @@ export default function Navbar() {
                   <Image
                     src="/sourcenet.png"
                     alt="SourceNet"
-                    width={160}
+                    // 🔥 MODIFIKASI: Mengecilkan lebar logo (160 -> 140)
+                    width={140} 
                     height={50}
                     priority
-                    className="h-12 w-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
+                    // 🔥 MODIFIKASI: Mengecilkan tinggi logo (h-12 -> h-10)
+                    className="h-10 w-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]" 
                   />
                   <span className="hidden sm:inline text-lg font-black text-[#2A2A2A] drop-shadow-[0_2px_3px_rgba(42,42,42,0.25)]">SourceNet</span>
                 </motion.div>
@@ -488,9 +491,11 @@ export default function Navbar() {
                     <Image
                       src="/sourcenet.png"
                       alt="SourceNet"
-                      width={220}
+                      // 🔥 MODIFIKASI: Mengecilkan lebar logo mobile (220 -> 180)
+                      width={180}
                       height={60}
-                      className="h-16 w-auto drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
+                      // 🔥 MODIFIKASI: Mengecilkan tinggi logo mobile (h-16 -> h-12)
+                      className="h-12 w-auto drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]" 
                     />
                   </motion.div>
 
