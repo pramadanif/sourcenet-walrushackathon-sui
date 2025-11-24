@@ -24,6 +24,16 @@ const SuiIcon = () => (
   />
 );
 
+const DeepSeekIcon = () => (
+  <Image
+    src="/DeepSeek-Logo.png"
+    alt="DeepSeek AI"
+    width={40}
+    height={40}
+    className="w-full h-full object-contain"
+  />
+);
+
 const technologies = [
   {
     icon: Key,
@@ -61,6 +71,13 @@ const technologies = [
     name: 'IPFS Storage',
     description: 'Immutable and distributed file storage across the network',
     color: 'bg-black',
+  },
+  {
+    icon: DeepSeekIcon,
+    name: 'DeepSeek AI Integration',
+    description: 'Advanced AI capabilities powered by DeepSeek for intelligent interactions',
+    color: 'bg-transparent',
+    isLogo: true,
   }
 ];
 
@@ -141,47 +158,50 @@ export default function Technology() {
           viewport={{ once: true, amount: 0.2 }}
           className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {technologies.map((tech, index) => (
-            <motion.div
-              key={tech.name}
-              variants={cardVariants}
-              className="group"
-            >
-              {/* Card Container */}
-              <div className="bg-white rounded-2xl border border-black/10 transition-all duration-500 group-hover:border-black/30 group-hover:shadow-xl h-full flex flex-col p-8">
-                
-                {/* Icon Container - Centered */}
-                <motion.div
-                  whileHover={{ scale: 1.12, rotate: 5 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-                  className="flex justify-center mb-8"
-                >
-                  <div className={`${tech.color} w-16 h-16 rounded-xl flex items-center justify-center ${tech.isLogo ? 'shadow-none' : 'shadow-lg'} transition-all duration-500 ${!tech.isLogo && 'group-hover:shadow-2xl'}`}>
-                    {tech.isLogo ? (
-                      <div className="w-12 h-12 flex items-center justify-center">
-                        <tech.icon />
-                      </div>
-                    ) : (
-                      <tech.icon size={28} className="text-white" strokeWidth={2} />
-                    )}
-                  </div>
-                </motion.div>
+          {technologies.map((tech, index) => {
+            const isLastItem = index === technologies.length - 1;
+            return (
+              <motion.div
+                key={tech.name}
+                variants={cardVariants}
+                className={`group ${isLastItem ? 'md:col-span-2 lg:col-span-1 lg:col-start-2' : ''}`}
+              >
+                {/* Card Container */}
+                <div className="bg-white rounded-2xl border border-black/10 transition-all duration-500 group-hover:border-black/30 group-hover:shadow-xl h-full flex flex-col p-8">
 
-                {/* Title - Centered */}
-                <h3 className="text-xl font-black text-black mb-3 tracking-tight group-hover:text-gray-800 transition-colors duration-300 text-center">
-                  {tech.name}
-                </h3>
+                  {/* Icon Container - Centered */}
+                  <motion.div
+                    whileHover={{ scale: 1.12, rotate: 5 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                    className="flex justify-center mb-8"
+                  >
+                    <div className={`${tech.color} ${tech.isLogo && tech.name.includes('DeepSeek') ? 'w-24 h-24' : 'w-16 h-16'} rounded-xl flex items-center justify-center ${tech.isLogo ? 'shadow-none' : 'shadow-lg'} transition-all duration-500 ${!tech.isLogo && 'group-hover:shadow-2xl'}`}>
+                      {tech.isLogo ? (
+                        <div className={`${tech.name.includes('DeepSeek') ? 'w-20 h-20' : 'w-12 h-12'} flex items-center justify-center`}>
+                          <tech.icon />
+                        </div>
+                      ) : (
+                        <tech.icon size={28} className="text-white" strokeWidth={2} />
+                      )}
+                    </div>
+                  </motion.div>
 
-                {/* Description - Centered */}
-                <p className="text-sm text-gray-600 leading-relaxed text-center flex-1 mb-8 font-light group-hover:text-gray-700 transition-colors duration-300">
-                  {tech.description}
-                </p>
+                  {/* Title - Centered */}
+                  <h3 className="text-xl font-black text-black mb-3 tracking-tight group-hover:text-gray-800 transition-colors duration-300 text-center">
+                    {tech.name}
+                  </h3>
 
-                {/* Bottom Accent Line */}
-                <div className="pt-6 border-t border-black/8 group-hover:border-black/15 transition-all duration-300" />
-              </div>
-            </motion.div>
-          ))}
+                  {/* Description - Centered */}
+                  <p className="text-sm text-gray-600 leading-relaxed text-center flex-1 mb-8 font-light group-hover:text-gray-700 transition-colors duration-300">
+                    {tech.description}
+                  </p>
+
+                  {/* Bottom Accent Line */}
+                  <div className="pt-6 border-t border-black/8 group-hover:border-black/15 transition-all duration-300" />
+                </div>
+              </motion.div>
+            );
+          })}
         </motion.div>
 
         {/* Built on Sui Section - transparent background */}

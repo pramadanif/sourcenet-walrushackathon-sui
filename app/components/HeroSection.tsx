@@ -276,7 +276,7 @@ export default function SplineHeroSection() {
               variants={fadeUpVariants}
               className="flex flex-col sm:flex-row gap-4 pt-2"
             >
-              <Link href="https://sourcenet-fe.vercel.app/" passHref>
+              <Link href="http://localhost:3000" passHref>
                 <motion.button
                   ref={buttonRef}
                   whileHover={{ scale: 1.02 }}

@@ -328,7 +328,7 @@ export default function Navbar() {
             </motion.div>
 
             {/* ✅ CTA Button — spacing & interaksi diperbaiki */}
-            <Link href="https://sourcenet-fe.vercel.app/" passHref>
+            <Link href="http://localhost:3000" passHref>
               <motion.button
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -523,7 +523,7 @@ export default function Navbar() {
                   ))}
 
                   {/* ✅ Mobile CTA — ukuran diperbesar */}
-                  <Link href="https://sourcenet-fe.vercel.app/" passHref className="w-full max-w-[280px]">
+                  <Link href="http://localhost:3000" passHref className="w-full max-w-[280px]">
                     <motion.button
                       variants={mobileNavItemVariants}
                       onClick={() => setIsMobileMenuOpen(false)}

@@ -33,7 +33,7 @@ const problems: Problem[] = [
   },
   {
     id: 3,
-    title: "Web3 Too Complex",
+    title: "Web2 Too Complex",
     desc: "Existing marketplaces are impossible to use: wallets, seed phrases, and gas fees.",
     icon: ProblemIcons.gear,
   },

@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SourceNet - The Web2 Data Marketplace Without Friction",
-  description: "Transform Your Digital Footprint Into Value. SourceNet is a frictionless Web2 data marketplace powered by Sui blockchain. Zero crypto knowledge required.",
+  title: "SourceNet - The Web3 Data Marketplace Without Friction",
+  description: "Transform Your Digital Footprint Into Value. SourceNet is a frictionless Web3 data marketplace powered by Sui blockchain. Zero crypto knowledge required.",
   keywords: "data marketplace, web2, sui blockchain, data monetization, zklogin, sponsored transactions",
   authors: [{ name: "SourceNet Team" }],
   openGraph: {
