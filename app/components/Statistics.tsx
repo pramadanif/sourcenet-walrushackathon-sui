@@ -48,6 +48,7 @@ export default function Statistics() {
     },
   ];
 
+  // Transform data untuk animasi GSAP
   const transforms = [
     [
       [10, 50, -10, 10],
@@ -72,9 +73,10 @@ export default function Statistics() {
   ];
 
   useEffect(() => {
+    // Set tinggi scroll area
     setStickyHeight(window.innerHeight * 5);
 
-    // Initialize Lenis
+    // Inisialisasi Smooth Scroll (Lenis)
     const initLenis = async () => {
       const { default: Lenis } = await import('lenis');
       const lenis = new Lenis();
@@ -90,6 +92,7 @@ export default function Statistics() {
       return;
     }
 
+    // Konfigurasi ScrollTrigger
     ScrollTrigger.create({
       trigger: stickySectionEl,
       start: "top top",
@@ -99,14 +102,14 @@ export default function Statistics() {
       onUpdate: (self) => {
         const progress = self.progress;
 
+        // Parallax efek untuk Header Text
         if (stickyHeaderRef.current) {
-          const maxTranslate =
-            stickyHeaderRef.current.offsetWidth - window.innerWidth;
+          const maxTranslate = stickyHeaderRef.current.offsetWidth - window.innerWidth;
           const translateX = -progress * maxTranslate;
           gsap.set(stickyHeaderRef.current, { x: translateX });
         }
 
-        // Start counter animation at 30% progress
+        // Logic Counter Angka
         if (progress > 0.3 && !hasCounterStarted) {
           setHasCounterStarted(true);
           stats.forEach((stat, index) => {
@@ -125,6 +128,7 @@ export default function Statistics() {
           });
         }
 
+        // Animasi Kartu Terbang
         cardsRef.current.forEach((card, index) => {
           const delay = index * 0.1125;
           const cardProgress = Math.max(0, Math.min((progress - delay) * 2, 1));
@@ -135,24 +139,12 @@ export default function Statistics() {
             const yPos = transforms[index]?.[0] || [0];
             const rotations = transforms[index]?.[1] || [0];
 
-            const cardX = gsap.utils.interpolate(
-              cardStartX,
-              cardEndX,
-              cardProgress,
-            );
+            const cardX = gsap.utils.interpolate(cardStartX, cardEndX, cardProgress);
             const yProgress = cardProgress * 3;
             const yIndex = Math.min(Math.floor(yProgress), yPos.length - 2);
             const yInterpolation = yProgress - yIndex;
-            const cardY = gsap.utils.interpolate(
-              yPos[yIndex],
-              yPos[yIndex + 1],
-              yInterpolation,
-            );
-            const cardRotation = gsap.utils.interpolate(
-              rotations[yIndex],
-              rotations[yIndex + 1],
-              yInterpolation,
-            );
+            const cardY = gsap.utils.interpolate(yPos[yIndex], yPos[yIndex + 1], yInterpolation);
+            const cardRotation = gsap.utils.interpolate(rotations[yIndex], rotations[yIndex + 1], yInterpolation);
 
             gsap.set(card, {
               xPercent: cardX,
@@ -170,7 +162,7 @@ export default function Statistics() {
     return () => {
       ScrollTrigger.killAll();
     };
-  }, [hasCounterStarted]);
+  }, [hasCounterStarted, stickyHeight]);
 
   return (
     <div
@@ -178,20 +170,32 @@ export default function Statistics() {
       id="statistics"
       ref={stickySectionRef}
     >
+      {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#e8e8e8] via-[#f0f0f0] to-[#d5d5d5]" />
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#919191] opacity-25 blur-[200px] rounded-full" />
       </div>
 
+      {/* Header Text Structure (Sandwich Method) */}
       <div
-        className="absolute top-0 left-0 w-[250vw] h-full flex items-center justify-center will-change-transform"
+        className="absolute top-0 left-0 w-[250vw] h-full flex flex-col justify-between will-change-transform"
         ref={stickyHeaderRef}
       >
-        <h1 className="text-black text-[30vw] tracking-tight leading-tight font-semibold m-0 transition-colors duration-300">
-          ACHIEVEMENTS & <span className="text-[#2f2f2f]">PROJECTIONS</span>
-        </h1>
+        {/* Spacer Atas */}
+        <div className="w-full h-24 md:h-32 shrink-0" aria-hidden="true" />
+
+        {/* Text Wrapper */}
+        <div className="flex-1 flex items-center justify-center w-full">
+          <h1 className="text-black text-[30vw] tracking-tight leading-tight font-semibold m-0 transition-colors duration-300 whitespace-nowrap">
+            ACHIEVEMENTS & <span className="text-[#2f2f2f]">PROJECTIONS</span>
+          </h1>
+        </div>
+
+        {/* Spacer Bawah */}
+        <div className="w-full h-24 md:h-32 shrink-0" aria-hidden="true" />
       </div>
 
+      {/* Cards Section */}
       {stats.map((stat, index) => {
         const target = stat.value;
         const isPercentage = target.includes('%');
@@ -200,6 +204,7 @@ export default function Statistics() {
         const isM = target.includes('M');
         const isPlus = target.includes('+');
         const counterValue = counters[index] ?? 0;
+
         let display = counterValue.toString();
         if (isDollar) display = '$' + display;
         if (isM) display += 'M';
@@ -210,10 +215,11 @@ export default function Statistics() {
         return (
           <div
             key={index}
-            className="absolute left-full w-[325px] bg-white rounded-[10px] p-3 will-change-transform z-20 transition-colors duration-300"
-            ref={(el) => {
-              cardsRef.current[index] = el;
-            }}
+            ref={(el) => { cardsRef.current[index] = el; }}
+            // PERBAIKAN UTAMA DISINI:
+            // 1. top-1/2 : Menaruh posisi TOP di 50% layar
+            // 2. -mt-[162px] : Margin negatif sebesar setengah tinggi total kartu (324px / 2)
+            className="absolute left-full top-1/2 -mt-[162px] w-[325px] bg-white rounded-[10px] p-3 will-change-transform z-20 transition-colors duration-300"
           >
             <div className="w-full h-[300px] flex flex-col justify-between text-black p-2 transition-colors duration-300">
               <div className="flex flex-col items-center">
@@ -234,9 +240,10 @@ export default function Statistics() {
         );
       })}
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 w-full px-4">
-        <p className="text-[#4f4f4f] text-sm text-center max-w-2xl mx-auto">
-          * Projections based on market research and early user feedback. Actual results may vary.
+      {/* Footer Text / Disclaimer */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-30 w-full px-4 pb-8 md:pb-10">
+        <p className="text-[#4f4f4f] text-sm text-center max-w-2xl mx-auto font-medium">
+          
         </p>
       </div>
     </div>

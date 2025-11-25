@@ -13,30 +13,36 @@ export default function HowItWorks() {
   const sectionRef = useRef<HTMLElement>(null);
   const chartRef = useRef<SVGSVGElement>(null);
 
+  // PERBAIKAN WARNA 1: Menggunakan warna kontras tinggi
+  const HIGH_CONTRAST_TEXT = "text-white";
+  const SUBTLE_CONTRAST_TEXT = "text-[#E0E0E0]"; // Abu-abu sangat muda (hampir putih) untuk deskripsi
+
   useEffect(() => {
     if (!sectionRef.current || !chartRef.current) return;
 
     const ctx = gsap.context(() => {
       // Animate chart paths
-      const paths = chartRef.current?.querySelectorAll('path.chart-line');
-      
+      const paths = chartRef.current?.querySelectorAll('.chart-line');
+
       paths?.forEach((path, index) => {
-        const length = (path as SVGPathElement).getTotalLength();
-        
+        const svgPath = path as SVGPathElement;
+        const length = svgPath.getTotalLength();
+
         gsap.set(path, {
           strokeDasharray: length,
           strokeDashoffset: length,
         });
 
         gsap.to(path, {
-          scrollTrigger: {
-            trigger: chartRef.current,
-            start: 'top 70%',
-          },
           strokeDashoffset: 0,
           duration: 2,
-          delay: index * 0.3,
-          ease: 'power2.inOut',
+          delay: index * 0.2,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 70%',
+            toggleActions: 'play none none none',
+          },
         });
       });
 
@@ -58,12 +64,13 @@ export default function HowItWorks() {
   }, []);
 
   return (
-    <section 
-      ref={sectionRef} 
-      id="how-it-works" 
-      className="section-padding bg-[#1a1a1a] relative overflow-hidden w-full pt-40 sm:pt-48 md:pt-56 py-24 md:py-32"
+    // PERBAIKAN SPACING 1: Meningkatkan padding vertikal secara ekstrem (pt-96 dan pb-64)
+    <section
+      ref={sectionRef}
+      id="how-it-works"
+      className="section-padding bg-[#1a1a1a] relative overflow-hidden w-full pt-96 md:pt-96 pb-64 md:pb-64"
     >
-      {/* Background effects */}
+      {/* Background effects (No change) */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#333] opacity-40 blur-[150px] rounded-full" />
         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#000] opacity-30 blur-[150px] rounded-full" />
@@ -71,7 +78,8 @@ export default function HowItWorks() {
 
       <div className="section-inner relative z-10 max-w-7xl mx-auto px-6">
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row items-start gap-12 mb-16">
+        {/* PERBAIKAN SPACING 2: Meningkatkan margin bawah pada Header (mb-36) */}
+        <div className="flex flex-col md:flex-row items-start gap-16 mb-36">
           {/* Left Side: Text Content */}
           <div className="md:w-1/2 space-y-8">
             <motion.div
@@ -80,27 +88,31 @@ export default function HowItWorks() {
               viewport={{ once: true }}
               className="inline-block mb-4"
             >
-              <span className="px-4 py-2 bg-[#333]/40 border border-[#555]/50 rounded-full text-[#ccc] text-sm font-medium">
+              {/* PERBAIKAN WARNA: Teks badge high-contrast */}
+              <span className={`px-4 py-2 bg-[#333]/40 border border-[#555]/50 rounded-full text-sm font-medium ${SUBTLE_CONTRAST_TEXT}`}>
                 Growth Comparison
               </span>
             </motion.div>
 
-            {/* Judul yang telah disesuaikan warnanya */}
-            <h2 
-              className="text-4xl md:text-5xl lg:text-6xl leading-tight font-bold"
-              style={{ color: '#ffffff' }}
+            {/* Judul: THE SOURCENET ADVANTAGE */}
+            {/* PERBAIKAN WARNA: Judul diubah ke bright white */}
+            <h2
+              className={`text-4xl md:text-5xl lg:text-6xl leading-tight font-bold ${HIGH_CONTRAST_TEXT}`}
             >
               THE SOURCENET ADVANTAGE
             </h2>
-            
-            <p className="text-xl text-[#bbb] leading-relaxed">
+
+            {/* Paragraf utama */}
+            {/* PERBAIKAN WARNA: Paragraf diubah ke light grey high-contrast */}
+            <p className={`text-xl leading-relaxed ${SUBTLE_CONTRAST_TEXT}`}>
               What would your investment have looked like if you had invested in NVIDIA or APPLE 10 years ago?
               <br />
-              <span className="text-[#ddd] font-semibold">Now imagine OWNING your data growth.</span>
+              {/* PERBAIKAN WARNA: Sub-teks diubah ke bright white */}
+              <span className={`font-semibold ${HIGH_CONTRAST_TEXT}`}>Now imagine OWNING your data growth.</span>
             </p>
           </div>
 
-          {/* Right Side: Chart */}
+          {/* Right Side: Chart (No changes) */}
           <div className="md:w-1/2">
             <div className="bg-[#222] border border-[#444]/40 rounded-3xl p-6 shadow-lg">
               <svg
@@ -204,8 +216,8 @@ export default function HowItWorks() {
         </div>
 
         {/* Key Metrics - Large Stats at Bottom */}
-        {/* PERUBAHAN DI SINI: mt-16 diganti menjadi mt-24 untuk jarak yang lebih besar */}
-        <div className="mt-24 grid md:grid-cols-3 gap-20 text-center">
+        {/* PERBAIKAN SPACING 3: Meningkatkan margin atas pada Key Metrics (mt-48) */}
+        <div className="mt-48 grid md:grid-cols-3 gap-20 text-center">
           {[
             {
               metric: '-1964%',
@@ -231,9 +243,12 @@ export default function HowItWorks() {
               transition={{ delay: i * 0.1 }}
               className="space-y-4"
             >
-              <div className="text-5xl md:text-6xl font-black text-white">{item.metric}</div>
-              <div className="text-xl font-bold text-[#ddd]">{item.label}</div>
-              <div className="text-sm text-[#bbb]">{item.description}</div>
+              {/* PERBAIKAN WARNA: Metric diubah ke bright white */}
+              <div className={`text-5xl md:text-6xl font-black ${HIGH_CONTRAST_TEXT}`}>{item.metric}</div>
+              {/* PERBAIKAN WARNA: Label diubah ke bright white */}
+              <div className={`text-xl font-bold ${HIGH_CONTRAST_TEXT}`}>{item.label}</div>
+              {/* PERBAIKAN WARNA: Deskripsi diubah ke light grey high-contrast */}
+              <div className={`text-sm ${SUBTLE_CONTRAST_TEXT}`}>{item.description}</div>
             </motion.div>
           ))}
         </div>

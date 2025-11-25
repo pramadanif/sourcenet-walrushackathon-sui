@@ -17,7 +17,7 @@ export default function Home() {
       <ProblemSection />
       <FourPillars />
       <Statistics />
-      <HowItWorks />
+      {/* <HowItWorks /> */}
       <Technology />
       {/* <WhyWeWin /> */}
       {/* <CTASection /> */}
