@@ -3,18 +3,19 @@
 import { motion } from 'framer-motion';
 import { Twitter, Github, Linkedin, Mail } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Footer() {
   const footerLinks = {
-    company: [
-      { name: 'About', href: '#' },
-      { name: 'Careers', href: '#' },
-      { name: 'Brand', href: '#' },
+    product: [
+      { name: 'Features', href: '#features' },
+      { name: 'Technology', href: '#technology' },
+      { name: 'How it Works', href: '#how-it-works' },
     ],
-    legal: [
+    company: [
+      { name: 'About', href: '#about' },
+      { name: 'Privacy Policy', href: '#' },
       { name: 'Terms', href: '#' },
-      { name: 'Privacy', href: '#' },
-      { name: 'Licenses', href: '#' },
     ],
   };
 
@@ -26,93 +27,132 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-[#FAFAFA] border-t border-neutral-200 relative overflow-hidden pt-32 pb-12 text-neutral-900">
-      {/* Background decorative gradient (Subtle Grey) */}
-      <div className="absolute inset-0 flex justify-center opacity-40 pointer-events-none overflow-hidden">
-        <div className="w-[800px] h-[800px] bg-gradient-to-tr from-neutral-200/50 to-transparent rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
-        <div className="w-[600px] h-[600px] bg-gradient-to-tl from-neutral-200/40 to-transparent rounded-full blur-[80px] -translate-y-1/2 -translate-x-1/3" />
-      </div>
-
-      <div className="section-inner relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between gap-16 md:gap-24">
-
-        {/* Brand Column */}
-        <div className="flex flex-col gap-8 max-w-sm">
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="inline-block"
-          >
-            {/* brightness-0 membuat logo otomatis hitam pekat (cocok untuk tema light) */}
-            <Image
-              src="/sourcenet.png"
-              alt="SourceNet"
-              width={200}
-              height={60}
-              className="h-10 w-auto brightness-0 opacity-90" 
-            />
-          </motion.div>
-          <p className="text-neutral-500 text-sm leading-relaxed font-medium">
-            The Web2 Data Marketplace Without Friction. Own your data, control your value, and monetize instantly.
-          </p>
-
-          {/* Social Links */}
-          <div className="flex gap-3">
-            {socialLinks.map((social, index) => (
-              <motion.a
-                key={index}
-                href={social.href}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                className="group w-10 h-10 rounded-full bg-white border border-neutral-200 flex items-center justify-center text-neutral-500 transition-all hover:bg-black hover:border-black hover:text-white shadow-sm"
-                aria-label={social.label}
-              >
-                <social.icon size={18} strokeWidth={2} className="transition-transform group-hover:scale-110" />
-              </motion.a>
-            ))}
-          </div>
-        </div>
-
-        {/* Links Columns */}
-        <div className="flex gap-16 sm:gap-32">
-          {/* Company */}
-          <div className="flex flex-col gap-6">
-            <h3 className="text-black font-bold text-xs uppercase tracking-[0.2em]">Company</h3>
-            <ul className="space-y-4">
-              {footerLinks.company.map((link, index) => (
-                <li key={index}>
-                  <a
-                    href={link.href}
-                    className="text-neutral-500 hover:text-black transition-colors text-sm font-medium flex items-center gap-2 group"
-                  >
-                    <span className="w-0 group-hover:w-2 h-[1px] bg-black transition-all duration-300"></span>
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div className="flex flex-col gap-6">
-            <h3 className="text-black font-bold text-xs uppercase tracking-[0.2em]">Legal</h3>
-            <ul className="space-y-4">
-              {footerLinks.legal.map((link, index) => (
-                <li key={index}>
-                  <a
-                    href={link.href}
-                    className="text-neutral-500 hover:text-black transition-colors text-sm font-medium flex items-center gap-2 group"
-                  >
-                     <span className="w-0 group-hover:w-2 h-[1px] bg-black transition-all duration-300"></span>
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* Copyright */}
+    // PERBAIKAN 1: Menambahkan 'flex justify-center' untuk memaksa container ke tengah secara absolut
+    <footer className="relative bg-[#FAFAFA] w-full flex justify-center overflow-hidden border-t border-neutral-200/60">
       
+      {/* Subtle Background Gradients */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50">
+        <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-gradient-to-br from-neutral-200/50 to-transparent rounded-full blur-[100px]" />
+        <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-gradient-to-tl from-neutral-300/40 to-transparent rounded-full blur-[80px]" />
+      </div>
+
+      {/* Main Container */}
+      {/* PERBAIKAN 2: 'w-full' memastikan container mengambil lebar penuh sebelum dibatasi max-w-7xl */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 my-10">
+
+        {/* Glassmorphism Card */}
+        <motion.div
+          className="relative rounded-3xl overflow-hidden"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          {/* Glass Background */}
+          <div className="absolute inset-0 bg-white/50 backdrop-blur-2xl" />
+          <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-white/40 to-neutral-100/50" />
+          <div className="absolute inset-0 rounded-3xl border border-white/70 shadow-[0_8px_32px_rgba(0,0,0,0.06),inset_0_1px_0_0_rgba(255,255,255,0.9)]" />
+
+          {/* Shimmer Effect */}
+          <motion.div
+            className="absolute inset-0 rounded-3xl opacity-60"
+            style={{
+              background: 'linear-gradient(110deg, transparent 25%, rgba(255,255,255,0.8) 50%, transparent 75%)',
+            }}
+            animate={{ x: ['-200%', '200%'] }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              repeatDelay: 4,
+              ease: 'linear',
+            }}
+          />
+
+          {/* Content */}
+          <div className="relative z-10 px-8 md:px-16">
+
+            {/* --- FORCE SPACER TOP (PENGGANTI PADDING ATAS) --- */}
+            {/* Ini mengakali padding yang tidak jalan dengan memberikan elemen kosong setinggi 4rem (h-16) */}
+            <div className="w-full h-12 md:h-20 pointer-events-none" aria-hidden="true" />
+
+            {/* Top Section: Logo + Description */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12 pb-12 border-b border-neutral-300/50">
+
+              {/* Logo & Brand */}
+              <div className="flex flex-col gap-4 max-w-md">
+                <Link href="/" className="inline-block">
+                  <motion.div
+                    className="flex items-center gap-3"
+                    whileHover={{ scale: 1.03 }}
+                    transition={{ type: 'spring', stiffness: 400 }}
+                  >
+                    <Image
+                      src="/sourcenet.png"
+                      alt="SourceNet Logo"
+                      width={140}
+                      height={50}
+                      priority
+                      className="h-10 w-auto drop-shadow-md"
+                    />
+                    <span className="text-2xl md:text-3xl font-black text-[#2A2A2A] tracking-tight">
+                      SourceNet
+                    </span>
+                  </motion.div>
+                </Link>
+                <p className="text-neutral-600 text-sm md:text-base leading-relaxed font-medium">
+                  The decentralized data marketplace built for the AI era. Own your data, control your value.
+                </p>
+              </div>
+
+              {/* Navigation Links */}
+              <div className="flex gap-12 md:gap-16">
+                {/* Product */}
+                <div className="flex flex-col gap-4">
+                  <h3 className="text-[#2A2A2A] font-bold text-xs uppercase tracking-wider">Product</h3>
+                  <ul className="space-y-3">
+                    {footerLinks.product.map((link) => (
+                      <li key={link.name}>
+                        <Link
+                          href={link.href}
+                          className="text-neutral-600 hover:text-[#2A2A2A] transition-colors text-sm font-medium"
+                        >
+                          {link.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Company */}
+                <div className="flex flex-col gap-4">
+                  <h3 className="text-[#2A2A2A] font-bold text-xs uppercase tracking-wider">Company</h3>
+                  <ul className="space-y-3">
+                    {footerLinks.company.map((link) => (
+                      <li key={link.name}>
+                        <Link
+                          href={link.href}
+                          className="text-neutral-600 hover:text-[#2A2A2A] transition-colors text-sm font-medium"
+                        >
+                          {link.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Section: Copyright + Social */}
+            
+
+            {/* --- FORCE SPACER BOTTOM (PENGGANTI PADDING BAWAH) --- */}
+            {/* Spacer bawah untuk memberi napas di bagian bawah card */}
+            <div className="w-full h-8 md:h-16 pointer-events-none" aria-hidden="true" />
+
+          </div>
+        </motion.div>
+
+      </div>
     </footer>
   );
 }

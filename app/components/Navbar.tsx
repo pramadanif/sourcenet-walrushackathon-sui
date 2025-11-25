@@ -147,7 +147,7 @@ export default function Navbar() {
           ref={navRef}
           onMouseMove={handleMouseMove}
           // 🔥 MODIFIKASI TERBARU: pl-12 -> pl-16 (Mobile), md:pl-24 -> md:pl-28 (Desktop)
-          className="relative mx-auto flex items-center justify-between rounded-[28px] pl-16 pr-6 md:pl-28 md:pr-9 py-4 group/nav transition-shadow duration-500" 
+          className="relative mx-auto flex items-center justify-between rounded-[28px] pl-16 pr-6 md:pl-28 md:pr-9 py-4 group/nav transition-shadow duration-500"
           style={{
             boxShadow: isScrolled
               ? '0 30px 70px -32px rgba(34,34,34,0.55)'
@@ -238,11 +238,11 @@ export default function Navbar() {
                     src="/sourcenet.png"
                     alt="SourceNet"
                     // 🔥 MODIFIKASI: Mengecilkan lebar logo (160 -> 140)
-                    width={140} 
+                    width={140}
                     height={50}
                     priority
                     // 🔥 MODIFIKASI: Mengecilkan tinggi logo (h-12 -> h-10)
-                    className="h-10 w-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]" 
+                    className="h-10 w-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
                   />
                   <span className="hidden sm:inline text-lg font-black text-[#2A2A2A] drop-shadow-[0_2px_3px_rgba(42,42,42,0.25)]">SourceNet</span>
                 </motion.div>
@@ -271,61 +271,33 @@ export default function Navbar() {
                   onHoverEnd={() => setHoveredLink(null)}
                   onFocus={() => setHoveredLink(link.href)}
                   onBlur={() => setHoveredLink(null)}
-                  className="relative px-7 py-2.5 rounded-2xl group/link focus:outline-none"
-                  whileHover={{ scale: 1.06, y: -1 }}
-                  whileTap={{ scale: 0.97 }}
+                  className="relative px-5 py-2 rounded-full group/link focus:outline-none"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   aria-current={link.href === '#features' ? 'page' : undefined}
                 >
-                  {/* ✅ Hover Background */}
+                  {/* ✅ Hover Background - Cleaner Pill */}
                   <AnimatePresence>
                     {hoveredLink === link.href && (
                       <motion.div
                         layoutId="navHover"
-                        className="absolute inset-0 bg-gradient-to-r from-[#919191]/35 to-[#474747]/15 rounded-2xl backdrop-blur-sm"
-                        initial={{ opacity: 0, scale: 0.9 }}
+                        className="absolute inset-0 bg-[#3D3D3D]/10 rounded-full"
+                        initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
                         transition={{
                           type: 'spring',
-                          stiffness: 450,
-                          damping: 28
+                          stiffness: 350,
+                          damping: 25
                         }}
                       />
                     )}
                   </AnimatePresence>
 
-                  {/* ✅ Border saat hover */}
-                  {hoveredLink === link.href && (
-                    <motion.div
-                      layoutId="navBorder"
-                      className="absolute inset-0 rounded-2xl border border-[#474747]/40"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.25 }}
-                    />
-                  )}
-
-                  <span className="relative z-10 text-[#333333] group-hover/link:text-[#1a1a1a] font-semibold text-base md:text-[15px] transition-colors duration-300">
+                  <span className={`relative z-10 font-medium text-[15px] transition-colors duration-300 ${hoveredLink === link.href ? 'text-black' : 'text-[#444444]'
+                    }`}>
                     {link.name}
                   </span>
-
-                  {/* ✅ Underline animasi */}
-                  {hoveredLink === link.href && (
-                    <motion.div
-                      className="absolute bottom-2 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-transparent via-[#353535] to-transparent"
-                      layoutId="underline"
-                      initial={{ width: '0%', opacity: 0 }}
-                      animate={{ width: '85%', opacity: 1 }}
-                      exit={{ width: '0%', opacity: 0 }}
-                      transition={{
-                        type: 'spring',
-                        stiffness: 550,
-                        damping: 32,
-                        mass: 0.7
-                      }}
-                    />
-                  )}
                 </motion.a>
               ))}
             </motion.div>
@@ -495,7 +467,7 @@ export default function Navbar() {
                       width={180}
                       height={60}
                       // 🔥 MODIFIKASI: Mengecilkan tinggi logo mobile (h-16 -> h-12)
-                      className="h-12 w-auto drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]" 
+                      className="h-12 w-auto drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
                     />
                   </motion.div>
 
