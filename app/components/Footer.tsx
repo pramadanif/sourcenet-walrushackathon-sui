@@ -27,53 +27,26 @@ export default function Footer() {
   ];
 
   return (
-    // PERBAIKAN 1: Menambahkan 'flex justify-center' untuk memaksa container ke tengah secara absolut
-    <footer className="relative bg-[#FAFAFA] w-full flex justify-center overflow-hidden border-t border-neutral-200/60">
-      
+    <footer className="relative bg-[#CECECE] w-full flex justify-center overflow-hidden border-t border-black/10">
+
       {/* Subtle Background Gradients */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50">
-        <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-gradient-to-br from-neutral-200/50 to-transparent rounded-full blur-[100px]" />
-        <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-gradient-to-tl from-neutral-300/40 to-transparent rounded-full blur-[80px]" />
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+        <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-gradient-to-br from-white/30 to-transparent rounded-full blur-[100px]" />
+        <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-gradient-to-tl from-white/20 to-transparent rounded-full blur-[80px]" />
       </div>
 
       {/* Main Container */}
-      {/* PERBAIKAN 2: 'w-full' memastikan container mengambil lebar penuh sebelum dibatasi max-w-7xl */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 my-10">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-20">
 
-        {/* Glassmorphism Card */}
+        {/* Content - No Card Wrapper */}
         <motion.div
-          className="relative rounded-3xl overflow-hidden"
+          className="relative"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          {/* Glass Background */}
-          <div className="absolute inset-0 bg-white/50 backdrop-blur-2xl" />
-          <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-white/40 to-neutral-100/50" />
-          <div className="absolute inset-0 rounded-3xl border border-white/70 shadow-[0_8px_32px_rgba(0,0,0,0.06),inset_0_1px_0_0_rgba(255,255,255,0.9)]" />
-
-          {/* Shimmer Effect */}
-          <motion.div
-            className="absolute inset-0 rounded-3xl opacity-60"
-            style={{
-              background: 'linear-gradient(110deg, transparent 25%, rgba(255,255,255,0.8) 50%, transparent 75%)',
-            }}
-            animate={{ x: ['-200%', '200%'] }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              repeatDelay: 4,
-              ease: 'linear',
-            }}
-          />
-
-          {/* Content */}
-          <div className="relative z-10 px-8 md:px-16">
-
-            {/* --- FORCE SPACER TOP (PENGGANTI PADDING ATAS) --- */}
-            {/* Ini mengakali padding yang tidak jalan dengan memberikan elemen kosong setinggi 4rem (h-16) */}
-            <div className="w-full h-12 md:h-20 pointer-events-none" aria-hidden="true" />
+          <div className="relative z-10">
 
             {/* Top Section: Logo + Description */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12 pb-12 border-b border-neutral-300/50">
@@ -143,11 +116,6 @@ export default function Footer() {
             </div>
 
             {/* Bottom Section: Copyright + Social */}
-            
-
-            {/* --- FORCE SPACER BOTTOM (PENGGANTI PADDING BAWAH) --- */}
-            {/* Spacer bawah untuk memberi napas di bagian bawah card */}
-            <div className="w-full h-8 md:h-16 pointer-events-none" aria-hidden="true" />
 
           </div>
         </motion.div>

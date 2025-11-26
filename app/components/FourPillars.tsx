@@ -16,34 +16,34 @@ export default function FourPillars() {
     {
       number: '01',
       title: 'Onboarding',
-      subtitle: 'Zero Friction',
-      desc: 'Forget wallets and seed phrases. Login with Google via ZKLogin. An ephemeral wallet is created instantly in the background.',
+      subtitle: 'Zero Friction Entry',
+      desc: 'Forget complicated wallets and seed phrases forever. Simply login with your Google account via ZKLogin technology. An ephemeral wallet is created instantly in the background, ready to use.',
       icon: Zap,
-      features: ['Google Login', 'No Seed Phrases', 'Instant Setup'],
+      features: ['Google OAuth Login', 'No Seed Phrases Required', 'Instant Wallet Setup', 'ZKLogin Technology'],
     },
     {
       number: '02',
       title: 'Production',
-      subtitle: 'Zero Cost',
-      desc: 'Upload data directly from your digital life. We sponsor the gas fees, so you never have to buy crypto to start earning.',
+      subtitle: 'Zero Cost Upload',
+      desc: 'Upload your data directly from your digital life with just a few clicks. We sponsor all the gas fees, so you never have to buy crypto or worry about transaction costs to start earning.',
       icon: Upload,
-      features: ['Sponsored Tx', 'Gasless', 'One-Click'],
+      features: ['Sponsored Transactions', 'Gasless Operations', 'One-Click Upload', 'Free to Start'],
     },
     {
       number: '03',
       title: 'Ownership',
-      subtitle: 'Encrypted & Minted',
-      desc: 'Your data is minted as a unique Sui Object (DataPod). It lives on-chain, encrypted, and fully under your control.',
+      subtitle: 'Encrypted & Minted On-Chain',
+      desc: 'Your data is minted as a unique Sui Object called a DataPod. It lives permanently on-chain, fully encrypted with AES-256, and completely under your control. You own it, you control it.',
       icon: Shield,
-      features: ['Sui Objects', 'IPFS Storage', 'AES Encryption'],
+      features: ['Sui Objects (DataPods)', 'IPFS & Walrus Storage', 'AES-256 Encryption', 'Full Ownership'],
     },
     {
       number: '04',
       title: 'Marketplace',
-      subtitle: 'Global Access',
-      desc: 'List your DataPod instantly via Kiosk. Buyers from around the world can purchase access 24/7 with automated payments.',
+      subtitle: 'Global Access 24/7',
+      desc: 'List your DataPod instantly via Sui Kiosk protocol. Buyers from around the world can discover and purchase access to your data 24/7 with automated smart contract payments and instant delivery.',
       icon: ShoppingCart,
-      features: ['Kiosk Listing', 'Automated Payouts', '24/7 Trading'],
+      features: ['Kiosk Listing Protocol', 'Automated Payouts', '24/7 Global Trading', 'Smart Contract Escrow'],
     },
   ];
 
@@ -60,7 +60,7 @@ export default function FourPillars() {
       <div className="section-inner relative z-10 w-full max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-24">
 
         {/* Header */}
-        <div className="mb-32 sm:mb-48 md:mb-56 lg:mb-72 text-center">
+        <div className="mb-16 sm:mb-20 md:mb-24 lg:mb-28 text-center">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -72,7 +72,7 @@ export default function FourPillars() {
         </div>
 
         {/* The Monoliths - Alternating Layout */}
-        <div className="flex flex-col gap-30 sm:gap-24 md:gap-40 lg:gap-48 xl:gap-64">
+        <div className="flex flex-col gap-16 sm:gap-20 md:gap-24 lg:gap-28">
           {pillars.map((pillar, index) => (
             <motion.div
               key={index}
@@ -86,7 +86,7 @@ export default function FourPillars() {
               <div className="w-full lg:w-1/2 relative group">
                 {/* CARD BOX: White background with metallic border */}
                 <div className="relative aspect-square sm:aspect-[4/3] overflow-hidden rounded-[3rem] bg-white border border-neutral-300 shadow-xl shadow-neutral-200/50">
-                  
+
                   {/* Spotlight Effect (Darker on hover) */}
                   <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
@@ -142,7 +142,7 @@ export default function FourPillars() {
       {/* === FORCE SPACING HACK === */}
       {/* Ini adalah 'blank text' block yang diminta untuk memaksa jarak bawah */}
       <div className="w-full h-48 md:h-64 flex items-center justify-center select-none pointer-events-none opacity-0" aria-hidden="true">
-         SPACER BLOCK - DO NOT REMOVE
+        SPACER BLOCK - DO NOT REMOVE
       </div>
 
     </section>

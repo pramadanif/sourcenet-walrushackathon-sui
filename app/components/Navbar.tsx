@@ -146,8 +146,7 @@ export default function Navbar() {
         <motion.div
           ref={navRef}
           onMouseMove={handleMouseMove}
-          // 🔥 MODIFIKASI TERBARU: pl-12 -> pl-16 (Mobile), md:pl-24 -> md:pl-28 (Desktop)
-          className="relative mx-auto flex items-center justify-between rounded-[28px] pl-16 pr-6 md:pl-28 md:pr-9 py-4 group/nav transition-shadow duration-500"
+          className="relative mx-auto flex items-center justify-between rounded-[28px] pl-6 pr-6 md:pl-8 md:pr-9 py-2.5 group/nav transition-shadow duration-500"
           style={{
             boxShadow: isScrolled
               ? '0 30px 70px -32px rgba(34,34,34,0.55)'
@@ -237,14 +236,12 @@ export default function Navbar() {
                   <Image
                     src="/sourcenet.png"
                     alt="SourceNet"
-                    // 🔥 MODIFIKASI: Mengecilkan lebar logo (160 -> 140)
-                    width={140}
-                    height={50}
+                    width={120}
+                    height={40}
                     priority
-                    // 🔥 MODIFIKASI: Mengecilkan tinggi logo (h-12 -> h-10)
-                    className="h-10 w-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
+                    className="h-8 w-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
                   />
-                  <span className="hidden sm:inline text-lg font-black text-[#2A2A2A] drop-shadow-[0_2px_3px_rgba(42,42,42,0.25)]">SourceNet</span>
+                  <span className="hidden sm:inline text-base font-black text-[#2A2A2A] drop-shadow-[0_2px_3px_rgba(42,42,42,0.25)]">SourceNet</span>
                 </motion.div>
               </Link>
 
@@ -310,7 +307,7 @@ export default function Navbar() {
                 transition={{ delay: 0.4, type: 'spring', stiffness: 220 }}
                 whileHover={{ scale: 1.1, y: -3 }}
                 whileTap={{ scale: 0.95, y: 0 }}
-                className="hidden md:block relative px-8 py-3.5 rounded-full font-bold text-base md:text-[15px] overflow-hidden group/cta mr-2" // 🔥 px-7 → px-8, py-3 → py-3.5, + mr-2
+                className="hidden md:block relative px-6 py-2 rounded-full font-bold text-sm overflow-hidden group/cta"
                 aria-label="Get started with SourceNet"
               >
                 {/* Background Gradient */}
@@ -358,7 +355,7 @@ export default function Navbar() {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               whileHover={{ scale: 1.12 }}
               whileTap={{ scale: 0.92 }}
-              className="md:hidden relative w-12 h-12 rounded-xl bg-[#3D3D3D]/15 backdrop-blur-xl border border-[#3D3D3D]/30 flex items-center justify-center overflow-hidden group/mobile shadow-lg"
+              className="md:hidden relative w-10 h-10 rounded-xl bg-[#3D3D3D]/15 backdrop-blur-xl border border-[#3D3D3D]/30 flex items-center justify-center overflow-hidden group/mobile shadow-lg"
               aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMobileMenuOpen}
             >
@@ -381,7 +378,7 @@ export default function Navbar() {
                       damping: 22
                     }}
                   >
-                    <X className="w-6 h-6 text-[#353535]" />
+                    <X className="w-5 h-5 text-[#353535]" />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -395,7 +392,7 @@ export default function Navbar() {
                       damping: 22
                     }}
                   >
-                    <Menu className="w-6 h-6 text-[#353535]" />
+                    <Menu className="w-5 h-5 text-[#353535]" />
                   </motion.div>
                 )}
               </AnimatePresence>

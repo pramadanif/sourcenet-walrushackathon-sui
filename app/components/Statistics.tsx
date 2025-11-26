@@ -187,7 +187,7 @@ export default function Statistics() {
         {/* Text Wrapper */}
         <div className="flex-1 flex items-center justify-center w-full">
           <h1 className="text-black text-[30vw] tracking-tight leading-tight font-semibold m-0 transition-colors duration-300 whitespace-nowrap">
-            ACHIEVEMENTS & <span className="text-[#2f2f2f]">PROJECTIONS</span>
+            SOURCENET
           </h1>
         </div>
 

@@ -210,116 +210,134 @@ export default function SplineHeroSection() {
 
           {/* LEFT CONTENT */}
           <motion.div
-            className="space-y-6 sm:space-y-8"
+            className="relative space-y-6 sm:space-y-8"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
-            {/* Badge - Removed backdrop-blur if it overlaps 3D heavily */}
-            <motion.div variants={fadeUpVariants} className="inline-block">
-              <div className="px-4 py-2 bg-white/80 border border-[#3D3D3D]/20 rounded-full text-[#2A2A2A] text-xs sm:text-sm font-semibold flex items-center gap-1.5 sm:gap-2">
-                <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                Web3 Frictionless Data Marketplace
-              </div>
-            </motion.div>
-
-            {/* Main Title - Optimized Masked Reveal */}
-            <div className="space-y-1">
-              <div className="overflow-hidden">
-                <motion.h1
-                  variants={textRevealVariants}
-                  // will-change membantu browser menyiapkan layer
-                  className="font-bold tracking-tight text-[#2A2A2A] leading-[1.1] will-change-transform"
-                  style={{ fontSize: 'clamp(3rem, 8vw, 5rem)' }}
-                >
-                  SourceNet
-                </motion.h1>
-              </div>
-
-              <div className="overflow-hidden pt-2">
-                <motion.p
-                  variants={textRevealVariants}
-                  className="text-[#3D3D3D] font-medium leading-tight will-change-transform"
-                  style={{ fontSize: 'clamp(1.1rem, 4vw, 1.5rem)' }}
-                >
-                  Own & Monetize Your Personal Data
-                </motion.p>
-              </div>
-            </div>
-
-            {/* Dynamic Subtitle - REMOVED BLUR EFFECT FOR PERFORMANCE */}
-            <motion.div
-              variants={fadeUpVariants}
-              className="relative h-[60px] sm:h-[72px] overflow-hidden max-w-xl"
-            >
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={currentSubtitleIndex}
-                  // Hapus filter blur di sini!
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -20, opacity: 0 }}
-                  transition={{
-                    duration: 0.5,
-                    ease: "easeOut"
-                  }}
-                  className="absolute top-0 left-0 font-medium text-[#555555] leading-relaxed will-change-transform"
-                  style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)' }}
-                >
-                  {subtitles[currentSubtitleIndex]}
-                </motion.p>
-              </AnimatePresence>
-            </motion.div>
-
-            {/* CTA Buttons */}
-            <motion.div
-              variants={fadeUpVariants}
-              className="flex flex-col sm:flex-row gap-4 pt-2"
-            >
-              <Link href="https://sourcenet-fe.vercel.app/" passHref>
-                <motion.button
-                  ref={buttonRef}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onHoverStart={() => setIsHovered(true)}
-                  onHoverEnd={() => setIsHovered(false)}
-                  className="group relative bg-[#2A2A2A] text-white px-8 py-5 sm:px-9 sm:py-5 rounded-full font-bold text-base sm:text-lg flex items-center justify-center gap-3 transition-all overflow-hidden shadow-xl"
-                >
-                  {/* Simplified hover effect */}
-                  <motion.div
-                    className="absolute inset-0 bg-white/20"
-                    initial={{ x: '-100%' }}
-                    animate={{ x: isHovered ? '100%' : '-100%' }}
-                    transition={{ duration: 0.4 }}
-                  />
-                  {/* FIXED: Added text-white explicitly */}
-                  <span className="relative z-10 text-white">Launch App</span>
-                  <motion.div
-                    animate={{ x: isHovered ? 5 : 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <ArrowRight className="text-white" size={20} />
-                  </motion.div>
-                </motion.button>
-              </Link>
-            </motion.div>
-
-            {/* Trust Badges */}
-            <motion.div
-              variants={fadeUpVariants}
-              className="pt-6 flex flex-wrap gap-4 sm:gap-6"
-            >
-              {[
-                { icon: Lock, label: "End-to-end encrypted" },
-                { icon: DollarSign, label: "Instant payouts" },
-                { icon: Users, label: "No-code required" }
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-sm font-medium text-[#666]">
-                  <item.icon size={14} className="text-[#2A2A2A]" />
-                  {item.label}
+            {/* Content wrapper dengan z-index lebih tinggi */}
+            <div className="relative z-10 space-y-6 sm:space-y-8">
+              {/* Badge */}
+              <motion.div variants={fadeUpVariants} className="inline-block">
+                <div className="px-4 py-2 bg-white/95 border border-[#3D3D3D]/30 rounded-full text-[#2A2A2A] text-xs sm:text-sm font-semibold flex items-center gap-1.5 sm:gap-2 shadow-lg">
+                  <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  Web3 Frictionless Data Marketplace
                 </div>
-              ))}
-            </motion.div>
+              </motion.div>
+
+              {/* Main Title - Optimized Masked Reveal */}
+              <div className="space-y-1">
+                <div className="overflow-hidden">
+                  <motion.h1
+                    variants={textRevealVariants}
+                    className="font-bold tracking-tight text-[#0A0A0A] leading-[1.1] will-change-transform"
+                    style={{
+                      fontSize: 'clamp(3rem, 8vw, 5rem)',
+                      textShadow: '0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(255,255,255,0.7)'
+                    }}
+                  >
+                    SourceNet
+                  </motion.h1>
+                </div>
+
+                <div className="overflow-hidden pt-2">
+                  <motion.p
+                    variants={textRevealVariants}
+                    className="text-[#1A1A1A] font-bold leading-tight will-change-transform"
+                    style={{
+                      fontSize: 'clamp(1.1rem, 4vw, 1.5rem)',
+                      textShadow: '0 0 15px rgba(255,255,255,0.9), 0 0 30px rgba(255,255,255,0.7)'
+                    }}
+                  >
+                    Own & Monetize Your Personal Data
+                  </motion.p>
+                </div>
+              </div>
+
+              {/* Dynamic Subtitle - REMOVED BLUR EFFECT FOR PERFORMANCE */}
+              <motion.div
+                variants={fadeUpVariants}
+                className="relative h-[60px] sm:h-[72px] overflow-hidden max-w-xl"
+              >
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={currentSubtitleIndex}
+                    // Hapus filter blur di sini!
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -20, opacity: 0 }}
+                    transition={{
+                      duration: 0.5,
+                      ease: "easeOut"
+                    }}
+                    className="absolute top-0 left-0 font-semibold text-[#2A2A2A] leading-relaxed will-change-transform"
+                    style={{
+                      fontSize: 'clamp(1rem, 3vw, 1.25rem)',
+                      textShadow: '0 0 10px rgba(255,255,255,0.9), 0 0 20px rgba(255,255,255,0.7)'
+                    }}  >
+                    {subtitles[currentSubtitleIndex]}
+                  </motion.p>
+                </AnimatePresence>
+              </motion.div>
+
+              {/* CTA Buttons */}
+              <motion.div
+                variants={fadeUpVariants}
+                className="flex flex-col sm:flex-row gap-4 pt-2"
+              >
+                <Link href="https://sourcenet-fe.vercel.app/" passHref>
+                  <motion.button
+                    ref={buttonRef}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onHoverStart={() => setIsHovered(true)}
+                    onHoverEnd={() => setIsHovered(false)}
+                    className="group relative bg-[#2A2A2A] text-white px-8 py-5 sm:px-9 sm:py-5 rounded-full font-bold text-base sm:text-lg flex items-center justify-center gap-3 transition-all overflow-hidden shadow-xl"
+                  >
+                    {/* Simplified hover effect */}
+                    <motion.div
+                      className="absolute inset-0 bg-white/20"
+                      initial={{ x: '-100%' }}
+                      animate={{ x: isHovered ? '100%' : '-100%' }}
+                      transition={{ duration: 0.4 }}
+                    />
+                    {/* FIXED: Added text-white explicitly */}
+                    <span className="relative z-10 text-white">Launch App</span>
+                    <motion.div
+                      animate={{ x: isHovered ? 5 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ArrowRight className="text-white" size={20} />
+                    </motion.div>
+                  </motion.button>
+                </Link>
+              </motion.div>
+
+              {/* Trust Badges - Warna Putih dengan Shadow */}
+              <motion.div
+                variants={fadeUpVariants}
+                className="pt-6 flex flex-wrap gap-4 sm:gap-6"
+              >
+                {[
+                  { icon: Lock, label: "End-to-end encrypted" },
+                  { icon: DollarSign, label: "Instant payouts" },
+                  { icon: Users, label: "No-code required" }
+                ].map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-2 text-sm font-semibold text-white"
+                    style={{
+                      textShadow: '0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(255,255,255,0.6), 0 2px 8px rgba(255,255,255,0.8)'
+                    }}
+                  >
+                    <item.icon size={14} className="text-white" style={{
+                      filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.9)) drop-shadow(0 0 16px rgba(255,255,255,0.6))'
+                    }} />
+                    {item.label}
+                  </div>
+                ))}
+              </motion.div>
+            </div>
           </motion.div>
 
           {/* Right Spacer */}

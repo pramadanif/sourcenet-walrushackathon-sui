@@ -122,8 +122,7 @@ export default function Technology() {
             transition={{ duration: 0.6 }}
             className="inline-flex items-center gap-2 rounded-full border border-black/20 bg-white px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-black/70 backdrop-blur-sm hover:border-black/40 transition-all"
           >
-
-            <span className="px-2"></span>
+            TECHNOLOGY STACK
           </motion.div>
 
           <motion.h2
