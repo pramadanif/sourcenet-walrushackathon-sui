@@ -21,26 +21,26 @@ const ProblemIcons = {
 const problems: Problem[] = [
   {
     id: 1,
-    title: "Data Locked Away",
-    desc: "Your digital life is trapped in Web2 silos. You generate the value, but they keep it locked away from you.",
+    title: "Data Locked in Silos",
+    desc: "Your digital life is fragmented across platforms (Google, Meta, Amazon). It's impossible to aggregate and sell your 'digital identity' as a single asset.",
     icon: ProblemIcons.lock,
   },
   {
     id: 2,
-    title: "Companies Profit, You Don't",
-    desc: "Big tech companies monetize your data for billions of dollars while you see exactly $0.00 in return.",
+    title: "Big Tech Profits, You Don't",
+    desc: "You generate terabytes of digital footprint yearly. Silicon Valley giants monetize it for billions while you earn exactly $0.00.",
     icon: ProblemIcons.money,
   },
   {
     id: 3,
-    title: "Web3 Too Complex",
-    desc: "Existing Web3 marketplaces are impossible to use with complicated wallets, seed phrases, and gas fees.",
+    title: "Web3 UX Nightmare",
+    desc: "Existing decentralized marketplaces require MetaMask installs, seed phrase management, and buying crypto for gas before uploading your first file.",
     icon: ProblemIcons.gear,
   },
   {
     id: 4,
-    title: "No Easy Access",
-    desc: "Selling your data should be as easy as browsing the web. Currently, it is virtually impossible to do.",
+    title: "The Data Serfdom Crisis",
+    desc: "We live in a broken data economy. Users create the value, Big Tech keeps the profit. It's time to change the equation permanently.",
     icon: ProblemIcons.cross,
   },
 ];
@@ -131,14 +131,14 @@ export default function ProblemSection() {
             THE PROBLEM
           </span>
           <h2 className="w-full text-4xl sm:text-5xl md:text-6xl font-black leading-[0.95] text-[#161616] tracking-tight mb-2">
-            Your Data is <span className="opacity-40">Locked.</span>
+            The <span className="opacity-40">Data Serfdom</span>
             <br />
-            Big Tech <span className="opacity-40">Profits.</span>
+            Crisis is <span className="opacity-40">Real.</span>
           </h2>
           <p className="text-lg sm:text-xl text-[#555] max-w-2xl leading-relaxed mt-2">
-            The internet is broken. You create the value, they capture it.
+            We are living in a broken data economy.
             <br className="hidden sm:block" />
-            SourceNet changes the equation permanently.
+            Users generate the value. Big Tech keeps the profit.
           </p>
         </motion.div>
 

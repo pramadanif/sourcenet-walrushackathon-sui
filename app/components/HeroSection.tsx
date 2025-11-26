@@ -232,11 +232,11 @@ export default function SplineHeroSection() {
 
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(0);
   const subtitles = [
-    "Sell your Web2 data anonymously, without gas.",
-    "Monetize your digital footprint — no blockchain required.",
-    "Your data. Your rules. Your earnings. Instantly.",
-    "Turn browsing history into passive income securely.",
-    "Profit from online activity — zero technical skills."
+    "The first frictionless data marketplace. Monetize your data without crypto headaches.",
+    "No wallets, no seed phrases, no gas fees. Just login with Google and start earning.",
+    "Your data, encrypted as Sui Objects. Powered by Walrus Protocol and DeepSeek AI.",
+    "Making data sovereignty accessible to everyone. Web3 made invisible.",
+    "Turn your digital footprint into passive income. Zero technical skills required."
   ];
 
   useEffect(() => {
