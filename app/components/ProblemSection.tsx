@@ -59,13 +59,25 @@ const headerVariants = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: {
+    opacity: 0,
+    y: 60,
+    scale: 0.8,
+    rotateX: -15,
+    filter: 'blur(10px)'
+  },
   show: {
     opacity: 1,
     y: 0,
+    scale: 1,
+    rotateX: 0,
+    filter: 'blur(0px)',
     transition: {
-      duration: 0.6,
-      ease: "easeOut",
+      type: 'spring',
+      stiffness: 100,
+      damping: 15,
+      mass: 1,
+      duration: 0.8,
     },
   },
 };
@@ -74,8 +86,8 @@ const listVariants = {
   hidden: {},
   show: {
     transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
+      staggerChildren: 0.2,
+      delayChildren: 0.3,
     },
   },
 };
@@ -138,7 +150,7 @@ export default function ProblemSection() {
           viewport={{ once: true, amount: 0.2 }}
           className="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 lg:gap-x-12"
         >
-          {problems.map((problem) => {
+          {problems.map((problem, index) => {
             const Icon = problem.icon;
             return (
               <motion.div
@@ -146,16 +158,34 @@ export default function ProblemSection() {
                 variants={itemVariants}
                 className="group flex flex-col items-center text-center"
               >
-                {/* Icon Container */}
-                <div className="relative mb-6 group-hover:-translate-y-2 transition-transform duration-500 ease-out">
-                  {/* Circle Background */}
-                  <div className="w-24 h-24 rounded-full bg-[#E5E5E5] border border-white/40 shadow-inner flex items-center justify-center relative z-10">
-                    <Icon className="h-9 w-9 text-[#222]" strokeWidth={1.5} />
-                  </div>
+                {/* Icon Container dengan animasi Web3 */}
+                <motion.div
+                  className="relative mb-6 group-hover:-translate-y-2 transition-transform duration-500 ease-out"
+                  whileHover={{
+                    scale: 1.1,
+                    rotate: [0, -5, 5, 0],
+                    transition: { duration: 0.5 }
+                  }}
+                >
+                  {/* Particle effect background */}
+                  <motion.div
+                    className="absolute inset-0 bg-white/60 blur-2xl rounded-full scale-150 z-0"
+                    initial={{ opacity: 0, scale: 0 }}
+                    whileInView={{ opacity: [0, 1, 0], scale: [0, 1.5, 2] }}
+                    transition={{ duration: 1.2, delay: index * 0.2 }}
+                  />
 
-                  {/* Subtle Shadow/Glow under icon */}
+                  {/* Circle Background */}
+                  <motion.div
+                    className="w-24 h-24 rounded-full bg-[#E5E5E5] border border-white/40 shadow-inner flex items-center justify-center relative z-10"
+                    whileHover={{ boxShadow: '0 0 30px rgba(255,255,255,0.6)' }}
+                  >
+                    <Icon className="h-9 w-9 text-[#222]" strokeWidth={1.5} />
+                  </motion.div>
+
+                  {/* Glow effect */}
                   <div className="absolute inset-0 bg-white/40 blur-xl rounded-full scale-150 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </div>
+                </motion.div>
 
                 {/* Text Content */}
                 <h3 className="text-xl sm:text-2xl font-bold text-[#111] mb-3 leading-tight tracking-tight">

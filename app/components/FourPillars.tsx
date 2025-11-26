@@ -76,33 +76,102 @@ export default function FourPillars() {
           {pillars.map((pillar, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{
+                opacity: 0,
+                y: 100,
+                scale: 0.85,
+                rotateY: index % 2 === 0 ? -15 : 15,
+                filter: 'blur(20px)'
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                rotateY: 0,
+                filter: 'blur(0px)'
+              }}
               viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 0.8 }}
+              transition={{
+                duration: 1.2,
+                type: 'spring',
+                stiffness: 80,
+                damping: 20,
+                delay: index * 0.2
+              }}
               className={`flex flex-col lg:flex-row items-center gap-16 lg:gap-32 ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}
             >
               {/* Visual Side */}
-              <div className="w-full lg:w-1/2 relative group">
-                {/* CARD BOX: White background with metallic border */}
-                <div className="relative aspect-square sm:aspect-[4/3] overflow-hidden rounded-[3rem] bg-white border border-neutral-300 shadow-xl shadow-neutral-200/50">
+              <motion.div
+                className="w-full lg:w-1/2 relative group"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                {/* CARD BOX dengan animasi */}
+                <motion.div
+                  className="relative aspect-square sm:aspect-[4/3] overflow-hidden rounded-[3rem] bg-white border border-neutral-300 shadow-xl shadow-neutral-200/50"
+                  initial={{ boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
+                  whileInView={{
+                    boxShadow: [
+                      '0 10px 30px rgba(0,0,0,0.1)',
+                      '0 20px 60px rgba(0,0,0,0.2)',
+                      '0 10px 30px rgba(0,0,0,0.1)'
+                    ]
+                  }}
+                  transition={{ duration: 2, delay: index * 0.2 }}
+                >
 
-                  {/* Spotlight Effect (Darker on hover) */}
+                  {/* Particle burst effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    whileInView={{ opacity: [0, 1, 0], scale: [0.5, 1.5, 2] }}
+                    transition={{ duration: 1.5, delay: index * 0.2 }}
+                  />
+
+                  {/* Spotlight Effect */}
                   <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                  {/* Giant Number (Watermark style) */}
-                  <div className="absolute -bottom-20 -right-20 text-[20rem] font-black text-neutral-100 leading-none select-none transition-transform duration-1000 group-hover:scale-110 group-hover:text-neutral-200">
+                  {/* Giant Number dengan glitch effect */}
+                  <motion.div
+                    className="absolute -bottom-20 -right-20 text-[20rem] font-black text-neutral-100 leading-none select-none"
+                    initial={{ x: 50, opacity: 0 }}
+                    whileInView={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.8, delay: index * 0.2 + 0.3 }}
+                    whileHover={{
+                      scale: 1.1,
+                      textShadow: '2px 2px 0 rgba(0,0,0,0.1), -2px -2px 0 rgba(0,0,0,0.1)',
+                      transition: { duration: 0.3 }
+                    }}
+                  >
                     {pillar.number}
-                  </div>
+                  </motion.div>
 
-                  {/* Icon Center */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-32 h-32 rounded-3xl bg-[#F5F5F5] border border-neutral-200 flex items-center justify-center text-neutral-900 shadow-lg group-hover:scale-110 transition-transform duration-500">
+                  {/* Icon Center dengan animasi 3D */}
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center"
+                    initial={{ scale: 0, rotate: -180 }}
+                    whileInView={{ scale: 1, rotate: 0 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 200,
+                      damping: 15,
+                      delay: index * 0.2 + 0.5
+                    }}
+                  >
+                    <motion.div
+                      className="w-32 h-32 rounded-3xl bg-[#F5F5F5] border border-neutral-200 flex items-center justify-center text-neutral-900 shadow-lg"
+                      whileHover={{
+                        scale: 1.15,
+                        rotate: [0, -5, 5, 0],
+                        boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+                      }}
+                      transition={{ duration: 0.5 }}
+                    >
                       <pillar.icon size={64} strokeWidth={1.5} />
-                    </div>
-                  </div>
-                </div>
-              </div>
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
 
               {/* Content Side */}
               <div className="w-full lg:w-1/2">
@@ -137,12 +206,6 @@ export default function FourPillars() {
             </motion.div>
           ))}
         </div>
-      </div>
-
-      {/* === FORCE SPACING HACK === */}
-      {/* Ini adalah 'blank text' block yang diminta untuk memaksa jarak bawah */}
-      <div className="w-full h-48 md:h-64 flex items-center justify-center select-none pointer-events-none opacity-0" aria-hidden="true">
-        SPACER BLOCK - DO NOT REMOVE
       </div>
 
     </section>
