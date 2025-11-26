@@ -234,7 +234,7 @@ export default function SplineHeroSection() {
   const subtitles = [
     "The first frictionless data marketplace. Monetize your data without crypto headaches.",
     "No wallets, no seed phrases, no gas fees. Just login with Google and start earning.",
-    "Your data, encrypted as Sui Objects. Powered by Walrus Protocol and DeepSeek AI.",
+    "Your data, encrypted as Sui Objects. Powered by Walrus Protocol and OpenAI.",
     "Making data sovereignty accessible to everyone. Web3 made invisible.",
     "Turn your digital footprint into passive income. Zero technical skills required."
   ];
