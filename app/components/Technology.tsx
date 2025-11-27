@@ -67,16 +67,16 @@ const technologies = [
   {
     icon: WalrusIcon,
     name: 'Walrus Protocol',
-    description: 'Decentralized storage for your data with maximum reliability',
+    description: 'Decentralized storage for your encrypted data with maximum reliability and permanent availability',
     color: 'bg-black',
     isLogo: false,
   },
   {
-    icon: Shield,
-    name: 'IPFS Storage',
-    description: 'Immutable and distributed file storage across the network',
-    color: 'bg-black',
-    isLogo: false,
+    icon: OpenAIIcon,
+    name: 'OpenAI Integration',
+    description: 'AI-powered data valuation and metadata tagging to help you price your data correctly and connect with buyers',
+    color: 'bg-white',
+    isLogo: true,
   },
 ];
 
@@ -199,44 +199,6 @@ export default function Technology() {
               </motion.div>
             );
           })}
-
-          {/* OpenAI Integration - Centered */}
-          <motion.div
-            variants={cardVariants}
-            className="group flex flex-col items-center text-center cursor-pointer p-6 md:col-span-2 lg:col-span-1 lg:col-start-2"
-          >
-            {/* Icon Container */}
-            <motion.div
-              whileHover={{ scale: 1.15, rotate: 8 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-              className="mb-10"
-            >
-              <div className="w-20 h-20 rounded-2xl bg-white shadow-lg group-hover:shadow-2xl transition-all duration-500 flex items-center justify-center group-hover:scale-110 border-2 border-black/20">
-                <div className="w-12 h-12 flex items-center justify-center">
-                  <span className="text-2xl font-black">
-                    <OpenAIIcon />
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Content */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.1 }}
-              className="flex flex-col gap-3"
-            >
-              <h3 className="text-2xl font-black text-black tracking-tight group-hover:text-gray-800 transition-colors duration-300">
-                AI Integration by OpenAI
-              </h3>
-
-              <p className="text-sm text-gray-600 leading-relaxed font-light group-hover:text-gray-700 transition-colors duration-300 max-w-xs">
-                Advanced AI capabilities powered by OpenAI for intelligent interactions
-              </p>
-            </motion.div>
-          </motion.div>
         </motion.div>
 
         {/* Built on Sui Section */}
