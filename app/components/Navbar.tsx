@@ -50,7 +50,7 @@ export default function Navbar() {
     { name: 'Features', href: '#features' },
     { name: 'How It Works', href: '#how-it-works' },
     { name: 'Technology', href: '#technology' },
-    { name: 'About', href: '#about' },
+    { name: 'Docs', href: '/docs' },
   ];
 
   // Animasi untuk desktop nav
